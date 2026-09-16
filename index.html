@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پرونده‌های زاویه‌ی گمشده</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="grid-overlay"></div>
+
+<button class="mute-btn" id="muteBtn" aria-pressed="false" aria-label="قطع یا وصل کردن صدا" title="قطع/وصل صدا">🔊</button>
+
+<main class="board">
+
+  <!-- ============ START SCREEN ============ -->
+  <section id="startScreen" class="start-screen">
+    <header class="board__header">
+      <div class="case-stamp"><span class="case-stamp__num">اداره‌ی کارآگاهی هندسه</span></div>
+      <h1 class="title">پرونده‌های <span class="title__accent">زاویه‌ی گمشده</span></h1>
+      <p class="subtitle">قبل از قبول پرونده‌های اصلی، باید تو دست‌گرمی خودتو ثابت کنی، کارآگاه.</p>
+      <p class="high-score-display">بیشترین رکورد: <span class="high-score-display__val" id="startHighScoreVal">۰</span></p>
+    </header>
+
+    <div class="mode-cards">
+      <button class="mode-card" id="btnWarmup">
+        <div class="mode-card__top">
+          <span class="mode-card__title">🎯 دست‌گرمی</span>
+          <span class="mode-card__badge mode-card__badge--open">همیشه باز</span>
+        </div>
+        <p class="mode-card__desc">۵ مرحله‌ی ساده، بدون زمان‌سنج. فقط با فرمول مجموع زوایا آشنا شو؛ هر جواب غلط یه جون کم می‌کنه.</p>
+      </button>
+
+      <button class="mode-card" id="btnMain">
+        <div class="mode-card__top">
+          <span class="mode-card__title">🕵️ پرونده‌ی اصلی</span>
+          <span class="mode-card__badge mode-card__badge--locked" id="mainBadge">قفل است</span>
+        </div>
+        <p class="mode-card__desc" id="mainDesc">برای باز شدن این بخش، اول ۵ مرحله‌ی دست‌گرمی رو کامل کن.</p>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ GAME SCREEN (shared by both modes) ============ -->
+  <section id="gameScreen" hidden>
+    <header class="board__header">
+      <div class="case-stamp">
+        <span class="case-stamp__num" id="modeLabel">پرونده‌ی فعال: <span id="roundNum">۱</span></span>
+      </div>
+      <h1 class="title" id="gameTitle">پرونده‌های <span class="title__accent">زاویه‌ی گمشده</span></h1>
+      <p class="subtitle" id="gameSubtitle">با فرمول مجموع زوایای چندضلعی، درجه‌ی گمشده رو کشف کن.</p>
+    </header>
+
+    <section class="stat-bar" aria-label="وضعیت بازی">
+      <div class="stat">
+        <span class="stat__label" id="scoreLabel">امتیاز</span>
+        <span class="stat__value" id="scoreVal">۰</span>
+      </div>
+      <div class="stat" id="livesStat">
+        <span class="stat__label">جون‌ها</span>
+        <span class="stat__value" id="livesVal">❤️❤️❤️</span>
+      </div>
+      <div class="stat stat--timer" id="timerStat">
+        <span class="stat__label" id="timerLabel">زمان باقی‌مانده</span>
+        <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+      </div>
+    </section>
+
+    <section class="evidence-panel">
+      <div class="pin pin--tl"></div>
+      <div class="pin pin--tr"></div>
+      <div class="polygon-wrap" id="polygonWrap"></div>
+      <div class="formula-tag">
+        <span class="formula-tag__label">فرمول سرنخ</span>
+        <span class="formula-tag__formula">مجموع زوایا = (n − 2) × 180</span>
+      </div>
+    </section>
+
+    <section class="answer-panel">
+      <label for="answerInput" class="answer-label">درجه‌ی زاویه‌ی گمشده (؟) چقدره؟</label>
+      <div class="answer-row">
+        <input type="number" id="answerInput" class="answer-input" placeholder="مثلاً 75" autocomplete="off" inputmode="numeric">
+        <button class="btn btn--submit" id="submitBtn">ثبت جواب</button>
+      </div>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="rules-card">
+      <button class="rules-card__toggle" id="rulesToggle" aria-expanded="false" aria-controls="rulesBody">
+        <span>قوانین پرونده رو ببین</span>
+        <span class="rules-card__icon" id="rulesIcon">+</span>
+      </button>
+      <div class="rules-card__body" id="rulesBody" hidden>
+        <ul>
+          <li>هر شکل یه چندضلعیه که همه‌ی زاویه‌هاش معلومه، جز یکی که با ؟ مشخص شده.</li>
+          <li>مجموع زاویه‌های داخلی هر چندضلعی از فرمول (n − 2) × 180 به‌دست میاد؛ n تعداد ضلع‌هاست.</li>
+          <li>زاویه‌ی گمشده = مجموع کل − مجموع زاویه‌های معلوم.</li>
+          <li id="ruleDynamic">در پرونده‌ی اصلی فقط ۶۰ ثانیه زمان داری؛ سوال‌ها کم‌کم سخت‌تر می‌شن و هر جواب درست امتیاز داره.</li>
+        </ul>
+      </div>
+    </section>
+
+    <button class="btn btn--ghost btn--back" id="backToMenuBtn">بازگشت به منو</button>
+  </section>
+
+  <footer class="board__footer">
+    <p>By Mahan Motaghian</p>
+  </footer>
+</main>
+
+<!-- ============ MODALS ============ -->
+<div class="modal-overlay" id="warmupWinModal" hidden>
+  <div class="modal">
+    <h2 class="modal__title">دست‌گرمی تموم شد! 🎉</h2>
+    <p class="modal__rank">آماده‌ای وارد پرونده‌ی اصلی بشی، کارآگاه.</p>
+    <div class="modal__actions">
+      <button class="btn btn--submit" id="goToMainBtn">برو به پرونده‌ی اصلی</button>
+      <button class="btn btn--ghost" id="warmupWinMenuBtn">بازگشت به منو</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="warmupFailModal" hidden>
+  <div class="modal">
+    <h2 class="modal__title">دست‌گرمی ناموفق</h2>
+    <p class="modal__rank">جون‌هات تموم شد؛ یه بار دیگه امتحان کن.</p>
+    <div class="modal__actions">
+      <button class="btn btn--submit" id="retryWarmupBtn">تلاش دوباره</button>
+      <button class="btn btn--ghost" id="warmupFailMenuBtn">بازگشت به منو</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="gameOverModal" hidden>
+  <div class="modal">
+    <h2 class="modal__title">وقت پرونده تموم شد ⏱️</h2>
+    <p class="modal__rank" id="rankText"></p>
+    <p class="modal__score">امتیاز این پرونده: <span id="finalScore"></span></p>
+    <p class="modal__high">بیشترین رکورد: <span id="highScore"></span></p>
+    <div class="modal__actions">
+      <button class="btn btn--submit" id="restartBtn">پرونده‌ی جدید</button>
+      <button class="btn btn--ghost" id="gameOverMenuBtn">بازگشت به منو</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- Helpers ----------
+  var faDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  function toFa(num) {
+    return String(num).replace(/[0-9]/g, function (d) { return faDigits[d]; });
+  }
+
+  var WARMUP_KEY = 'geoDetectiveWarmupDone';
+  var HIGH_SCORE_KEY = 'geoDetectiveHighScore';
+  var WARMUP_TOTAL = 5;
+  var MAIN_TOTAL_TIME = 60;
+
+  // =========================================================
+  // AUDIO ENGINE — procedural instrumental music + SFX
+  // =========================================================
+  var audioCtx = null;
+  var masterGain = null;
+  var musicGain = null;
+  var sfxGain = null;
+  var filterNode = null;
+  var musicStarted = false;
+  var musicLoopTimer = null;
+  var audioMuted = false;
+
+  var chords = [
+    [110.00, 130.81, 164.81], // Am
+    [146.83, 174.61, 220.00], // Dm
+    [164.81, 207.65, 246.94], // E
+    [110.00, 130.81, 164.81]  // Am
+  ];
+  var chordDuration = 4.4;
+  var chordIndex = 0;
+
+  function ensureAudio() {
+    if (audioCtx) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return;
+    }
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (e) {
+      return;
+    }
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = audioMuted ? 0 : 1;
+    masterGain.connect(audioCtx.destination);
+
+    filterNode = audioCtx.createBiquadFilter();
+    filterNode.type = 'lowpass';
+    filterNode.frequency.value = 1100;
+
+    musicGain = audioCtx.createGain();
+    musicGain.gain.value = 0.05;
+    filterNode.connect(musicGain);
+    musicGain.connect(masterGain);
+
+    var lfo = audioCtx.createOscillator();
+    lfo.frequency.value = 0.045;
+    var lfoGain = audioCtx.createGain();
+    lfoGain.gain.value = 260;
+    lfo.connect(lfoGain);
+    lfoGain.connect(filterNode.frequency);
+    lfo.start();
+
+    sfxGain = audioCtx.createGain();
+    sfxGain.gain.value = 1;
+    sfxGain.connect(masterGain);
+
+    startMusicLoop();
+  }
+
+  function playChordPad(freqs, startTime, duration) {
+    freqs.forEach(function (f, idx) {
+      var osc = audioCtx.createOscillator();
+      osc.type = idx === 0 ? 'sine' : 'triangle';
+      osc.frequency.value = f;
+      var g = audioCtx.createGain();
+      var peak = 0.9 / freqs.length;
+      g.gain.setValueAtTime(0.0001, startTime);
+      g.gain.linearRampToValueAtTime(peak, startTime + 1.3);
+      g.gain.setValueAtTime(peak, startTime + duration - 1.3);
+      g.gain.linearRampToValueAtTime(0.0001, startTime + duration);
+      osc.connect(g);
+      g.connect(filterNode);
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.05);
+    });
+  }
+
+  function scheduleNextChord() {
+    if (!musicStarted || !audioCtx) return;
+    var t = audioCtx.currentTime + 0.05;
+    playChordPad(chords[chordIndex % chords.length], t, chordDuration);
+    chordIndex++;
+    musicLoopTimer = setTimeout(scheduleNextChord, chordDuration * 1000);
+  }
+
+  function startMusicLoop() {
+    if (musicStarted) return;
+    musicStarted = true;
+    scheduleNextChord();
+  }
+
+  function setMuted(m) {
+    audioMuted = m;
+    if (audioCtx && masterGain) {
+      masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+      masterGain.gain.linearRampToValueAtTime(m ? 0 : 1, audioCtx.currentTime + 0.15);
+    }
+    muteBtn.textContent = m ? '🔇' : '🔊';
+    muteBtn.setAttribute('aria-pressed', String(m));
+  }
+
+  function playTone(freq, startTime, duration, type, peakGain) {
+    if (!audioCtx) return;
+    var osc = audioCtx.createOscillator();
+    var g = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, startTime);
+    g.gain.exponentialRampToValueAtTime(peakGain, startTime + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+    osc.connect(g);
+    g.connect(sfxGain);
+    osc.start(startTime);
+    osc.stop(startTime + duration + 0.03);
+  }
+
+  function playCorrectSound() {
+    if (!audioCtx) return;
+    var t = audioCtx.currentTime;
+    playTone(880, t, 0.09, 'triangle', 0.2);
+    playTone(1318.5, t + 0.08, 0.16, 'triangle', 0.18);
+  }
+
+  function playWrongSound() {
+    if (!audioCtx) return;
+    var t = audioCtx.currentTime;
+    playTone(180, t, 0.2, 'sawtooth', 0.12);
+  }
+
+  function playFanfare() {
+    if (!audioCtx) return;
+    var t = audioCtx.currentTime;
+    playTone(523.25, t, 0.14, 'triangle', 0.2);
+    playTone(659.25, t + 0.12, 0.14, 'triangle', 0.2);
+    playTone(783.99, t + 0.24, 0.28, 'triangle', 0.22);
+  }
+
+  function playSadTone() {
+    if (!audioCtx) return;
+    var t = audioCtx.currentTime;
+    playTone(220, t, 0.22, 'sawtooth', 0.14);
+    playTone(164.81, t + 0.18, 0.3, 'sawtooth', 0.13);
+  }
+
+  // ---------- DOM refs ----------
+  var muteBtn = document.getElementById('muteBtn');
+  var startScreen = document.getElementById('startScreen');
+  var gameScreen = document.getElementById('gameScreen');
+  var btnWarmup = document.getElementById('btnWarmup');
+  var btnMain = document.getElementById('btnMain');
+  var mainBadge = document.getElementById('mainBadge');
+  var mainDesc = document.getElementById('mainDesc');
+  var startHighScoreVal = document.getElementById('startHighScoreVal');
+
+  var modeLabel = document.getElementById('modeLabel');
+  var roundNumEl = document.getElementById('roundNum');
+  var gameTitle = document.getElementById('gameTitle');
+  var gameSubtitle = document.getElementById('gameSubtitle');
+  var scoreLabel = document.getElementById('scoreLabel');
+  var scoreValEl = document.getElementById('scoreVal');
+  var livesStat = document.getElementById('livesStat');
+  var livesValEl = document.getElementById('livesVal');
+  var timerStat = document.getElementById('timerStat');
+  var timerLabel = document.getElementById('timerLabel');
+  var timerFillEl = document.getElementById('timerFill');
+  var polygonWrap = document.getElementById('polygonWrap');
+  var answerInput = document.getElementById('answerInput');
+  var submitBtn = document.getElementById('submitBtn');
+  var feedbackEl = document.getElementById('feedback');
+  var rulesToggle = document.getElementById('rulesToggle');
+  var rulesBody = document.getElementById('rulesBody');
+  var rulesIcon = document.getElementById('rulesIcon');
+  var ruleDynamic = document.getElementById('ruleDynamic');
+  var backToMenuBtn = document.getElementById('backToMenuBtn');
+
+  var warmupWinModal = document.getElementById('warmupWinModal');
+  var warmupFailModal = document.getElementById('warmupFailModal');
+  var gameOverModal = document.getElementById('gameOverModal');
+  var rankText = document.getElementById('rankText');
+  var finalScoreEl = document.getElementById('finalScore');
+  var highScoreEl = document.getElementById('highScore');
+  var restartBtn = document.getElementById('restartBtn');
+  var goToMainBtn = document.getElementById('goToMainBtn');
+  var warmupWinMenuBtn = document.getElementById('warmupWinMenuBtn');
+  var retryWarmupBtn = document.getElementById('retryWarmupBtn');
+  var warmupFailMenuBtn = document.getElementById('warmupFailMenuBtn');
+  var gameOverMenuBtn = document.getElementById('gameOverMenuBtn');
+
+  // ---------- State ----------
+  var state = {
+    mode: 'main',        // 'warmup' | 'main'
+    score: 0,
+    lives: 3,
+    round: 0,
+    streak: 0,
+    mainTimeLeft: 0,
+    timerId: null,
+    angles: [],
+    missingIndex: -1,
+    nSides: 3,
+    active: false,
+    locked: false
+  };
+
+  function hideAllModals() {
+    warmupWinModal.hidden = true;
+    warmupFailModal.hidden = true;
+    gameOverModal.hidden = true;
+  }
+
+  // ---------- Menu / unlock state ----------
+  function isWarmupDone() {
+    return localStorage.getItem(WARMUP_KEY) === 'true';
+  }
+
+  function getHighScore() {
+    return parseInt(localStorage.getItem(HIGH_SCORE_KEY) || '0', 10);
+  }
+
+  function refreshMenu() {
+    startHighScoreVal.textContent = toFa(getHighScore());
+    if (isWarmupDone()) {
+      btnMain.classList.remove('is-locked');
+      mainBadge.textContent = 'باز شده';
+      mainBadge.className = 'mode-card__badge mode-card__badge--open';
+      mainDesc.textContent = '۶۰ ثانیه وقت داری؛ سوال‌ها کم‌کم سخت‌تر می‌شن. آماده‌ی چالش واقعی باش!';
+    } else {
+      btnMain.classList.add('is-locked');
+      mainBadge.textContent = 'قفل است';
+      mainBadge.className = 'mode-card__badge mode-card__badge--locked';
+      mainDesc.textContent = 'برای باز شدن این بخش، اول ۵ مرحله‌ی دست‌گرمی رو کامل کن.';
+    }
+  }
+
+  function showStartScreen() {
+    clearInterval(state.timerId);
+    state.active = false;
+    hideAllModals();
+    refreshMenu();
+    gameScreen.hidden = true;
+    startScreen.hidden = false;
+  }
+
+  // ---------- Angle generation ----------
+  function generateAngles(n, total) {
+    var cuts = [0];
+    for (var i = 0; i < n - 1; i++) cuts.push(Math.random());
+    cuts.push(1);
+    cuts.sort(function (a, b) { return a - b; });
+
+    var fracs = [];
+    for (var j = 0; j < n; j++) fracs.push(cuts[j + 1] - cuts[j]);
+
+    var minFrac = 0.07;
+    fracs = fracs.map(function (f) { return minFrac + f * (1 - minFrac * n); });
+    var sumF = fracs.reduce(function (a, b) { return a + b; }, 0);
+    fracs = fracs.map(function (f) { return f / sumF; });
+
+    var deg = fracs.map(function (f) { return Math.round(f * total); });
+    var diff = total - deg.reduce(function (a, b) { return a + b; }, 0);
+    deg[0] += diff;
+
+    return deg;
+  }
+
+  // ---------- SVG builder ----------
+  function buildPolygonSVG(n, angles, missingIndex) {
+    var cx = 150, cy = 155, r = 108;
+    var points = [];
+    for (var i = 0; i < n; i++) {
+      var theta = -Math.PI / 2 + i * (2 * Math.PI / n);
+      points.push({ x: cx + r * Math.cos(theta), y: cy + r * Math.sin(theta) });
+    }
+
+    var pointsAttr = points.map(function (p) {
+      return p.x.toFixed(1) + ',' + p.y.toFixed(1);
+    }).join(' ');
+
+    var dots = points.map(function (p) {
+      return '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="4" class="vertex-dot"></circle>';
+    }).join('');
+
+    var labels = '';
+    points.forEach(function (p, i) {
+      var dx = p.x - cx, dy = p.y - cy;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      var lx = cx + (dx / dist) * (r + 28);
+      var ly = cy + (dy / dist) * (r + 28);
+
+      if (i === missingIndex) {
+        labels +=
+          '<g class="vertex vertex--missing">' +
+          '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="19" class="missing-badge"></circle>' +
+          '<text x="' + lx.toFixed(1) + '" y="' + (ly + 6).toFixed(1) + '" class="missing-mark">؟</text>' +
+          '</g>';
+      } else {
+        labels +=
+          '<g class="vertex">' +
+          '<text x="' + lx.toFixed(1) + '" y="' + (ly + 5).toFixed(1) + '" class="angle-label">' + angles[i] + '°</text>' +
+          '</g>';
+      }
+    });
+
+    return '<svg viewBox="0 0 300 310" class="polygon-svg" aria-hidden="true">' +
+      '<polygon points="' + pointsAttr + '" class="polygon-shape"></polygon>' +
+      dots + labels +
+      '</svg>';
+  }
+
+  // ---------- Rendering ----------
+  function renderStats() {
+    if (state.mode === 'warmup') {
+      scoreLabel.textContent = 'مرحله';
+      scoreValEl.textContent = toFa(state.round) + ' از ' + toFa(WARMUP_TOTAL);
+      var hearts = '';
+      for (var i = 0; i < 3; i++) hearts += i < state.lives ? '❤️' : '🖤';
+      livesValEl.textContent = hearts;
+    } else {
+      scoreLabel.textContent = 'امتیاز';
+      scoreValEl.textContent = toFa(state.score);
+    }
+    roundNumEl.textContent = toFa(state.round);
+  }
+
+  function renderRound() {
+    polygonWrap.innerHTML = buildPolygonSVG(state.nSides, state.angles, state.missingIndex);
+    answerInput.value = '';
+    answerInput.disabled = false;
+    submitBtn.disabled = false;
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'feedback';
+    renderStats();
+    answerInput.focus();
+  }
+
+  function updateMainTimerBar() {
+    var pct = Math.max(0, (state.mainTimeLeft / MAIN_TOTAL_TIME) * 100);
+    timerFillEl.style.width = pct + '%';
+    timerFillEl.classList.toggle('is-low', pct < 30);
+  }
+
+  // ---------- Main-mode overall timer (60s total) ----------
+  function startMainTimer() {
+    clearInterval(state.timerId);
+    timerStat.classList.remove('is-untimed');
+    updateMainTimerBar();
+    var lastTick = Date.now();
+    state.timerId = setInterval(function () {
+      var now = Date.now();
+      var elapsed = (now - lastTick) / 1000;
+      lastTick = now;
+      state.mainTimeLeft -= elapsed;
+      if (state.mainTimeLeft <= 0) {
+        state.mainTimeLeft = 0;
+        updateMainTimerBar();
+        clearInterval(state.timerId);
+        gameOver();
+      } else {
+        updateMainTimerBar();
+      }
+    }, 100);
+  }
+
+  // ---------- Round flow ----------
+  function nextRound() {
+    state.round += 1;
+
+    if (state.mode === 'warmup') {
+      if (state.round > WARMUP_TOTAL) {
+        finishWarmup();
+        return;
+      }
+      state.nSides = state.round <= 3 ? 3 : 4;
+    } else {
+      state.nSides = Math.min(8, 3 + Math.floor((state.round - 1) / 2));
+    }
+
+    var total = (state.nSides - 2) * 180;
+    state.angles = generateAngles(state.nSides, total);
+    state.missingIndex = Math.floor(Math.random() * state.nSides);
+    state.locked = false;
+    renderRound();
+  }
+
+  function calcPoints() {
+    var base = 30 + (state.nSides - 2) * 15;
+    var streakBonus = Math.min(state.streak, 6) * 5;
+    return base + streakBonus;
+  }
+
+  function handleCorrect() {
+    if (state.locked) return;
+    state.locked = true;
+    answerInput.disabled = true;
+    submitBtn.disabled = true;
+    playCorrectSound();
+
+    if (state.mode === 'warmup') {
+      feedbackEl.textContent = '✅ درسته! سرنخ رو درست خوندی.';
+      feedbackEl.className = 'feedback is-correct';
+      setTimeout(function () { if (state.active) nextRound(); }, 750);
+      return;
+    }
+
+    var pts = calcPoints();
+    state.score += pts;
+    state.streak += 1;
+    feedbackEl.textContent = '✅ حل شد! +' + toFa(pts) + ' امتیاز';
+    feedbackEl.className = 'feedback is-correct';
+    renderStats();
+    setTimeout(function () { if (state.active) nextRound(); }, 550);
+  }
+
+  function handleWrong() {
+    if (state.locked) return;
+    state.locked = true;
+    var actual = state.angles[state.missingIndex];
+    state.streak = 0;
+    answerInput.disabled = true;
+    submitBtn.disabled = true;
+    playWrongSound();
+    feedbackEl.textContent = '❌ اشتباه! جواب درست: ' + actual + '°';
+    feedbackEl.className = 'feedback is-wrong';
+
+    if (state.mode === 'warmup') {
+      state.lives -= 1;
+      renderStats();
+      setTimeout(function () {
+        if (state.lives <= 0) {
+          failWarmup();
+        } else if (state.active) {
+          nextRound();
+        }
+      }, 1050);
+    } else {
+      setTimeout(function () { if (state.active) nextRound(); }, 700);
+    }
+  }
+
+  function submitAnswer() {
+    if (!state.active || state.locked) return;
+    var raw = answerInput.value.trim();
+    if (raw === '') {
+      feedbackEl.textContent = 'اول یه عدد وارد کن، کارآگاه!';
+      feedbackEl.className = 'feedback';
+      return;
+    }
+    var guess = Math.round(parseFloat(raw));
+    var actual = state.angles[state.missingIndex];
+    if (guess === actual) {
+      handleCorrect();
+    } else {
+      handleWrong();
+    }
+  }
+
+  // ---------- Warm-up outcomes ----------
+  function finishWarmup() {
+    state.active = false;
+    localStorage.setItem(WARMUP_KEY, 'true');
+    playFanfare();
+    warmupWinModal.hidden = false;
+  }
+
+  function failWarmup() {
+    state.active = false;
+    playSadTone();
+    warmupFailModal.hidden = false;
+  }
+
+  // ---------- Main game over ----------
+  function getRank(score) {
+    if (score >= 700) return 'استاد کارآگاه هندسه 🕵️‍♂️';
+    if (score >= 400) return 'کارآگاه ارشد پرونده‌ها';
+    if (score >= 150) return 'کارآگاه ماهر';
+    return 'کارآگاه کارآموز';
+  }
+
+  function gameOver() {
+    state.active = false;
+    clearInterval(state.timerId);
+    var high = getHighScore();
+    if (state.score > high) {
+      high = state.score;
+      localStorage.setItem(HIGH_SCORE_KEY, String(high));
+    }
+    playFanfare();
+    rankText.textContent = getRank(state.score);
+    finalScoreEl.textContent = toFa(state.score);
+    highScoreEl.textContent = toFa(high);
+    gameOverModal.hidden = false;
+  }
+
+  // ---------- Mode starters ----------
+  function startWarmup() {
+    ensureAudio();
+    state.mode = 'warmup';
+    state.score = 0;
+    state.lives = 3;
+    state.round = 0;
+    state.streak = 0;
+    state.active = true;
+    state.locked = false;
+
+    livesStat.hidden = false;
+    modeLabel.innerHTML = 'دست‌گرمی — مرحله‌ی <span id="roundNum">۱</span>';
+    roundNumEl = document.getElementById('roundNum');
+    gameTitle.innerHTML = '<span class="title__accent">دست‌گرمی</span> کارآگاهی';
+    gameSubtitle.textContent = 'بدون عجله؛ فقط فرمول رو درست به کار ببر.';
+    ruleDynamic.textContent = 'با از دست دادن هر ۳ جون، دست‌گرمی از اول شروع می‌شه.';
+    timerStat.classList.add('is-untimed');
+    timerLabel.textContent = 'بدون محدودیت';
+    timerFillEl.style.width = '100%';
+    timerFillEl.classList.remove('is-low');
+    clearInterval(state.timerId);
+
+    hideAllModals();
+    startScreen.hidden = true;
+    gameScreen.hidden = false;
+    nextRound();
+  }
+
+  function startMainGame() {
+    ensureAudio();
+    state.mode = 'main';
+    state.score = 0;
+    state.round = 0;
+    state.streak = 0;
+    state.active = true;
+    state.locked = false;
+    state.mainTimeLeft = MAIN_TOTAL_TIME;
+
+    livesStat.hidden = true;
+    modeLabel.innerHTML = 'پرونده‌ی اصلی — سؤال <span id="roundNum">۱</span>';
+    roundNumEl = document.getElementById('roundNum');
+    gameTitle.innerHTML = 'پرونده‌های <span class="title__accent">زاویه‌ی گمشده</span>';
+    gameSubtitle.textContent = 'تا وقتی زمان داری، هرچی سریع‌تر و بیشتر جواب درست بده.';
+    ruleDynamic.textContent = 'در پرونده‌ی اصلی فقط ۶۰ ثانیه زمان داری؛ سوال‌ها کم‌کم سخت‌تر می‌شن و هر جواب درست امتیاز داره.';
+    timerLabel.textContent = 'زمان کل پرونده';
+
+    hideAllModals();
+    startScreen.hidden = true;
+    gameScreen.hidden = false;
+    nextRound();
+    startMainTimer();
+  }
+
+  // ---------- Events ----------
+  muteBtn.addEventListener('click', function () {
+    ensureAudio();
+    setMuted(!audioMuted);
+  });
+
+  submitBtn.addEventListener('click', submitAnswer);
+  answerInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') submitAnswer();
+  });
+
+  rulesToggle.addEventListener('click', function () {
+    var isHidden = rulesBody.hidden;
+    rulesBody.hidden = !isHidden;
+    rulesToggle.setAttribute('aria-expanded', String(isHidden));
+    rulesIcon.textContent = isHidden ? '−' : '+';
+  });
+
+  btnWarmup.addEventListener('click', startWarmup);
+  btnMain.addEventListener('click', function () {
+    if (isWarmupDone()) startMainGame();
+  });
+
+  backToMenuBtn.addEventListener('click', showStartScreen);
+  gameOverMenuBtn.addEventListener('click', showStartScreen);
+  warmupWinMenuBtn.addEventListener('click', showStartScreen);
+  warmupFailMenuBtn.addEventListener('click', showStartScreen);
+
+  restartBtn.addEventListener('click', function () { gameOverModal.hidden = true; startMainGame(); });
+  goToMainBtn.addEventListener('click', function () { warmupWinModal.hidden = true; startMainGame(); });
+  retryWarmupBtn.addEventListener('click', function () { warmupFailModal.hidden = true; startWarmup(); });
+
+  // ---------- Boot ----------
+  refreshMenu();
+})();
+</script>
+</body>
+</html>
