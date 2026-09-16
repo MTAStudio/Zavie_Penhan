@@ -41,6 +41,14 @@
         </div>
         <p class="mode-card__desc" id="mainDesc">برای باز شدن این بخش، اول ۵ مرحله‌ی دست‌گرمی رو کامل کن.</p>
       </button>
+
+      <button class="mode-card" id="btnDuel">
+        <div class="mode-card__top">
+          <span class="mode-card__title">🤝 مسابقه‌ی زنده (دو نفره)</span>
+          <span class="mode-card__badge mode-card__badge--open">آنلاین</span>
+        </div>
+        <p class="mode-card__desc">یه نفر روم می‌سازه و کد یا لینکشو می‌ده، اون یکی وارد می‌شه و رو در رو رقابت می‌کنید.</p>
+      </button>
     </div>
   </section>
 
@@ -106,6 +114,160 @@
     <button class="btn btn--ghost btn--back" id="backToMenuBtn">بازگشت به منو</button>
   </section>
 
+  <!-- ============ DUEL: SETUP (create / join) ============ -->
+  <section id="duelSetupScreen" hidden>
+    <header class="board__header">
+      <div class="case-stamp"><span class="case-stamp__num">مسابقه‌ی زنده</span></div>
+      <h1 class="title">اتاق <span class="title__accent">دو نفره</span></h1>
+      <p class="subtitle">یه اسم برای خودت انتخاب کن، بعد یا روم بساز یا با کد وارد روم دوستت شو.</p>
+    </header>
+
+    <div class="rules-card duel-panel">
+      <div class="rules-card__body" style="padding-top:16px;">
+        <label class="answer-label" for="duelNameInput">اسم کارآگاه</label>
+        <input type="text" id="duelNameInput" class="answer-input" style="width:100%;max-width:260px;margin:0 auto;display:block;" placeholder="مثلاً آرمین" maxlength="14" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="mode-cards">
+      <button class="mode-card" id="btnCreateRoom" type="button">
+        <div class="mode-card__top">
+          <span class="mode-card__title">🛠️ ساخت روم جدید</span>
+        </div>
+        <p class="mode-card__desc">یه روم بساز و کد یا لینکشو برای دوستت بفرست.</p>
+      </button>
+
+      <div class="mode-card" id="joinRoomCard" style="cursor:default;">
+        <div class="mode-card__top">
+          <span class="mode-card__title">🔑 عضویت با کد</span>
+        </div>
+        <p class="mode-card__desc" style="margin-bottom:10px;">کدِ روم دوستت رو اینجا بزن.</p>
+        <div class="answer-row">
+          <input type="text" id="duelCodeInput" class="answer-input duel-code-input" placeholder="مثلاً A3K9P" maxlength="5" autocomplete="off">
+          <button class="btn btn--submit" id="btnJoinRoom" type="button">ورود</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="feedback" id="duelSetupMsg" aria-live="polite"></p>
+
+    <button class="btn btn--ghost btn--back" id="duelSetupBackBtn">بازگشت به منو</button>
+  </section>
+
+  <!-- ============ DUEL: LOBBY ============ -->
+  <section id="duelLobbyScreen" hidden>
+    <header class="board__header">
+      <div class="case-stamp"><span class="case-stamp__num">اتاق انتظار</span></div>
+      <h1 class="title">در انتظار <span class="title__accent">شروع</span></h1>
+      <p class="subtitle" id="duelLobbySubtitle">منتظر پیوستن حریف بمون...</p>
+    </header>
+
+    <div class="evidence-panel duel-panel" id="duelCodePanel">
+      <div class="pin pin--tl"></div>
+      <div class="pin pin--tr"></div>
+      <p class="answer-label" style="margin-bottom:6px;">کد روم</p>
+      <div class="duel-code-box" id="duelCodeBox">-----</div>
+      <div class="answer-row" style="margin-top:10px;">
+        <button class="btn btn--ghost" id="copyCodeBtn" type="button">کپی کد</button>
+        <button class="btn btn--ghost" id="copyLinkBtn" type="button">کپی لینک دعوت</button>
+      </div>
+    </div>
+
+    <div class="rules-card duel-panel">
+      <div class="rules-card__body" style="padding-top:14px;">
+        <p class="answer-label" style="margin-bottom:10px;">بازیکن‌ها</p>
+        <div class="player-list" id="playerList"></div>
+      </div>
+    </div>
+
+    <div class="rules-card duel-panel" id="duelSettingsCard" hidden>
+      <div class="rules-card__body" style="padding-top:14px;">
+        <p class="answer-label" style="margin-bottom:10px;">تنظیمات بازی (دست مدیر روم)</p>
+
+        <div class="settings-row">
+          <span class="settings-label">مدت مسابقه</span>
+          <select id="duelTimeSelect" class="select-input">
+            <option value="30">۳۰ ثانیه</option>
+            <option value="60" selected>۶۰ ثانیه</option>
+            <option value="90">۹۰ ثانیه</option>
+            <option value="120">۲ دقیقه</option>
+            <option value="150">۲.۵ دقیقه</option>
+            <option value="180">۳ دقیقه</option>
+          </select>
+        </div>
+
+        <div class="settings-row">
+          <span class="settings-label">شکل‌ها از</span>
+          <select id="duelMinSelect" class="select-input"></select>
+          <span class="settings-label">تا</span>
+          <select id="duelMaxSelect" class="select-input"></select>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="duelAllShapesChk" checked>
+          <span>همه‌ی شکل‌ها (۳ تا ۸ ضلعی)</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="rules-card duel-panel" id="duelSettingsReadonly" hidden>
+      <div class="rules-card__body" style="padding-top:14px;" id="duelSettingsReadonlyText"></div>
+    </div>
+
+    <div class="answer-panel">
+      <button class="btn btn--submit" id="duelReadyBtn" type="button" hidden>آماده‌ام ✅</button>
+      <button class="btn btn--submit" id="duelStartBtn" type="button" hidden disabled>شروع بازی 🚀</button>
+      <p class="feedback" id="duelLobbyMsg" aria-live="polite"></p>
+    </div>
+
+    <button class="btn btn--ghost btn--back" id="duelLeaveBtn">ترک اتاق</button>
+  </section>
+
+  <!-- ============ DUEL: LIVE GAME ============ -->
+  <section id="duelGameScreen" hidden>
+    <header class="board__header">
+      <div class="case-stamp"><span class="case-stamp__num">مسابقه‌ی زنده — سؤال <span id="duelRoundNum">۱</span></span></div>
+      <h1 class="title">پرونده‌های <span class="title__accent">زاویه‌ی گمشده</span></h1>
+      <p class="subtitle">هر کی سریع‌تر جواب درست بده، امتیاز می‌گیره!</p>
+    </header>
+
+    <section class="stat-bar" aria-label="امتیازها">
+      <div class="stat">
+        <span class="stat__label" id="duelMeLabel">شما</span>
+        <span class="stat__value" id="duelMeScore">۰</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label" id="duelOppLabel">حریف</span>
+        <span class="stat__value" id="duelOppScore">۰</span>
+      </div>
+      <div class="stat stat--timer" id="duelTimerStat">
+        <span class="stat__label">زمان باقی‌مانده</span>
+        <div class="timer-track"><div class="timer-fill" id="duelTimerFill"></div></div>
+      </div>
+    </section>
+
+    <section class="evidence-panel">
+      <div class="pin pin--tl"></div>
+      <div class="pin pin--tr"></div>
+      <div class="polygon-wrap" id="duelPolygonWrap"></div>
+      <div class="formula-tag">
+        <span class="formula-tag__label">فرمول سرنخ</span>
+        <span class="formula-tag__formula">مجموع زوایا = (n − 2) × 180</span>
+      </div>
+    </section>
+
+    <section class="answer-panel">
+      <label for="duelAnswerInput" class="answer-label">درجه‌ی زاویه‌ی گمشده (؟) چقدره؟</label>
+      <div class="answer-row">
+        <input type="number" id="duelAnswerInput" class="answer-input" placeholder="مثلاً 75" autocomplete="off" inputmode="numeric">
+        <button class="btn btn--submit" id="duelSubmitBtn" type="button">ثبت جواب</button>
+      </div>
+      <div class="feedback" id="duelFeedback" aria-live="polite"></div>
+    </section>
+
+    <button class="btn btn--ghost btn--back" id="duelQuitBtn">خروج از مسابقه</button>
+  </section>
+
   <footer class="board__footer">
     <p>By Mahan Motaghian</p>
   </footer>
@@ -143,6 +305,29 @@
     <div class="modal__actions">
       <button class="btn btn--submit" id="restartBtn">پرونده‌ی جدید</button>
       <button class="btn btn--ghost" id="gameOverMenuBtn">بازگشت به منو</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="duelResultModal" hidden>
+  <div class="modal">
+    <h2 class="modal__title" id="duelResultTitle">مسابقه تموم شد 🏁</h2>
+    <p class="modal__rank" id="duelResultRank"></p>
+    <p class="modal__score">شما: <span id="duelResultMe"></span></p>
+    <p class="modal__score">حریف: <span id="duelResultOpp"></span></p>
+    <div class="modal__actions">
+      <button class="btn btn--submit" id="duelPlayAgainBtn">بازی دوباره</button>
+      <button class="btn btn--ghost" id="duelResultMenuBtn">بازگشت به منو</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="duelInfoModal" hidden>
+  <div class="modal">
+    <h2 class="modal__title">اطلاع</h2>
+    <p class="modal__rank" id="duelInfoText"></p>
+    <div class="modal__actions">
+      <button class="btn btn--submit" id="duelInfoOkBtn">باشه</button>
     </div>
   </div>
 </div>
@@ -406,35 +591,148 @@
   }
 
   // ---------- Angle generation ----------
+  // هر زاویه رو بین ۲۰ تا ۱۵۰ درجه نگه می‌داریم تا هیچ‌وقت به خط صاف (۱۸۰°) نزدیک نشه؛
+  // وگرنه اون رأس عملاً "گم" می‌شه و مثلاً یه چهارضلعی، شبیه مثلث دیده می‌شه (باگی که قبلاً بود).
+  // مجموع همیشه دقیقاً برابر (n-2)×180 می‌مونه؛ هیچ رأسی گرد یا تقریبی نمی‌شه.
+  function distributeBudget(n, budget, cap) {
+    var alloc = new Array(n).fill(0);
+    var remaining = budget;
+    for (var i = 0; i < n - 1; i++) {
+      var slotsLeft = n - 1 - i;
+      var lo = Math.max(0, remaining - cap * slotsLeft);
+      var hi = Math.min(cap, remaining);
+      var val = lo + Math.floor(Math.random() * (hi - lo + 1));
+      alloc[i] = val;
+      remaining -= val;
+    }
+    alloc[n - 1] = remaining;
+    return alloc;
+  }
+
+  function shuffleArr(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+  }
+
   function generateAngles(n, total) {
-    var cuts = [0];
-    for (var i = 0; i < n - 1; i++) cuts.push(Math.random());
-    cuts.push(1);
-    cuts.sort(function (a, b) { return a - b; });
-
-    var fracs = [];
-    for (var j = 0; j < n; j++) fracs.push(cuts[j + 1] - cuts[j]);
-
-    var minFrac = 0.07;
-    fracs = fracs.map(function (f) { return minFrac + f * (1 - minFrac * n); });
-    var sumF = fracs.reduce(function (a, b) { return a + b; }, 0);
-    fracs = fracs.map(function (f) { return f / sumF; });
-
-    var deg = fracs.map(function (f) { return Math.round(f * total); });
-    var diff = total - deg.reduce(function (a, b) { return a + b; }, 0);
-    deg[0] += diff;
-
-    return deg;
+    var minA = 20;
+    var maxA = Math.min(150, total - (n - 1) * minA);
+    if (maxA < minA) maxA = minA;
+    var cap = maxA - minA;
+    var budget = total - n * minA;
+    if (budget < 0) budget = 0;
+    if (budget > n * cap) budget = n * cap;
+    var alloc = distributeBudget(n, budget, cap);
+    var deg = alloc.map(function (a) { return minA + a; });
+    return shuffleArr(deg);
   }
 
   // ---------- SVG builder ----------
-  function buildPolygonSVG(n, angles, missingIndex) {
-    var cx = 150, cy = 155, r = 108;
-    var points = [];
-    for (var i = 0; i < n; i++) {
-      var theta = -Math.PI / 2 + i * (2 * Math.PI / n);
-      points.push({ x: cx + r * Math.cos(theta), y: cy + r * Math.sin(theta) });
+  // شکل رو "متناسب با زاویه‌های واقعی" می‌سازیم (نه یه چندضلعی منتظم ثابت)،
+  // تا هم دست‌گرمی و هم پرونده‌ی اصلی، نمایی واقعی‌تر و متناسب با اعداد داشته باشن.
+
+  // با روش "لاک‌پشتی": جهت هر ضلع از روی زاویه‌ی بیرونیِ رأس قبلی به‌دست میاد،
+  // و طول اضلاع طوری با کمترین انحراف از حالت یکسان تنظیم می‌شه که شکل دقیقاً بسته بشه
+  // (برای مثلث، این روش خودش دقیقاً همون نسبت صحیح قانون سینوس‌ها رو می‌ده).
+  function computeIrregularPolygon(angles) {
+    var n = angles.length;
+    var dirs = new Array(n);
+    dirs[0] = 0;
+    var i;
+    for (i = 1; i < n; i++) {
+      var exteriorRad = Math.PI - (angles[i] * Math.PI / 180);
+      dirs[i] = dirs[i - 1] + exteriorRad;
     }
+
+    var ux = [], uy = [];
+    for (i = 0; i < n; i++) {
+      ux.push(Math.cos(dirs[i]));
+      uy.push(Math.sin(dirs[i]));
+    }
+
+    var Sx = 0, Sy = 0;
+    for (i = 0; i < n; i++) { Sx += ux[i]; Sy += uy[i]; }
+
+    var Mxx = 0, Mxy = 0, Myy = 0;
+    for (i = 0; i < n; i++) {
+      Mxx += ux[i] * ux[i];
+      Mxy += ux[i] * uy[i];
+      Myy += uy[i] * uy[i];
+    }
+
+    var det = Mxx * Myy - Mxy * Mxy;
+    var lamX = 0, lamY = 0;
+    if (Math.abs(det) > 1e-9) {
+      var invXX = Myy / det, invXY = -Mxy / det, invYY = Mxx / det;
+      var bx = -Sx, by = -Sy;
+      lamX = invXX * bx + invXY * by;
+      lamY = invXY * bx + invYY * by;
+    }
+
+    var MIN_LEN = 0.28;
+    var L = [];
+    for (i = 0; i < n; i++) {
+      var len = 1 + (lamX * ux[i] + lamY * uy[i]);
+      if (len < MIN_LEN) len = MIN_LEN;
+      L.push(len);
+    }
+
+    var pts = [{ x: 0, y: 0 }];
+    for (i = 0; i < n; i++) {
+      var prev = pts[pts.length - 1];
+      pts.push({ x: prev.x + L[i] * ux[i], y: prev.y + L[i] * uy[i] });
+    }
+    pts.pop(); // نقطه‌ی آخر تقریباً برابر نقطه‌ی اوله؛ چون polygon خودش بسته می‌شه، حذفش می‌کنیم.
+
+    return pts;
+  }
+
+  // شکل خام رو وسط‌چین و هم‌مقیاس می‌کنه تا همیشه جای کافی توی تابلوی مدرک داشته باشه.
+  function fitPolygonToCanvas(pts, cx, cy, targetHalf) {
+    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    pts.forEach(function (p) {
+      if (p.x < minX) minX = p.x;
+      if (p.x > maxX) maxX = p.x;
+      if (p.y < minY) minY = p.y;
+      if (p.y > maxY) maxY = p.y;
+    });
+
+    var w = maxX - minX, h = maxY - minY;
+    var maxDim = Math.max(w, h, 0.0001);
+    var scale = (targetHalf * 2) / maxDim;
+    var midX = (minX + maxX) / 2, midY = (minY + maxY) / 2;
+
+    var scaled = pts.map(function (p) {
+      return { x: (p.x - midX) * scale, y: (p.y - midY) * scale };
+    });
+
+    // یه چرخش کوچیک می‌دیم که رأس اول همیشه بالای شکل بیفته؛ نظم بصری بهتری می‌ده.
+    var v0 = scaled[0];
+    var currentAngle = Math.atan2(v0.y, v0.x);
+    var targetAngle = -Math.PI / 2;
+    var rot = targetAngle - currentAngle;
+    var cosR = Math.cos(rot), sinR = Math.sin(rot);
+
+    return scaled.map(function (p) {
+      return {
+        x: cx + (p.x * cosR - p.y * sinR),
+        y: cy + (p.x * sinR + p.y * cosR)
+      };
+    });
+  }
+
+  function buildPolygonSVG(n, angles, missingIndex) {
+    var cx = 150, cy = 158, targetHalf = 88;
+    var raw = computeIrregularPolygon(angles);
+    var points = fitPolygonToCanvas(raw, cx, cy, targetHalf);
+
+    var cenX = 0, cenY = 0;
+    points.forEach(function (p) { cenX += p.x; cenY += p.y; });
+    cenX /= points.length;
+    cenY /= points.length;
 
     var pointsAttr = points.map(function (p) {
       return p.x.toFixed(1) + ',' + p.y.toFixed(1);
@@ -446,10 +744,10 @@
 
     var labels = '';
     points.forEach(function (p, i) {
-      var dx = p.x - cx, dy = p.y - cy;
-      var dist = Math.sqrt(dx * dx + dy * dy);
-      var lx = cx + (dx / dist) * (r + 28);
-      var ly = cy + (dy / dist) * (r + 28);
+      var dx = p.x - cenX, dy = p.y - cenY;
+      var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      var lx = p.x + (dx / dist) * 32;
+      var ly = p.y + (dy / dist) * 32;
 
       if (i === missingIndex) {
         labels +=
@@ -536,7 +834,9 @@
       }
       state.nSides = state.round <= 3 ? 3 : 4;
     } else {
-      state.nSides = Math.min(8, 3 + Math.floor((state.round - 1) / 2));
+      // هر سؤال یه ضلع بیشتر از قبلی: مثلث، مربع، پنج‌ضلعی، شش‌ضلعی و ...
+      // یعنی پنج‌ضلعی و شش‌ضلعی خیلی زودتر (بعد از ۲ جواب) وارد بازی می‌شن.
+      state.nSides = Math.min(8, 2 + state.round);
     }
 
     var total = (state.nSides - 2) * 180;
@@ -743,6 +1043,781 @@
 
   // ---------- Boot ----------
   refreshMenu();
+
+  // Expose a few read-only helpers for the (separate) live-duel module below,
+  // without changing anything about how this single-player module works.
+  window.GeoShared = {
+    toFa: toFa,
+    ensureAudio: ensureAudio,
+    playCorrectSound: playCorrectSound,
+    playWrongSound: playWrongSound,
+    playFanfare: playFanfare,
+    playSadTone: playSadTone
+  };
+})();
+</script>
+
+<!-- PeerJS: enables the live 2-player duel (peer-to-peer, via PeerJS's free public broker) -->
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  if (typeof Peer === 'undefined') {
+    var btnDuelMissing = document.getElementById('btnDuel');
+    if (btnDuelMissing) {
+      btnDuelMissing.addEventListener('click', function () {
+        alert('اتصال به سرویس مسابقه‌ی زنده ممکن نشد. اینترنتت رو چک کن و صفحه رو دوباره بارگذاری کن.');
+      });
+    }
+    return;
+  }
+
+  var G = window.GeoShared || {};
+  var toFa = G.toFa || function (n) { return String(n); };
+
+  var CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  function genCode() {
+    var s = '';
+    for (var i = 0; i < 5; i++) s += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)];
+    return s;
+  }
+  function peerIdFromCode(code) { return 'gdzv-' + code; }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // ---------- DOM refs ----------
+  var startScreen = document.getElementById('startScreen');
+  var btnDuel = document.getElementById('btnDuel');
+  var duelSetupScreen = document.getElementById('duelSetupScreen');
+  var duelLobbyScreen = document.getElementById('duelLobbyScreen');
+  var duelGameScreen = document.getElementById('duelGameScreen');
+
+  var duelNameInput = document.getElementById('duelNameInput');
+  var btnCreateRoom = document.getElementById('btnCreateRoom');
+  var duelCodeInput = document.getElementById('duelCodeInput');
+  var btnJoinRoom = document.getElementById('btnJoinRoom');
+  var duelSetupMsg = document.getElementById('duelSetupMsg');
+  var duelSetupBackBtn = document.getElementById('duelSetupBackBtn');
+
+  var duelCodeBox = document.getElementById('duelCodeBox');
+  var duelCodePanel = document.getElementById('duelCodePanel');
+  var copyCodeBtn = document.getElementById('copyCodeBtn');
+  var copyLinkBtn = document.getElementById('copyLinkBtn');
+  var playerList = document.getElementById('playerList');
+  var duelLobbySubtitle = document.getElementById('duelLobbySubtitle');
+
+  var duelSettingsCard = document.getElementById('duelSettingsCard');
+  var duelTimeSelect = document.getElementById('duelTimeSelect');
+  var duelMinSelect = document.getElementById('duelMinSelect');
+  var duelMaxSelect = document.getElementById('duelMaxSelect');
+  var duelAllShapesChk = document.getElementById('duelAllShapesChk');
+  var duelSettingsReadonly = document.getElementById('duelSettingsReadonly');
+  var duelSettingsReadonlyText = document.getElementById('duelSettingsReadonlyText');
+
+  var duelReadyBtn = document.getElementById('duelReadyBtn');
+  var duelStartBtn = document.getElementById('duelStartBtn');
+  var duelLobbyMsg = document.getElementById('duelLobbyMsg');
+  var duelLeaveBtn = document.getElementById('duelLeaveBtn');
+
+  var duelRoundNum = document.getElementById('duelRoundNum');
+  var duelMeLabel = document.getElementById('duelMeLabel');
+  var duelOppLabel = document.getElementById('duelOppLabel');
+  var duelMeScore = document.getElementById('duelMeScore');
+  var duelOppScore = document.getElementById('duelOppScore');
+  var duelTimerFill = document.getElementById('duelTimerFill');
+  var duelPolygonWrap = document.getElementById('duelPolygonWrap');
+  var duelAnswerInput = document.getElementById('duelAnswerInput');
+  var duelSubmitBtn = document.getElementById('duelSubmitBtn');
+  var duelFeedback = document.getElementById('duelFeedback');
+  var duelQuitBtn = document.getElementById('duelQuitBtn');
+
+  var duelResultModal = document.getElementById('duelResultModal');
+  var duelResultTitle = document.getElementById('duelResultTitle');
+  var duelResultRank = document.getElementById('duelResultRank');
+  var duelResultMe = document.getElementById('duelResultMe');
+  var duelResultOpp = document.getElementById('duelResultOpp');
+  var duelPlayAgainBtn = document.getElementById('duelPlayAgainBtn');
+  var duelResultMenuBtn = document.getElementById('duelResultMenuBtn');
+
+  var duelInfoModal = document.getElementById('duelInfoModal');
+  var duelInfoText = document.getElementById('duelInfoText');
+  var duelInfoOkBtn = document.getElementById('duelInfoOkBtn');
+
+  if (!btnDuel || !duelSetupScreen || !duelLobbyScreen || !duelGameScreen) return;
+
+  // populate shape selects 3..8
+  (function () {
+    for (var n = 3; n <= 8; n++) {
+      var o1 = document.createElement('option'); o1.value = n; o1.textContent = toFa(n) + ' ضلعی';
+      duelMinSelect.appendChild(o1);
+      var o2 = document.createElement('option'); o2.value = n; o2.textContent = toFa(n) + ' ضلعی';
+      duelMaxSelect.appendChild(o2);
+    }
+    duelMinSelect.value = 3; duelMaxSelect.value = 8;
+    duelMinSelect.disabled = true; duelMaxSelect.disabled = true;
+  })();
+
+  // ---------- Networking state ----------
+  var peer = null, conn = null, isHost = false, myName = '', peerName = '', hostNameG = '', roomCode = '';
+  var guestReady = false, connected = false;
+  var settings = { time: 60, minSides: 3, maxSides: 8 };
+
+  // ---------- Duel match state ----------
+  var ds = { scoreMe: 0, scoreOpp: 0, round: 0, nSides: 3, angles: [], missingIndex: -1, locked: false, timeLeft: 0, timerId: null, active: false };
+
+  function showOnly(el) {
+    [startScreen, duelSetupScreen, duelLobbyScreen, duelGameScreen].forEach(function (s) { s.hidden = (s !== el); });
+  }
+  function setSetupMsg(t, err) { duelSetupMsg.textContent = t || ''; duelSetupMsg.className = 'feedback' + (err ? ' is-wrong' : ''); }
+  function setLobbyMsg(t, err) { duelLobbyMsg.textContent = t || ''; duelLobbyMsg.className = 'feedback' + (err ? ' is-wrong' : ''); }
+  function showInfo(text) { duelInfoText.textContent = text; duelInfoModal.hidden = false; }
+  duelInfoOkBtn.addEventListener('click', function () { duelInfoModal.hidden = true; });
+
+  function cleanupPeer() {
+    if (conn) { try { conn.close(); } catch (e) {} conn = null; }
+    if (peer) { try { peer.destroy(); } catch (e) {} peer = null; }
+    connected = false; isHost = false; guestReady = false; peerName = ''; hostNameG = '';
+    if (ds.timerId) { clearInterval(ds.timerId); ds.timerId = null; }
+    ds.active = false;
+  }
+
+  function backToMenu() {
+    cleanupPeer();
+    duelResultModal.hidden = true;
+    showOnly(startScreen);
+  }
+
+  btnDuel.addEventListener('click', function () {
+    setSetupMsg('');
+    try {
+      var url = new URL(window.location.href);
+      var qRoom = url.searchParams.get('room');
+      if (qRoom) duelCodeInput.value = qRoom.toUpperCase();
+    } catch (e) {}
+    var savedName = localStorage.getItem('geoDetectiveDuelName');
+    if (savedName) duelNameInput.value = savedName;
+    showOnly(duelSetupScreen);
+  });
+
+  duelSetupBackBtn.addEventListener('click', function () { showOnly(startScreen); });
+
+  function getEnteredName() { return duelNameInput.value.trim().slice(0, 14); }
+
+  // ================= CREATE ROOM (host) =================
+  btnCreateRoom.addEventListener('click', function () {
+    var name = getEnteredName();
+    if (!name) { setSetupMsg('اول یه اسم برای خودت بنویس.', true); duelNameInput.focus(); return; }
+    localStorage.setItem('geoDetectiveDuelName', name);
+    myName = name;
+    setSetupMsg('در حال ساخت روم...');
+    tryCreateRoom(0);
+  });
+
+  function tryCreateRoom(attempt) {
+    if (attempt > 4) { setSetupMsg('ساخت روم ممکن نشد. اتصال اینترنت رو چک کن.', true); return; }
+    var code = genCode();
+    var p;
+    try { p = new Peer(peerIdFromCode(code), { debug: 0 }); }
+    catch (e) { setSetupMsg('مرورگرت از این قابلیت پشتیبانی نمی‌کنه.', true); return; }
+    peer = p;
+    var settled = false;
+    p.on('open', function () {
+      if (settled) return; settled = true;
+      isHost = true; roomCode = code; connected = false; guestReady = false; peerName = '';
+      settings = { time: 60, minSides: 3, maxSides: 8 };
+      enterLobbyAsHost();
+      p.on('connection', function (c) {
+        if (conn && conn.open) {
+          c.on('open', function () {
+            try { c.send({ type: 'full' }); } catch (e) {}
+            setTimeout(function () { try { c.close(); } catch (e) {} }, 300);
+          });
+          return;
+        }
+        conn = c;
+        setupHostConn(c);
+      });
+    });
+    p.on('error', function (err) {
+      if (settled) return;
+      if (err && err.type === 'unavailable-id') {
+        settled = true;
+        try { p.destroy(); } catch (e) {}
+        tryCreateRoom(attempt + 1);
+      } else {
+        settled = true;
+        setSetupMsg('خطا در ساخت روم: امکان اتصال به سرور نیست.', true);
+      }
+    });
+  }
+
+  function setupHostConn(c) {
+    c.on('open', function () { connected = true; setLobbyMsg(''); renderLobby(); });
+    c.on('data', function (msg) { handleHostMessage(msg); });
+    c.on('close', function () { handleGuestLeft(); });
+    c.on('error', function () { handleGuestLeft(); });
+  }
+
+  function handleGuestLeft() {
+    if (!isHost) return;
+    var wasInGame = ds.active;
+    connected = false; guestReady = false; peerName = ''; conn = null;
+    if (wasInGame) {
+      if (ds.timerId) { clearInterval(ds.timerId); ds.timerId = null; }
+      ds.active = false;
+      duelGameScreen.hidden = true;
+      showOnly(duelLobbyScreen);
+      showInfo('حریف از بازی خارج شد. منتظر عضو جدید بمون یا اتاق رو ترک کن.');
+    }
+    renderLobby();
+  }
+
+  function handleHostMessage(msg) {
+    if (!msg || !msg.type) return;
+    if (msg.type === 'join') {
+      peerName = (msg.name || 'مهمان').slice(0, 14);
+      guestReady = false;
+      renderLobby();
+    } else if (msg.type === 'ready') {
+      guestReady = !!msg.ready;
+      renderLobby();
+    } else if (msg.type === 'answer') {
+      if (ds.active) evalAnswer('opp', msg.guess);
+    } else if (msg.type === 'leave') {
+      handleGuestLeft();
+    }
+  }
+
+  // ================= JOIN ROOM (guest) =================
+  btnJoinRoom.addEventListener('click', function () {
+    var name = getEnteredName();
+    var code = duelCodeInput.value.trim().toUpperCase();
+    if (!name) { setSetupMsg('اول یه اسم برای خودت بنویس.', true); duelNameInput.focus(); return; }
+    if (!code || code.length !== 5) { setSetupMsg('یه کد ۵ کاراکتری معتبر وارد کن.', true); duelCodeInput.focus(); return; }
+    localStorage.setItem('geoDetectiveDuelName', name);
+    myName = name;
+    setSetupMsg('در حال اتصال به روم...');
+    joinRoom(code);
+  });
+
+  function joinRoom(code) {
+    var p;
+    try { p = new Peer(undefined, { debug: 0 }); }
+    catch (e) { setSetupMsg('مرورگرت از این قابلیت پشتیبانی نمی‌کنه.', true); return; }
+    peer = p;
+    var settled = false;
+    p.on('open', function () {
+      var c = p.connect(peerIdFromCode(code), { reliable: true });
+      conn = c; isHost = false; roomCode = code;
+      var connTimeout = setTimeout(function () {
+        if (!settled) { settled = true; setSetupMsg('اتصال برقرار نشد. کد روم رو دوباره چک کن.', true); cleanupPeer(); }
+      }, 12000);
+      c.on('open', function () {
+        clearTimeout(connTimeout);
+        settled = true;
+        connected = true;
+        c.send({ type: 'join', name: myName });
+        settings = { time: 60, minSides: 3, maxSides: 8 };
+        enterLobbyAsGuest();
+      });
+      c.on('data', function (msg) { handleGuestMessage(msg); });
+      c.on('close', function () { handleHostLeft(); });
+      c.on('error', function () {
+        if (!settled) { settled = true; clearTimeout(connTimeout); setSetupMsg('اتصال به روم ممکن نشد.', true); }
+        else handleHostLeft();
+      });
+    });
+    p.on('error', function (err) {
+      if (settled) return;
+      settled = true;
+      if (err && err.type === 'peer-unavailable') setSetupMsg('همچین رومی پیدا نشد. کد رو چک کن.', true);
+      else setSetupMsg('خطا در اتصال به سرور.', true);
+    });
+  }
+
+  function handleHostLeft() {
+    if (isHost) return;
+    cleanupPeer();
+    duelGameScreen.hidden = true;
+    duelLobbyScreen.hidden = true;
+    showOnly(duelSetupScreen);
+    showInfo('میزبان روم رو ترک کرد.');
+  }
+
+  function handleGuestMessage(msg) {
+    if (!msg || !msg.type) return;
+    if (msg.type === 'full') {
+      setSetupMsg('این روم پره. لطفاً بعداً امتحان کن.', true);
+      cleanupPeer();
+    } else if (msg.type === 'lobby') {
+      hostNameG = msg.hostName; peerName = msg.hostName;
+      guestReady = msg.guestReady; settings = msg.settings;
+      renderLobby();
+    } else if (msg.type === 'kicked') {
+      cleanupPeer();
+      showOnly(duelSetupScreen);
+      showInfo('میزبان تو رو از اتاق بیرون کرد.');
+    } else if (msg.type === 'round') {
+      ds.round = msg.round; ds.nSides = msg.nSides; ds.angles = msg.angles; ds.missingIndex = msg.missingIndex; ds.locked = false;
+      renderDuelRound();
+    } else if (msg.type === 'result') {
+      var meWon = msg.winner === 'guest';
+      ds.scoreMe = msg.scoreGuest; ds.scoreOpp = msg.scoreHost; ds.locked = true;
+      G.playCorrectSound && G.playCorrectSound();
+      renderDuelResultRound(meWon, msg.actual, ds.scoreMe, ds.scoreOpp);
+    } else if (msg.type === 'tick') {
+      ds.timeLeft = msg.timeLeft;
+      updateDuelTimerBar();
+    } else if (msg.type === 'gameover') {
+      duelGameOver(msg.scoreHost, msg.scoreGuest);
+    } else if (msg.type === 'gamestart') {
+      settings = msg.settings;
+      ds.scoreMe = 0; ds.scoreOpp = 0; ds.round = 0; ds.active = true;
+      enterDuelGame();
+    } else if (msg.type === 'backtolobby') {
+      duelGameScreen.hidden = true;
+      duelResultModal.hidden = true;
+      enterLobbyAsGuest();
+    }
+  }
+
+  // ================= LOBBY =================
+  function enterLobbyAsHost() {
+    showOnly(duelLobbyScreen);
+    duelCodePanel.hidden = false;
+    duelCodeBox.textContent = roomCode;
+    duelSettingsCard.hidden = false;
+    duelSettingsReadonly.hidden = true;
+    duelReadyBtn.hidden = true;
+    duelStartBtn.hidden = false;
+    duelStartBtn.disabled = true;
+    setLobbyMsg('منتظر پیوستن حریف...');
+    renderLobby();
+  }
+
+  function enterLobbyAsGuest() {
+    showOnly(duelLobbyScreen);
+    duelCodePanel.hidden = true;
+    duelSettingsCard.hidden = true;
+    duelSettingsReadonly.hidden = false;
+    duelReadyBtn.hidden = false;
+    duelStartBtn.hidden = true;
+    guestReady = false;
+    duelReadyBtn.textContent = 'آماده‌ام ✅';
+    duelReadyBtn.classList.remove('is-ready');
+    setLobbyMsg('منتظر شروع بازی از طرف میزبان...');
+    renderLobby();
+  }
+
+  function renderLobby() {
+    var rows = '';
+    var hostDisplay = isHost ? myName : (hostNameG || 'میزبان');
+    rows += '<div class="player-row"><span class="player-row__name">👑 ' + escapeHtml(hostDisplay) + '</span><span class="player-row__badge is-ready">میزبان</span></div>';
+
+    if (isHost) {
+      if (connected && peerName) {
+        rows += '<div class="player-row"><span class="player-row__name">🙋 ' + escapeHtml(peerName) + '</span>' +
+          '<span class="player-row__badge' + (guestReady ? ' is-ready' : '') + '">' + (guestReady ? 'آماده ✅' : 'در انتظار ⏳') + '</span>' +
+          '<button class="player-row__kick" id="kickBtn" type="button" title="اخراج">✕</button></div>';
+      } else {
+        rows += '<div class="player-row player-row--empty">⏳ منتظر پیوستن حریف...</div>';
+      }
+    } else {
+      rows += '<div class="player-row"><span class="player-row__name">🙋 ' + escapeHtml(myName) + '</span>' +
+        '<span class="player-row__badge' + (guestReady ? ' is-ready' : '') + '">' + (guestReady ? 'آماده ✅' : 'در انتظار ⏳') + '</span></div>';
+    }
+    playerList.innerHTML = rows;
+
+    if (isHost) {
+      var kickBtn = document.getElementById('kickBtn');
+      if (kickBtn) kickBtn.addEventListener('click', kickGuest);
+      duelStartBtn.disabled = !(connected && guestReady);
+      duelLobbySubtitle.textContent = connected ? 'حریف وصل شد؛ منتظر آماده‌باشش باش.' : 'کد یا لینک روم رو برای دوستت بفرست.';
+    } else {
+      duelSettingsReadonlyText.innerHTML = buildSettingsSummary();
+      duelLobbySubtitle.textContent = 'منتظر شروع بازی از طرف میزبان...';
+    }
+  }
+
+  function buildSettingsSummary() {
+    var timeTxt = toFa(settings.time) + ' ثانیه';
+    var shapeTxt = settings.minSides === settings.maxSides ? (toFa(settings.minSides) + ' ضلعی') : ('از ' + toFa(settings.minSides) + ' تا ' + toFa(settings.maxSides) + ' ضلعی');
+    return '<p style="margin:4px 0;">⏱ مدت مسابقه: <b>' + timeTxt + '</b></p><p style="margin:4px 0;">🔺 شکل‌ها: <b>' + shapeTxt + '</b></p>';
+  }
+
+  function kickGuest() {
+    if (!isHost || !conn) return;
+    try { conn.send({ type: 'kicked' }); } catch (e) {}
+    setTimeout(function () {
+      try { conn.close(); } catch (e) {}
+      conn = null; connected = false; guestReady = false; peerName = '';
+      renderLobby();
+      setLobbyMsg('حریف اخراج شد.');
+    }, 200);
+  }
+
+  copyCodeBtn.addEventListener('click', function () { copyText(roomCode, copyCodeBtn, 'کپی کد'); });
+  copyLinkBtn.addEventListener('click', function () {
+    var url = new URL(window.location.href);
+    url.search = ''; url.searchParams.set('room', roomCode);
+    copyText(url.toString(), copyLinkBtn, 'کپی لینک دعوت');
+  });
+  function copyText(text, btn, resetLabel) {
+    var done = function () { btn.textContent = 'کپی شد ✅'; setTimeout(function () { btn.textContent = resetLabel; }, 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+    } else { fallbackCopy(text); done(); }
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  function readSettingsFromForm() {
+    var t = parseInt(duelTimeSelect.value, 10) || 60;
+    var mn = parseInt(duelMinSelect.value, 10) || 3;
+    var mx = parseInt(duelMaxSelect.value, 10) || 8;
+    if (mn > mx) { var tmp = mn; mn = mx; mx = tmp; }
+    settings = { time: t, minSides: mn, maxSides: mx };
+  }
+  function broadcastSettings() {
+    if (!isHost) return;
+    readSettingsFromForm();
+    if (conn && connected) { try { conn.send({ type: 'lobby', hostName: myName, guestReady: guestReady, settings: settings }); } catch (e) {} }
+  }
+  duelTimeSelect.addEventListener('change', broadcastSettings);
+  duelMinSelect.addEventListener('change', broadcastSettings);
+  duelMaxSelect.addEventListener('change', broadcastSettings);
+  duelAllShapesChk.addEventListener('change', function () {
+    if (duelAllShapesChk.checked) {
+      duelMinSelect.value = 3; duelMaxSelect.value = 8;
+      duelMinSelect.disabled = true; duelMaxSelect.disabled = true;
+    } else {
+      duelMinSelect.disabled = false; duelMaxSelect.disabled = false;
+    }
+    broadcastSettings();
+  });
+
+  duelReadyBtn.addEventListener('click', function () {
+    guestReady = !guestReady;
+    duelReadyBtn.textContent = guestReady ? 'لغو آماده‌باش' : 'آماده‌ام ✅';
+    duelReadyBtn.classList.toggle('is-ready', guestReady);
+    if (conn && connected) { try { conn.send({ type: 'ready', ready: guestReady }); } catch (e) {} }
+  });
+
+  duelStartBtn.addEventListener('click', function () {
+    if (!isHost || !connected || !guestReady) return;
+    readSettingsFromForm();
+    ds.scoreMe = 0; ds.scoreOpp = 0; ds.round = 0; ds.active = true;
+    if (conn) { try { conn.send({ type: 'gamestart', settings: settings }); } catch (e) {} }
+    enterDuelGame();
+    G.ensureAudio && G.ensureAudio();
+    startDuelRound();
+    startDuelTimer();
+  });
+
+  duelLeaveBtn.addEventListener('click', function () {
+    if (isHost) { if (conn) { try { conn.send({ type: 'kicked' }); } catch (e) {} } }
+    else { if (conn) { try { conn.send({ type: 'leave' }); } catch (e) {} } }
+    backToMenu();
+  });
+
+  duelQuitBtn.addEventListener('click', function () {
+    if (isHost) { if (conn) { try { conn.send({ type: 'kicked' }); } catch (e) {} } }
+    else { if (conn) { try { conn.send({ type: 'leave' }); } catch (e) {} } }
+    backToMenu();
+  });
+
+  // ================= LIVE GAME =================
+  function enterDuelGame() {
+    showOnly(duelGameScreen);
+    duelMeLabel.textContent = 'شما (' + myName + ')';
+    duelOppLabel.textContent = 'حریف (' + (peerName || '---') + ')';
+    duelMeScore.textContent = '۰'; duelOppScore.textContent = '۰';
+    ds.timeLeft = settings.time;
+    updateDuelTimerBar();
+  }
+
+  // ---- self-contained copies of the angle/polygon math (kept independent
+  // from the single-player module on purpose, so nothing there is touched) ----
+  function distributeBudget(n, budget, cap) {
+    var alloc = new Array(n).fill(0);
+    var remaining = budget;
+    for (var i = 0; i < n - 1; i++) {
+      var slotsLeft = n - 1 - i;
+      var lo = Math.max(0, remaining - cap * slotsLeft);
+      var hi = Math.min(cap, remaining);
+      var val = lo + Math.floor(Math.random() * (hi - lo + 1));
+      alloc[i] = val;
+      remaining -= val;
+    }
+    alloc[n - 1] = remaining;
+    return alloc;
+  }
+  function shuffleArr(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+  }
+  function generateAngles(n, total) {
+    var minA = 20;
+    var maxA = Math.min(150, total - (n - 1) * minA);
+    if (maxA < minA) maxA = minA;
+    var cap = maxA - minA;
+    var budget = total - n * minA;
+    if (budget < 0) budget = 0;
+    if (budget > n * cap) budget = n * cap;
+    var alloc = distributeBudget(n, budget, cap);
+    var deg = alloc.map(function (a) { return minA + a; });
+    return shuffleArr(deg);
+  }
+  function computeIrregularPolygon(angles) {
+    var n = angles.length;
+    var dirs = new Array(n);
+    dirs[0] = 0;
+    var i;
+    for (i = 1; i < n; i++) {
+      var exteriorRad = Math.PI - (angles[i] * Math.PI / 180);
+      dirs[i] = dirs[i - 1] + exteriorRad;
+    }
+    var ux = [], uy = [];
+    for (i = 0; i < n; i++) { ux.push(Math.cos(dirs[i])); uy.push(Math.sin(dirs[i])); }
+    var Sx = 0, Sy = 0;
+    for (i = 0; i < n; i++) { Sx += ux[i]; Sy += uy[i]; }
+    var Mxx = 0, Mxy = 0, Myy = 0;
+    for (i = 0; i < n; i++) { Mxx += ux[i] * ux[i]; Mxy += ux[i] * uy[i]; Myy += uy[i] * uy[i]; }
+    var det = Mxx * Myy - Mxy * Mxy;
+    var lamX = 0, lamY = 0;
+    if (Math.abs(det) > 1e-9) {
+      var invXX = Myy / det, invXY = -Mxy / det, invYY = Mxx / det;
+      var bx = -Sx, by = -Sy;
+      lamX = invXX * bx + invXY * by;
+      lamY = invXY * bx + invYY * by;
+    }
+    var MIN_LEN = 0.28;
+    var L = [];
+    for (i = 0; i < n; i++) {
+      var len = 1 + (lamX * ux[i] + lamY * uy[i]);
+      if (len < MIN_LEN) len = MIN_LEN;
+      L.push(len);
+    }
+    var pts = [{ x: 0, y: 0 }];
+    for (i = 0; i < n; i++) {
+      var prev = pts[pts.length - 1];
+      pts.push({ x: prev.x + L[i] * ux[i], y: prev.y + L[i] * uy[i] });
+    }
+    pts.pop();
+    return pts;
+  }
+  function fitPolygonToCanvas(pts, cx, cy, targetHalf) {
+    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    pts.forEach(function (p) {
+      if (p.x < minX) minX = p.x; if (p.x > maxX) maxX = p.x;
+      if (p.y < minY) minY = p.y; if (p.y > maxY) maxY = p.y;
+    });
+    var w = maxX - minX, h = maxY - minY;
+    var maxDim = Math.max(w, h, 0.0001);
+    var scale = (targetHalf * 2) / maxDim;
+    var midX = (minX + maxX) / 2, midY = (minY + maxY) / 2;
+    var scaled = pts.map(function (p) { return { x: (p.x - midX) * scale, y: (p.y - midY) * scale }; });
+    var v0 = scaled[0];
+    var currentAngle = Math.atan2(v0.y, v0.x);
+    var targetAngle = -Math.PI / 2;
+    var rot = targetAngle - currentAngle;
+    var cosR = Math.cos(rot), sinR = Math.sin(rot);
+    return scaled.map(function (p) {
+      return { x: cx + (p.x * cosR - p.y * sinR), y: cy + (p.x * sinR + p.y * cosR) };
+    });
+  }
+  function buildPolygonSVG(n, angles, missingIndex) {
+    var cx = 150, cy = 158, targetHalf = 88;
+    var raw = computeIrregularPolygon(angles);
+    var points = fitPolygonToCanvas(raw, cx, cy, targetHalf);
+    var cenX = 0, cenY = 0;
+    points.forEach(function (p) { cenX += p.x; cenY += p.y; });
+    cenX /= points.length; cenY /= points.length;
+    var pointsAttr = points.map(function (p) { return p.x.toFixed(1) + ',' + p.y.toFixed(1); }).join(' ');
+    var dots = points.map(function (p) {
+      return '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="4" class="vertex-dot"></circle>';
+    }).join('');
+    var labels = '';
+    points.forEach(function (p, i) {
+      var dx = p.x - cenX, dy = p.y - cenY;
+      var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      var lx = p.x + (dx / dist) * 32;
+      var ly = p.y + (dy / dist) * 32;
+      if (i === missingIndex) {
+        labels += '<g class="vertex vertex--missing">' +
+          '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="19" class="missing-badge"></circle>' +
+          '<text x="' + lx.toFixed(1) + '" y="' + (ly + 6).toFixed(1) + '" class="missing-mark">؟</text></g>';
+      } else {
+        labels += '<g class="vertex"><text x="' + lx.toFixed(1) + '" y="' + (ly + 5).toFixed(1) + '" class="angle-label">' + angles[i] + '°</text></g>';
+      }
+    });
+    return '<svg viewBox="0 0 300 310" class="polygon-svg" aria-hidden="true"><polygon points="' + pointsAttr + '" class="polygon-shape"></polygon>' + dots + labels + '</svg>';
+  }
+
+  function startDuelRound() {
+    if (!isHost) return;
+    ds.round += 1;
+    var range = settings.maxSides - settings.minSides;
+    ds.nSides = settings.minSides + Math.floor(Math.random() * (range + 1));
+    var total = (ds.nSides - 2) * 180;
+    ds.angles = generateAngles(ds.nSides, total);
+    ds.missingIndex = Math.floor(Math.random() * ds.nSides);
+    ds.locked = false;
+    if (conn && connected) {
+      try { conn.send({ type: 'round', round: ds.round, nSides: ds.nSides, angles: ds.angles, missingIndex: ds.missingIndex }); } catch (e) {}
+    }
+    renderDuelRound();
+  }
+
+  function renderDuelRound() {
+    duelRoundNum.textContent = toFa(ds.round);
+    duelPolygonWrap.innerHTML = buildPolygonSVG(ds.nSides, ds.angles, ds.missingIndex);
+    duelAnswerInput.value = '';
+    duelAnswerInput.disabled = false;
+    duelSubmitBtn.disabled = false;
+    duelFeedback.textContent = '';
+    duelFeedback.className = 'feedback';
+    duelAnswerInput.focus();
+  }
+
+  function calcDuelPoints(n) { return 30 + (n - 2) * 15; }
+
+  duelSubmitBtn.addEventListener('click', submitDuelAnswer);
+  duelAnswerInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') submitDuelAnswer(); });
+
+  function submitDuelAnswer() {
+    if (!ds.active || ds.locked) return;
+    var raw = duelAnswerInput.value.trim();
+    if (raw === '') return;
+    var guess = Math.round(parseFloat(raw));
+
+    if (isHost) {
+      evalAnswer('me', guess);
+      if (!ds.locked) { duelAnswerInput.value = ''; duelAnswerInput.focus(); }
+    } else {
+      var actual = ds.angles[ds.missingIndex];
+      if (guess === actual) {
+        duelAnswerInput.disabled = true; duelSubmitBtn.disabled = true;
+        duelFeedback.textContent = '✅ درسته! منتظر تایید...';
+        duelFeedback.className = 'feedback is-correct';
+        if (conn && connected) { try { conn.send({ type: 'answer', guess: guess }); } catch (e) {} }
+      } else {
+        duelFeedback.textContent = '❌ اشتباهه! دوباره امتحان کن.';
+        duelFeedback.className = 'feedback is-wrong';
+        duelAnswerInput.value = '';
+        duelAnswerInput.focus();
+      }
+    }
+  }
+
+  function evalAnswer(role, guess) {
+    if (!isHost || !ds.active || ds.locked) return;
+    var actual = ds.angles[ds.missingIndex];
+    if (guess !== actual) {
+      if (role === 'me') {
+        duelFeedback.textContent = '❌ اشتباهه! دوباره امتحان کن.';
+        duelFeedback.className = 'feedback is-wrong';
+      }
+      return;
+    }
+    ds.locked = true;
+    var pts = calcDuelPoints(ds.nSides);
+    if (role === 'me') ds.scoreMe += pts; else ds.scoreOpp += pts;
+    duelAnswerInput.disabled = true; duelSubmitBtn.disabled = true;
+    G.playCorrectSound && G.playCorrectSound();
+    renderDuelResultRound(role === 'me', actual, ds.scoreMe, ds.scoreOpp);
+    if (conn && connected) {
+      try { conn.send({ type: 'result', winner: role === 'me' ? 'host' : 'guest', actual: actual, scoreHost: ds.scoreMe, scoreGuest: ds.scoreOpp }); } catch (e) {}
+    }
+    if (ds.active) setTimeout(function () { if (ds.active) startDuelRound(); }, 900);
+  }
+
+  function renderDuelResultRound(meWon, actual, scoreMe, scoreOpp) {
+    duelMeScore.textContent = toFa(scoreMe);
+    duelOppScore.textContent = toFa(scoreOpp);
+    duelAnswerInput.disabled = true; duelSubmitBtn.disabled = true;
+    if (meWon) {
+      duelFeedback.textContent = '✅ تو سریع‌تر بودی! جواب: ' + actual + '°';
+      duelFeedback.className = 'feedback is-correct';
+    } else {
+      duelFeedback.textContent = '⏱ حریف زودتر جواب داد. جواب درست: ' + actual + '°';
+      duelFeedback.className = 'feedback is-wrong';
+    }
+  }
+
+  function startDuelTimer() {
+    if (ds.timerId) clearInterval(ds.timerId);
+    var lastTick = Date.now();
+    var lastBroadcast = Date.now();
+    updateDuelTimerBar();
+    ds.timerId = setInterval(function () {
+      var now = Date.now();
+      var elapsed = (now - lastTick) / 1000; lastTick = now;
+      ds.timeLeft -= elapsed;
+      if (ds.timeLeft <= 0) {
+        ds.timeLeft = 0;
+        updateDuelTimerBar();
+        clearInterval(ds.timerId); ds.timerId = null;
+        finishDuelMatch();
+      } else {
+        updateDuelTimerBar();
+        if (now - lastBroadcast > 900) {
+          lastBroadcast = now;
+          if (conn && connected) { try { conn.send({ type: 'tick', timeLeft: ds.timeLeft }); } catch (e) {} }
+        }
+      }
+    }, 100);
+  }
+  function updateDuelTimerBar() {
+    var pct = Math.max(0, (ds.timeLeft / settings.time) * 100);
+    duelTimerFill.style.width = pct + '%';
+    duelTimerFill.classList.toggle('is-low', pct < 30);
+  }
+  function finishDuelMatch() {
+    ds.active = false;
+    if (conn && connected) { try { conn.send({ type: 'gameover', scoreHost: ds.scoreMe, scoreGuest: ds.scoreOpp }); } catch (e) {} }
+    duelGameOver(ds.scoreMe, ds.scoreOpp);
+  }
+  function duelGameOver(scoreHost, scoreGuest) {
+    ds.active = false;
+    if (ds.timerId) { clearInterval(ds.timerId); ds.timerId = null; }
+    var myScore = isHost ? scoreHost : scoreGuest;
+    var oppScore = isHost ? scoreGuest : scoreHost;
+    ds.scoreMe = myScore; ds.scoreOpp = oppScore;
+    G.playFanfare && G.playFanfare();
+    duelResultMe.textContent = toFa(myScore);
+    duelResultOpp.textContent = toFa(oppScore);
+    if (myScore > oppScore) { duelResultTitle.textContent = 'بردی! 🏆'; duelResultRank.textContent = 'آفرین کارآگاه، این دور مال تو بود.'; }
+    else if (myScore < oppScore) { duelResultTitle.textContent = 'باختی 😅'; duelResultRank.textContent = 'این دفعه حریف سریع‌تر بود؛ یه بار دیگه امتحان کن.'; }
+    else { duelResultTitle.textContent = 'مساوی شد! 🤝'; duelResultRank.textContent = 'امتیازهاتون برابره.'; }
+    duelPlayAgainBtn.hidden = !isHost;
+    duelResultModal.hidden = false;
+  }
+
+  duelPlayAgainBtn.addEventListener('click', function () {
+    if (!isHost) return;
+    duelResultModal.hidden = true;
+    guestReady = false;
+    if (conn && connected) { try { conn.send({ type: 'backtolobby' }); } catch (e) {} }
+    enterLobbyAsHost();
+  });
+  duelResultMenuBtn.addEventListener('click', function () {
+    duelResultModal.hidden = true;
+    if (isHost) { if (conn) { try { conn.send({ type: 'kicked' }); } catch (e) {} } }
+    else { if (conn) { try { conn.send({ type: 'leave' }); } catch (e) {} } }
+    backToMenu();
+  });
 })();
 </script>
 </body>
