@@ -546,3 +546,122 @@ input:focus-visible {
   .missing-badge { animation: none; }
   .btn { transition: none; }
 }
+
+/* ================================
+   Duel: setup / lobby / live game
+   ================================ */
+
+.duel-panel { margin-bottom: 12px; }
+
+.duel-code-input { text-transform: uppercase; letter-spacing: 0.08em; }
+
+.duel-code-box {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.35em;
+  color: var(--brass-bright);
+  text-align: center;
+  padding: 8px 0 2px;
+}
+
+.player-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.player-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--navy-700);
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 9px 12px;
+}
+
+.player-row--empty {
+  color: var(--chalk-faint);
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.player-row__name {
+  flex: 1;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-row__badge {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(196, 70, 60, 0.12);
+  color: var(--red-string);
+  border: 1px solid var(--red-string);
+  white-space: nowrap;
+}
+
+.player-row__badge.is-ready {
+  background: rgba(79, 156, 124, 0.15);
+  color: var(--teal-solved);
+  border-color: var(--teal-solved);
+}
+
+.player-row__kick {
+  background: none;
+  border: 1.5px solid var(--red-string);
+  color: var(--red-string);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.player-row__kick:hover { background: rgba(196, 70, 60, 0.15); }
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.settings-label { color: var(--chalk-dim); font-size: 0.9rem; }
+
+.select-input {
+  background: var(--navy-700);
+  color: var(--chalk);
+  border: 1.5px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+.select-input:disabled { opacity: 0.5; }
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--chalk-dim);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.checkbox-row input { width: 16px; height: 16px; accent-color: var(--brass); }
+
+.btn.is-ready {
+  background: var(--teal-solved);
+  box-shadow: 0 4px 0 #2e6b52;
+}
+
+@media (max-width: 480px) {
+  .duel-code-box { font-size: 1.6rem; letter-spacing: 0.25em; }
+}
