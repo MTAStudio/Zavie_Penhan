@@ -44,7 +44,7 @@
         <span class="avatar-chip__icon" id="avatarChipIcon">🎩</span>
         <div class="avatar-chip__info">
           <span class="avatar-chip__label">کارآگاه فعلی</span>
-          <span class="avatar-chip__name" id="avatarChipName">کارآگاه بی‌نام</span>
+          <span class="avatar-chip__name" id="avatarChipName">آقای معما</span>
         </div>
         <button class="avatar-chip__btn" id="changeAvatarBtn" type="button">تغییر</button>
       </div>
@@ -67,6 +67,17 @@
 
     <div class="mode-cards">
       <div class="mode-row">
+        <button class="mode-card mode-card--adventure" id="btnAdventure">
+          <div class="mode-card__top">
+            <span class="mode-card__title">🏰 حالت ماجراجویی</span>
+            <span class="mode-card__badge mode-card__badge--adventure" id="advBadge">نقشه</span>
+          </div>
+          <p class="mode-card__desc" id="advDesc">۲۰ مرحله توی ۴ منطقه. تا قصر نهایی پیش برو!</p>
+        </button>
+        <button class="help-mini" data-help="adventure" title="راهنما">؟</button>
+      </div>
+
+      <div class="mode-row">
         <button class="mode-card mode-card--story" id="btnStory">
           <div class="mode-card__top">
             <span class="mode-card__title">📖 حالت داستانی</span>
@@ -75,6 +86,17 @@
           <p class="mode-card__desc" id="storyDesc">پنج فصل، یه راز بزرگ. کارآگاه، آماده‌ای؟</p>
         </button>
         <button class="help-mini" data-help="story" title="راهنما">؟</button>
+      </div>
+
+      <div class="mode-row">
+        <button class="mode-card mode-card--loot" id="btnLoot">
+          <div class="mode-card__top">
+            <span class="mode-card__title">🎁 جعبه‌ی جایزه</span>
+            <span class="mode-card__badge mode-card__badge--loot" id="lootBadge">۰</span>
+          </div>
+          <p class="mode-card__desc" id="lootDesc">هر ۱۰ جواب درست، یه جعبه. بازش کن!</p>
+        </button>
+        <button class="help-mini" data-help="loot" title="راهنما">؟</button>
       </div>
 
       <div class="mode-row">
@@ -111,9 +133,20 @@
       </div>
 
       <div class="mode-row">
+        <button class="mode-card mode-card--special" id="btnSpecialDaily">
+          <div class="mode-card__top">
+            <span class="mode-card__title">⭐ چالش ویژه‌ی امروز</span>
+            <span class="mode-card__badge mode-card__badge--special" id="specialDailyBadge">---</span>
+          </div>
+          <p class="mode-card__desc" id="specialDailyDesc">هر روز یه چالش جدید با قوانین خاص.</p>
+        </button>
+        <button class="help-mini" data-help="specialDaily" title="راهنما">؟</button>
+      </div>
+
+      <div class="mode-row">
         <button class="mode-card" id="btnDuel">
           <div class="mode-card__top">
-            <span class="mode-card__title">🤝 مسابقه‌ی زنده (۲ نفره)</span>
+            <span class="mode-card__title">🤝 مسابقه‌ی زنده</span>
             <span class="mode-card__badge mode-card__badge--open">آنلاین</span>
           </div>
           <p class="mode-card__desc">با کد روم، رو در رو رقابت کنید.</p>
@@ -167,6 +200,60 @@
     </div>
   </section>
 
+  <!-- ============ ADVENTURE MAP ============ -->
+  <section id="adventureScreen" hidden>
+    <header class="board__header">
+      <div class="case-stamp"><span class="case-stamp__num">حالت ماجراجویی</span></div>
+      <h1 class="title">🏰 <span class="title__accent">نقشه‌ی ماجراجویی</span></h1>
+      <p class="subtitle" id="adventureSubtitle">از روستای مثلث‌ها شروع کن تا به قصر نهایی برسی.</p>
+    </header>
+
+    <div class="adventure-map" id="adventureMap"></div>
+
+    <button class="btn btn--ghost btn--back" id="adventureBackBtn">بازگشت به منو</button>
+  </section>
+
+  <!-- ============ ADVENTURE LEVEL ============ -->
+  <section id="adventureLevelScreen" hidden>
+    <header class="board__header">
+      <div class="case-stamp"><span class="case-stamp__num" id="advLevelLabel">مرحله ۱</span></div>
+      <h1 class="title" id="advLevelTitle">---</h1>
+      <p class="subtitle" id="advLevelDesc">---</p>
+    </header>
+
+    <section class="stat-bar">
+      <div class="stat">
+        <span class="stat__label">سؤال</span>
+        <span class="stat__value" id="advQuestionNum">۱ / ۳</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">ستاره</span>
+        <span class="stat__value" id="advStars">☆☆☆</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">امتیاز مرحله</span>
+        <span class="stat__value" id="advScoreVal">۰</span>
+      </div>
+    </section>
+
+    <section class="evidence-panel">
+      <div class="pin pin--tl"></div>
+      <div class="pin pin--tr"></div>
+      <div class="polygon-wrap" id="advPolygonWrap"></div>
+    </section>
+
+    <section class="answer-panel">
+      <label for="advAnswerInput" class="answer-label">زاویه‌ی گمشده (؟)</label>
+      <div class="answer-row">
+        <input type="number" id="advAnswerInput" class="answer-input" placeholder="75" inputmode="numeric">
+        <button class="btn btn--submit" id="advSubmitBtn">ثبت</button>
+      </div>
+      <div class="feedback" id="advFeedback"></div>
+    </section>
+
+    <button class="btn btn--ghost btn--back" id="advExitBtn">خروج از مرحله</button>
+  </section>
+
   <!-- ============ STORY ============ -->
   <section id="storyScreen" hidden>
     <header class="board__header">
@@ -212,6 +299,80 @@
         <button class="btn btn--ghost btn--back" id="storyAbortBtn">خروج از فصل</button>
       </div>
     </div>
+  </section>
+
+  <!-- ============ LOOT ============ -->
+  <section id="lootScreen" hidden>
+    <header class="board__header">
+      <div class="case-stamp"><span class="case-stamp__num">جعبه‌های جایزه</span></div>
+      <h1 class="title">🎁 <span class="title__accent">جعبه‌ی جایزه</span></h1>
+      <p class="subtitle">هر ۱۰ جواب درست، یه جعبه می‌گیری. بازش کن!</p>
+    </header>
+
+    <section class="stat-bar">
+      <div class="stat">
+        <span class="stat__label">جعبه‌های باز نشده</span>
+        <span class="stat__value" id="lootCountVal">۰</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">کل باز شده</span>
+        <span class="stat__value" id="lootOpenedVal">۰</span>
+      </div>
+    </section>
+
+    <div class="loot-area">
+      <div class="loot-box" id="lootBox">
+        <div class="loot-box__lid"></div>
+        <div class="loot-box__body">🎁</div>
+        <div class="loot-box__glow"></div>
+      </div>
+      <p class="loot-hint" id="lootHint">برای باز کردن، روی جعبه کلیک کن</p>
+    </div>
+
+    <div class="loot-rewards" id="lootRewards"></div>
+
+    <button class="btn btn--ghost btn--back" id="lootBackBtn">بازگشت به منو</button>
+  </section>
+
+  <!-- ============ SPECIAL DAILY ============ -->
+  <section id="specialDailyScreen" hidden>
+    <header class="board__header">
+      <div class="case-stamp"><span class="case-stamp__num">چالش ویژه — <span id="specialDateLabel">---</span></span></div>
+      <h1 class="title" id="specialTitle">⭐ <span class="title__accent">چالش ویژه</span></h1>
+      <p class="subtitle" id="specialDesc">---</p>
+    </header>
+
+    <section class="stat-bar">
+      <div class="stat">
+        <span class="stat__label">امتیاز</span>
+        <span class="stat__value" id="specialScoreVal">۰</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">پیشرفت</span>
+        <span class="stat__value" id="specialProgressVal">۰ / ۵</span>
+      </div>
+      <div class="stat stat--timer" id="specialTimerStat">
+        <span class="stat__label">زمان</span>
+        <div class="timer-track"><div class="timer-fill" id="specialTimerFill"></div></div>
+      </div>
+    </section>
+
+    <section class="evidence-panel">
+      <div class="pin pin--tl"></div>
+      <div class="pin pin--tr"></div>
+      <div class="polygon-wrap" id="specialPolygonWrap"></div>
+    </section>
+
+    <section class="answer-panel">
+      <label for="specialAnswerInput" class="answer-label">زاویه‌ی گمشده (؟)</label>
+      <div class="answer-row">
+        <input type="number" id="specialAnswerInput" class="answer-input" placeholder="75" inputmode="numeric">
+        <button class="btn btn--submit" id="specialSubmitBtn">ثبت</button>
+      </div>
+      <div class="feedback" id="specialFeedback"></div>
+    </section>
+
+    <button class="btn btn--ghost btn--back" id="specialBackBtn">بازگشت</button>
   </section>
 
   <!-- ============ GAME ============ -->
@@ -815,6 +976,31 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="specialResultModal" hidden>
+  <div class="modal">
+    <h2 class="modal__title" id="specialResultTitle">چالش ویژه تموم شد ⭐</h2>
+    <p class="modal__rank" id="specialResultRank"></p>
+    <p class="modal__score">امتیاز: <span id="specialFinalScore"></span></p>
+    <p class="modal__score">امتیاز کل: <span id="specialTotalScore"></span></p>
+    <div class="modal__actions">
+      <button class="btn btn--submit" id="specialResultMenuBtn">بازگشت</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="adventureResultModal" hidden>
+  <div class="modal">
+    <h2 class="modal__title" id="advResultTitle">مرحله تموم شد! 🎉</h2>
+    <p class="modal__rank" id="advResultRank"></p>
+    <p class="modal__stars" id="advResultStars">☆☆☆</p>
+    <p class="modal__score">امتیاز: <span id="advResultScore"></span></p>
+    <div class="modal__actions">
+      <button class="btn btn--submit" id="advResultNextBtn">مرحله‌ی بعد</button>
+      <button class="btn btn--ghost" id="advResultMenuBtn">بازگشت به نقشه</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="duelResultModal" hidden>
   <div class="modal">
     <h2 class="modal__title" id="duelResultTitle">مسابقه تموم شد</h2>
@@ -856,6 +1042,18 @@
     <div class="avatar-grid" id="avatarGrid"></div>
     <div class="modal__actions">
       <button class="btn btn--ghost" id="avatarCloseBtn">بستن</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="lootResultModal" hidden>
+  <div class="modal modal--loot">
+    <div class="loot-result-icon" id="lootResultIcon">🎁</div>
+    <h2 class="modal__title" id="lootResultTitle">---</h2>
+    <p class="modal__rank" id="lootResultDesc">---</p>
+    <div class="loot-result-reward" id="lootResultReward"></div>
+    <div class="modal__actions">
+      <button class="btn btn--submit" id="lootResultCloseBtn">عالیه!</button>
     </div>
   </div>
 </div>
@@ -922,7 +1120,7 @@
 <div class="modal-overlay" id="achvModal" hidden>
   <div class="modal modal--wide">
     <h2 class="modal__title">🏆 دستاوردها</h2>
-    <p class="modal__rank" id="achvProgressText">۰ از ۱۲</p>
+    <p class="modal__rank" id="achvProgressText">۰ از ۱۵</p>
     <div class="achv-grid" id="achvGrid"></div>
     <div class="modal__actions">
       <button class="btn btn--submit" id="achvCloseBtn">بستن</button>
@@ -939,6 +1137,12 @@
     </div>
   </div>
 </div>
+
+<!-- Particles container for cinematic effects -->
+<div class="particles-layer" id="particlesLayer"></div>
+
+<!-- Confetti container -->
+<div class="confetti-layer" id="confettiLayer"></div>
 
 <div class="achv-toast" id="achvToast" hidden>
   <span class="achv-toast__icon" id="achvToastIcon">🏆</span>
@@ -961,7 +1165,9 @@
     WARMUP: 'gdWarmupDone', HIGH: 'gdHighScore', TOTAL: 'gdTotalScore',
     STATS: 'gdStats', ACHV: 'gdAchievements', LEADER: 'gdLeaderboard',
     THEME: 'gdTheme', DAILY: 'gdDaily', EVIDENCE: 'gdEvidence',
-    AVATAR: 'gdAvatar', STORY: 'gdStoryProgress'
+    AVATAR: 'gdAvatar', STORY: 'gdStoryProgress',
+    LOOT: 'gdLoot', LOOT_REWARDS: 'gdLootRewards', UNLOCKED_AVATARS: 'gdUnlockedAvatars',
+    SPECIAL_DAILY: 'gdSpecialDaily', ADVENTURE: 'gdAdventure', CORRECT_STREAK: 'gdCorrectStreak'
   };
 
   function getInt(k, d) { return parseInt(localStorage.getItem(k) || String(d||0), 10); }
@@ -1020,14 +1226,67 @@
   function saveStats(s) { setJSON(KEYS.STATS, s); }
   function recordAnswer(correct, timeMs, streakNow) {
     var s = getStats();
-    if (correct) { s.totalCorrect++; if (!s.fastestMs || timeMs < s.fastestMs) s.fastestMs = timeMs; }
-    else s.totalWrong++;
+    if (correct) {
+      s.totalCorrect++;
+      if (!s.fastestMs || timeMs < s.fastestMs) s.fastestMs = timeMs;
+      // Loot counter
+      var lootSt = getLootState();
+      lootSt.correctCount++;
+      if (lootSt.correctCount >= 10) {
+        lootSt.correctCount -= 10;
+        lootSt.unopened++;
+      }
+      saveLootState(lootSt);
+      refreshLootBadge();
+    } else {
+      s.totalWrong++;
+    }
     s.totalTimeMs += timeMs;
     s.totalRounds++;
     if (streakNow > s.bestStreak) s.bestStreak = streakNow;
     saveStats(s);
   }
   function recordGame() { var s = getStats(); s.gamesPlayed++; saveStats(s); }
+
+  // ===== LOOT =====
+  function getLootState() {
+    return getJSON(KEYS.LOOT, { correctCount: 0, unopened: 0, opened: 0 });
+  }
+  function saveLootState(st) { setJSON(KEYS.LOOT, st); }
+  function refreshLootBadge() {
+    var st = getLootState();
+    var badge = document.getElementById('lootBadge');
+    if (badge) {
+      badge.textContent = toFa(st.unopened);
+      badge.className = 'mode-card__badge ' + (st.unopened > 0 ? 'mode-card__badge--loot-active' : 'mode-card__badge--loot');
+    }
+    var desc = document.getElementById('lootDesc');
+    if (desc) {
+      if (st.unopened > 0) {
+        desc.textContent = '🎁 ' + toFa(st.unopened) + ' جعبه‌ی باز نشده داری!';
+      } else {
+        var rem = 10 - st.correctCount;
+        desc.textContent = 'هر ۱۰ جواب درست، یه جعبه. ' + toFa(rem) + ' تای دیگه مونده.';
+      }
+    }
+  }
+
+  // ===== UNLOCKED AVATARS =====
+  function getUnlockedAvatars() {
+    return getJSON(KEYS.UNLOCKED_AVATARS, ['classic']);
+  }
+  function unlockAvatar(id) {
+    var list = getUnlockedAvatars();
+    if (list.indexOf(id) === -1) {
+      list.push(id);
+      setJSON(KEYS.UNLOCKED_AVATARS, list);
+      return true;
+    }
+    return false;
+  }
+  function isAvatarUnlocked(id) {
+    return getUnlockedAvatars().indexOf(id) !== -1;
+  }
 
   var ACHIEVEMENTS = [
     { id:'warmup', icon:'🎯', name:'اولین دست‌گرمی', desc:'۵ مرحله‌ی دست‌گرمی رو کامل کن' },
@@ -1041,7 +1300,10 @@
     { id:'total1000', icon:'💎', name:'جمع‌کننده', desc:'۱۰۰۰ امتیاز کل' },
     { id:'level5', icon:'🎩', name:'خبره', desc:'رسیدن به سطح ۵' },
     { id:'story1', icon:'📖', name:'داستان‌خوان', desc:'فصل اول داستان رو تموم کن' },
-    { id:'party', icon:'👥', name:'جمع‌دوست', desc:'بردن یه مسابقه‌ی گروهی' }
+    { id:'party', icon:'👥', name:'جمع‌دوست', desc:'بردن یه مسابقه‌ی گروهی' },
+    { id:'loot1', icon:'🎁', name:'جعبه‌بازکن', desc:'اولین جعبه‌ی جایزه رو باز کن' },
+    { id:'loot_legendary', icon:'💎', name:'افسانه‌ای', desc:'یه جایزه‌ی افسانه‌ای بگیر' },
+    { id:'adventure_full', icon:'🏰', name:'فاتح قصر', desc:'همه‌ی ۲۰ مرحله‌ی ماجراجویی' }
   ];
   function getAchievements() { return getJSON(KEYS.ACHV, {}); }
   function unlockAchievement(id) {
@@ -1129,6 +1391,32 @@
     return d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
   }
 
+  // ===== SPECIAL DAILY (challenges by weekday) =====
+  var SPECIAL_CHALLENGES = [
+    // 0 = Sunday (یکشنبه)
+    { day: 0, name: 'یکشنبه‌ی جمع‌بندی', icon: '🎯', desc: 'همه‌ی شکل‌ها — امتیاز ×۲', color: '#cf9f42', multiplier: 2, time: 15, shapeMin: 3, shapeMax: 8, count: 8, rule: 'normal' },
+    { day: 1, name: 'دوشنبه‌ی مثلث‌ها', icon: '🔺', desc: 'فقط مثلث! امتیاز ×۲', color: '#e8bc63', multiplier: 2, time: 10, shapeMin: 3, shapeMax: 3, count: 8, rule: 'normal' },
+    { day: 2, name: 'سه‌شنبه‌ی سرعت', icon: '⚡', desc: 'هر سؤال ۵ ثانیه! امتیاز ×۳', color: '#3ddc84', multiplier: 3, time: 5, shapeMin: 3, shapeMax: 6, count: 10, rule: 'normal' },
+    { day: 3, name: 'چهارشنبه‌ی بی‌رحم', icon: '💀', desc: 'هر غلط = پایان! امتیاز ×۴', color: '#c4463c', multiplier: 4, time: 12, shapeMin: 3, shapeMax: 8, count: 20, rule: 'suddenDeath' },
+    { day: 4, name: 'پنجشنبه‌ی طلایی', icon: '🌟', desc: 'امتیاز ×۵! همه‌چیز عالیه', color: '#e8bc63', multiplier: 5, time: 20, shapeMin: 3, shapeMax: 8, count: 10, rule: 'normal' },
+    { day: 5, name: 'جمعه‌ی باس', icon: '👹', desc: '۳ تا باس‌فایت پشت سر هم', color: '#b878ff', multiplier: 3, time: 15, shapeMin: 6, shapeMax: 8, count: 5, rule: 'boss' },
+    { day: 6, name: 'شنبه‌ی راز', icon: '🔍', desc: 'شکل‌های مخفی، امتیاز ×۳', color: '#4fc3f7', multiplier: 3, time: 15, shapeMin: 4, shapeMax: 8, count: 8, rule: 'normal' }
+  ];
+  function getTodaySpecial() {
+    var d = new Date();
+    var dayIdx = d.getDay();
+    return SPECIAL_CHALLENGES[dayIdx];
+  }
+  function getSpecialDailyState() {
+    var st = getJSON(KEYS.SPECIAL_DAILY, {});
+    if (st.dateKey !== getTodayKey()) {
+      st = { dateKey: getTodayKey(), completed: false, score: 0 };
+      setJSON(KEYS.SPECIAL_DAILY, st);
+    }
+    return st;
+  }
+  function saveSpecialDailyState(st) { setJSON(KEYS.SPECIAL_DAILY, st); }
+
   function getEvidenceState() {
     var st = getJSON(KEYS.EVIDENCE, {});
     if (st.dateKey !== getTodayKey()) {
@@ -1141,10 +1429,19 @@
 
   // ===== AVATAR =====
   var AVATARS = [
-    { id: 'classic', icon: '🎩', name: 'آقای معما', desc: 'کارآگاه کلاسیک با پالت قهوه‌ای', title: 'کارآگاه معما' },
-    { id: 'neon', icon: '🕶️', name: 'سایه‌ی نئون', desc: 'کارآگاه مدرن با پالت آبی', title: 'کارآگاه نئون' },
-    { id: 'phantom', icon: '👤', name: 'شبح بنفش', desc: 'کارآگاه مخفی با پالت بنفش', title: 'کارآگاه شبح' },
-    { id: 'cyber', icon: '🤖', name: 'دکتر زاویه', desc: 'کارآگاه سایبری با پالت فیروزه‌ای', title: 'کارآگاه سایبری' }
+    { id: 'classic', icon: '🎩', name: 'آقای معما', desc: 'کارآگاه کلاسیک با پالت قهوه‌ای', title: 'کارآگاه معما', rarity: 'common', locked: false },
+    { id: 'neon', icon: '🕶️', name: 'سایه‌ی نئون', desc: 'کارآگاه مدرن با پالت آبی', title: 'کارآگاه نئون', rarity: 'common', locked: false },
+    { id: 'phantom', icon: '👤', name: 'شبح بنفش', desc: 'کارآگاه مخفی با پالت بنفش', title: 'کارآگاه شبح', rarity: 'common', locked: false },
+    { id: 'cyber', icon: '🤖', name: 'دکتر زاویه', desc: 'کارآگاه سایبری با پالت فیروزه‌ای', title: 'کارآگاه سایبری', rarity: 'common', locked: false },
+    // Locked avatars - unlock via loot
+    { id: 'master', icon: '🕵️‍♂️', name: 'کارآگاه طلایی', desc: 'کارآگاه افسانه‌ای طلایی', title: 'کارآگاه طلایی', rarity: 'rare', locked: true },
+    { id: 'ninja', icon: '🥷', name: 'نینجای هندسه', desc: 'استاد مخفی‌کاری', title: 'نینجای هندسه', rarity: 'rare', locked: true },
+    { id: 'wizard', icon: '🧙', name: 'جادوگر زوایا', desc: 'جادوگر باستانی', title: 'جادوگر زوایا', rarity: 'epic', locked: true },
+    { id: 'ghost', icon: '👻', name: 'روح گمشده', desc: 'از دنیای دیگر آمده', title: 'روح گمشده', rarity: 'epic', locked: true },
+    { id: 'dragon', icon: '🐉', name: 'اژدهای مدرک', desc: 'نگهبان گنجینه‌ی مدارک', title: 'اژدهای مدرک', rarity: 'legendary', locked: true },
+    { id: 'king', icon: '👑', name: 'شاه زاویه‌ها', desc: 'حاکم مطلق هندسه', title: 'شاه زاویه‌ها', rarity: 'legendary', locked: true },
+    { id: 'alien', icon: '👽', name: 'فضایی مرموز', desc: 'از سیاره‌ای دیگر', title: 'فضایی مرموز', rarity: 'epic', locked: true },
+    { id: 'robot', icon: '🦾', name: 'ربات پیشرفته', desc: 'هوش مصنوعی زاویه‌شناس', title: 'ربات پیشرفته', rarity: 'rare', locked: true }
   ];
   function getAvatar() {
     var id = localStorage.getItem(KEYS.AVATAR) || 'classic';
@@ -1152,6 +1449,7 @@
     return AVATARS[0];
   }
   function setAvatar(id) {
+    if (!isAvatarUnlocked(id)) return;
     localStorage.setItem(KEYS.AVATAR, id);
     document.body.setAttribute('data-avatar', id);
     refreshAvatarUI();
@@ -1169,14 +1467,22 @@
     var cur = getAvatar();
     var html = '';
     AVATARS.forEach(function (a) {
-      html += '<button class="avatar-option' + (a.id === cur.id ? ' is-current' : '') + '" data-id="' + a.id + '">' +
-        '<span class="avatar-option__icon">' + a.icon + '</span>' +
-        '<span class="avatar-option__name">' + a.name + '</span>' +
-        '<span class="avatar-option__desc">' + a.desc + '</span>' +
+      var unlocked = !a.locked || isAvatarUnlocked(a.id);
+      var isCur = a.id === cur.id;
+      var rarityLabel = a.rarity === 'common' ? 'معمولی' : a.rarity === 'rare' ? 'نادر' : a.rarity === 'epic' ? 'حماسی' : 'افسانه‌ای';
+      html += '<button class="avatar-option' +
+        (isCur ? ' is-current' : '') +
+        (unlocked ? '' : ' is-locked') +
+        '" data-id="' + a.id + '"' +
+        (unlocked ? '' : ' disabled') + '>' +
+        '<span class="avatar-option__rarity avatar-option__rarity--' + a.rarity + '">' + rarityLabel + '</span>' +
+        '<span class="avatar-option__icon">' + (unlocked ? a.icon : '🔒') + '</span>' +
+        '<span class="avatar-option__name">' + (unlocked ? a.name : 'قفل شده') + '</span>' +
+        '<span class="avatar-option__desc">' + (unlocked ? a.desc : 'توی جعبه‌ی جایزه باز میشه') + '</span>' +
         '</button>';
     });
     grid.innerHTML = html;
-    grid.querySelectorAll('.avatar-option').forEach(function (btn) {
+    grid.querySelectorAll('.avatar-option:not(.is-locked)').forEach(function (btn) {
       btn.addEventListener('click', function () { setAvatar(btn.dataset.id); });
     });
     document.getElementById('avatarModal').hidden = false;
@@ -1191,7 +1497,13 @@
   }
   function saveStoryProgress(p) { setJSON(KEYS.STORY, p); }
 
-  var ALL_SCREENS = ['startScreen','storyScreen','gameScreen','dailyScreen','duelSetupScreen','duelLobbyScreen','duelGameScreen','partySetupScreen','partyLobbyScreen','partyGameScreen','teacherScreen','teacherStudentScreen','evidenceScreen','leaderboardScreen'];
+  // ===== ADVENTURE PROGRESS =====
+  function getAdventureProgress() {
+    return getJSON(KEYS.ADVENTURE, { completed: {}, unlocked: 1 });
+  }
+  function saveAdventureProgress(p) { setJSON(KEYS.ADVENTURE, p); }
+
+  var ALL_SCREENS = ['startScreen','adventureScreen','adventureLevelScreen','storyScreen','lootScreen','specialDailyScreen','gameScreen','dailyScreen','duelSetupScreen','duelLobbyScreen','duelGameScreen','partySetupScreen','partyLobbyScreen','partyGameScreen','teacherScreen','teacherStudentScreen','evidenceScreen','leaderboardScreen'];
   function showScreen(id) {
     ALL_SCREENS.forEach(function (s) {
       var el = document.getElementById(s);
@@ -1244,15 +1556,18 @@
 
   var HELP_TEXTS = {
     general: { title:'📖 راهنما', body:'<p>توی هر بخش، زاویه‌ی گمشده‌ی چندضلعی‌ها رو حساب کن.</p><p><b>فرمول:</b> مجموع = (n − 2) × 180</p>' },
-    story: { title:'📖 حالت داستانی', body:'<p>پنج فصل، هر فصل با یه متن داستانی شروع میشه. بعدش باید چند سؤال جواب بدی تا فصل تموم بشه.</p><p>آخر هر فصل یه <b>باس‌فایت</b> داری. اگه ببری، فصل بعد باز میشه.</p>' },
+    adventure: { title:'🏰 حالت ماجراجویی', body:'<p>نقشه‌ای با ۲۰ مرحله توی ۴ منطقه: روستای مثلث‌ها، جنگل چهارضلعی، کوه پنج‌ضلعی، قصر نهایی.</p><p>هر مرحله ۳ سؤال داره. با جواب درست، ستاره می‌گیری. هرچی سریع‌تر، ستاره‌ی بیشتر.</p>' },
+    story: { title:'📖 حالت داستانی', body:'<p>پنج فصل با متن داستانی و باس‌فایت.</p>' },
+    loot: { title:'🎁 جعبه‌ی جایزه', body:'<p>هر ۱۰ جواب درست، یه جعبه می‌گیری. جعبه‌ها ۴ سطح نایابی دارن: معمولی، نادر، حماسی، افسانه‌ای.</p><p>از جعبه‌ها می‌تونی <b>آواتارهای قفل</b> باز کنی!</p>' },
+    specialDaily: { title:'⭐ چالش ویژه', body:'<p>هر روز هفته یه چالش متفاوت با قوانین خاص. مثلاً دوشنبه فقط مثلث، چهارشنبه هر غلط = پایان.</p>' },
     warmup: { title:'🎯 دست‌گرمی', body:'<p>۵ مرحله‌ی ساده، بدون زمان و امتیاز. ۳ جون داری.</p>' },
-    main: { title:'🕵️ پرونده‌ی اصلی', body:'<p>۶۰ ثانیه وقت داری. هر جواب درست امتیاز داره و به امتیاز کل اضافه میشه.</p>' },
+    main: { title:'🕵️ پرونده‌ی اصلی', body:'<p>۶۰ ثانیه وقت داری. هر جواب درست امتیاز داره.</p>' },
     daily: { title:'📅 چالش روزانه', body:'<p>۱۰ سؤال یکسان برای همه، امتیاز <b>×۳</b>.</p>' },
-    duel: { title:'🤝 مسابقه‌ی زنده', body:'<p>یه روم دو نفره بساز، کدش رو بفرست. اون با کد وارد میشه و رقابت می‌کنید.</p>' },
-    party: { title:'👥 مسابقه‌ی گروهی', body:'<p>تا ۸ نفر توی یه اتاق. هر کی سریع‌تر جواب درست بده، امتیاز می‌گیره. هر سؤال ۱۵ ثانیه وقت داره.</p>' },
-    teacher: { title:'🏫 حالت معلم', body:'<p>معلم کلاس می‌سازه و سؤال سفارشی اضافه می‌کنه. دانش‌آموزا با کد وارد میشن و سؤال‌ها رو یکی‌یکی جواب می‌دن. نتایج توی داشبورد معلم ذخیره میشه.</p>' },
-    evidence: { title:'🔎 کشف مدرک', body:'<p>۷ مدرک پنهان. با تغییر زاویه و زوم پیداشون کن.</p><p>هر مدرک یه معمای هندسی داره. بعد از همه، <b>+۳۰۰ امتیاز</b>.</p>' },
-    leaderboard: { title:'🥇 لیدربورد', body:'<p>۱۰ رکورد برتر خودت توی پرونده‌ی اصلی.</p>' }
+    duel: { title:'🤝 مسابقه‌ی زنده', body:'<p>یه روم دو نفره بساز، کدش رو بفرست.</p>' },
+    party: { title:'👥 مسابقه‌ی گروهی', body:'<p>تا ۸ نفر توی یه اتاق.</p>' },
+    teacher: { title:'🏫 حالت معلم', body:'<p>معلم کلاس می‌سازه و سؤال سفارشی اضافه می‌کنه.</p>' },
+    evidence: { title:'🔎 کشف مدرک', body:'<p>۷ مدرک پنهان. با تغییر زاویه و زوم پیداشون کن.</p>' },
+    leaderboard: { title:'🥇 لیدربورد', body:'<p>۱۰ رکورد برتر خودت.</p>' }
   };
   function openHelpModal(key) {
     var h = HELP_TEXTS[key] || HELP_TEXTS.general;
@@ -1305,6 +1620,7 @@
 
     refreshTotalScoreUI();
     refreshAvatarUI();
+    refreshLootBadge();
   }
 
   window.GeoCore = {
@@ -1315,9 +1631,13 @@
     getAchievements: getAchievements, unlockAchievement: unlockAchievement, checkMilestoneAchievements: checkMilestoneAchievements,
     addToLeaderboard: addToLeaderboard, getLeaderboard: getLeaderboard, renderLeaderboard: renderLeaderboard,
     getTodayKey: getTodayKey, getDailyState: getDailyState, saveDailyState: saveDailyState, getDailySeed: getDailySeed,
+    getSpecialDailyState: getSpecialDailyState, saveSpecialDailyState: saveSpecialDailyState, getTodaySpecial: getTodaySpecial, SPECIAL_CHALLENGES: SPECIAL_CHALLENGES,
     getEvidenceState: getEvidenceState, saveEvidenceState: saveEvidenceState,
     getAvatar: getAvatar, AVATARS: AVATARS,
+    getUnlockedAvatars: getUnlockedAvatars, unlockAvatar: unlockAvatar, isAvatarUnlocked: isAvatarUnlocked, refreshAvatarUI: refreshAvatarUI,
+    getLootState: getLootState, saveLootState: saveLootState, refreshLootBadge: refreshLootBadge,
     getStoryProgress: getStoryProgress, saveStoryProgress: saveStoryProgress,
+    getAdventureProgress: getAdventureProgress, saveAdventureProgress: saveAdventureProgress,
     showScreen: showScreen, applyTheme: applyTheme, openHelpModal: openHelpModal,
     ACHIEVEMENTS: ACHIEVEMENTS
   };
@@ -1418,18 +1738,132 @@
     tone(165, t + 0.18, 0.3, 'sawtooth', 0.11);
   }
   function playTypeSound() { if (ctx) tone(1200, ctx.currentTime, 0.02, 'square', 0.03); }
+  function playLootOpen() {
+    if (!ctx) return;
+    var t = ctx.currentTime;
+    tone(440, t, 0.1, 'triangle', 0.15);
+    tone(660, t + 0.08, 0.1, 'triangle', 0.15);
+    tone(880, t + 0.16, 0.2, 'triangle', 0.18);
+  }
+  function playLootRare() {
+    if (!ctx) return;
+    var t = ctx.currentTime;
+    [523, 659, 784, 1047].forEach(function (f, i) {
+      tone(f, t + i * 0.08, 0.2, 'triangle', 0.15);
+    });
+  }
 
   document.addEventListener('DOMContentLoaded', function () {
     var b = document.getElementById('muteBtn');
     if (b) b.addEventListener('click', function () { ensureAudio(); setMuted(!muted); });
   });
 
-  window.GeoAudio = { ensureAudio: ensureAudio, playCorrectSound: playCorrectSound, playWrongSound: playWrongSound, playFanfare: playFanfare, playSadTone: playSadTone, playTypeSound: playTypeSound };
+  window.GeoAudio = {
+    ensureAudio: ensureAudio,
+    playCorrectSound: playCorrectSound,
+    playWrongSound: playWrongSound,
+    playFanfare: playFanfare,
+    playSadTone: playSadTone,
+    playTypeSound: playTypeSound,
+    playLootOpen: playLootOpen,
+    playLootRare: playLootRare
+  };
 })();
 </script>
 
 <!-- =========================================================
-     3. POLYGON ENGINE
+     3. CINEMATIC EFFECTS
+     ========================================================= -->
+<script>
+(function () {
+  "use strict";
+
+  function getParticleLayer() {
+    var l = document.getElementById('particlesLayer');
+    if (!l) return null;
+    return l;
+  }
+  function getConfettiLayer() {
+    var l = document.getElementById('confettiLayer');
+    if (!l) return null;
+    return l;
+  }
+
+  // ذرات طلایی وقتی جواب درست
+  function goldParticles(x, y) {
+    var layer = getParticleLayer();
+    if (!layer) return;
+    for (var i = 0; i < 16; i++) {
+      var p = document.createElement('div');
+      p.className = 'particle particle--gold';
+      p.style.left = (x || window.innerWidth / 2) + 'px';
+      p.style.top = (y || window.innerHeight / 2) + 'px';
+      var angle = Math.random() * Math.PI * 2;
+      var dist = 60 + Math.random() * 120;
+      p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+      p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+      p.style.animationDelay = (Math.random() * 0.2) + 's';
+      layer.appendChild(p);
+      (function (p) {
+        setTimeout(function () { p.remove(); }, 1500);
+      })(p);
+    }
+  }
+
+  // لرزش صفحه وقتی غلط
+  function shakeScreen() {
+    document.body.classList.add('shake-screen');
+    setTimeout(function () { document.body.classList.remove('shake-screen'); }, 400);
+  }
+
+  // کانفتی برای دستاورد
+  function confetti(count) {
+    var layer = getConfettiLayer();
+    if (!layer) return;
+    count = count || 40;
+    var colors = ['#cf9f42', '#e8bc63', '#4f9c7c', '#3ddc84', '#c4463c', '#b878ff', '#4fc3f7'];
+    for (var i = 0; i < count; i++) {
+      var c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + '%';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.animationDelay = (Math.random() * 0.5) + 's';
+      c.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+      c.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+      layer.appendChild(c);
+      (function (c) {
+        setTimeout(function () { c.remove(); }, 3500);
+      })(c);
+    }
+  }
+
+  // رسم خط به خط چندضلعی
+  function drawPolygonAnimated(container, svgHTML) {
+    container.innerHTML = svgHTML;
+    var svg = container.querySelector('svg');
+    if (!svg) return;
+    var polygon = svg.querySelector('.polygon-shape');
+    if (!polygon) return;
+    var len = polygon.getTotalLength ? polygon.getTotalLength() : 800;
+    polygon.style.strokeDasharray = len + ' ' + len;
+    polygon.style.strokeDashoffset = String(len);
+    polygon.style.transition = 'stroke-dashoffset 0.9s ease-out';
+    requestAnimationFrame(function () {
+      polygon.style.strokeDashoffset = '0';
+    });
+  }
+
+  window.GeoEffects = {
+    goldParticles: goldParticles,
+    shakeScreen: shakeScreen,
+    confetti: confetti,
+    drawPolygonAnimated: drawPolygonAnimated
+  };
+})();
+</script>
+
+<!-- =========================================================
+     4. POLYGON ENGINE
      ========================================================= -->
 <script>
 (function () {
@@ -1579,12 +2013,12 @@
 </script>
 
 <!-- =========================================================
-     4. MAIN GAME
+     5. MAIN GAME
      ========================================================= -->
 <script>
 (function () {
   "use strict";
-  var C = window.GeoCore, A = window.GeoAudio, P = window.GeoPolygon;
+  var C = window.GeoCore, A = window.GeoAudio, P = window.GeoPolygon, E = window.GeoEffects;
   if (!C || !A || !P) return;
   var toFa = C.toFa;
   var WARMUP_TOTAL = 5, MAIN_TOTAL_TIME = 60;
@@ -1606,7 +2040,9 @@
     $('roundNum').textContent = toFa(st.round);
   }
   function renderRound() {
-    $('polygonWrap').innerHTML = P.buildPolygonSVG(st.nSides, st.angles, st.missingIndex, { w: 320, h: 320, half: 88 });
+    var html = P.buildPolygonSVG(st.nSides, st.angles, st.missingIndex, { w: 320, h: 320, half: 88 });
+    if (E && E.drawPolygonAnimated) E.drawPolygonAnimated($('polygonWrap'), html);
+    else $('polygonWrap').innerHTML = html;
     $('answerInput').value = '';
     $('answerInput').disabled = false;
     $('submitBtn').disabled = false;
@@ -1663,6 +2099,7 @@
     $('answerInput').disabled = true;
     $('submitBtn').disabled = true;
     A.playCorrectSound();
+    if (E) E.goldParticles(window.innerWidth / 2, window.innerHeight / 2);
     var timeMs = Date.now() - st.roundStart;
     if (timeMs < 3000) C.unlockAchievement('fast');
 
@@ -1679,6 +2116,7 @@
     if (st.streak >= 5) C.unlockAchievement('streak5');
     if (st.streak >= 10) C.unlockAchievement('streak10');
     C.recordAnswer(true, timeMs, st.streak);
+    C.refreshLootBadge();
     $('feedback').textContent = '✅ +' + toFa(pts) + ' امتیاز';
     $('feedback').className = 'feedback is-correct';
     renderStats();
@@ -1692,6 +2130,7 @@
     $('answerInput').disabled = true;
     $('submitBtn').disabled = true;
     A.playWrongSound();
+    if (E) E.shakeScreen();
     C.recordAnswer(false, Date.now() - st.roundStart, 0);
     $('feedback').textContent = '❌ جواب درست: ' + ans + '°';
     $('feedback').className = 'feedback is-wrong';
@@ -1827,99 +2266,303 @@
 </script>
 
 <!-- =========================================================
-     5. STORY MODE
+     6. ADVENTURE MODE
      ========================================================= -->
 <script>
 (function () {
   "use strict";
-  var C = window.GeoCore, A = window.GeoAudio, P = window.GeoPolygon;
+  var C = window.GeoCore, A = window.GeoAudio, P = window.GeoPolygon, E = window.GeoEffects;
   if (!C || !A || !P) return;
   var toFa = C.toFa;
   var $ = function (id) { return document.getElementById(id); };
 
-  // 5 فصل
-  var CHAPTERS = [
-    {
-      id: 1,
-      title: 'مثلث گمشده',
-      intro: [
-        'کارآگاه، به اداره‌ی هندسه خوش اومدی.',
-        'یه پرونده‌ی عجیب روی میزته: یه مثلث که یکی از زاویه‌هاش ناپدید شده.',
-        'هیچ‌کس نمی‌دونه چرا. ولی تو باید کشفش کنی.',
-        'قبل از هرچیز، باید تواناییت رو ثابت کنی. سه تا سؤال ساده.'
-      ],
-      outro: 'آفرین کارآگاه! اولین قدم رو محکم برداشتی. ولی این تازه شروع ماجراست...',
-      questionCount: 3,
-      maxSides: 3,
-      bossSides: 4
-    },
-    {
-      id: 2,
-      title: 'چهارضلعی‌های دروغگو',
-      intro: [
-        'یه نامه‌ی ناشناس رسیده: «چهارضلعی‌ها دروغ می‌گن.»',
-        'باید بررسی کنی. بعضی از این شکل‌ها ادعا می‌کنن مجموع زوایاشون ۳۶۰ نیست.',
-        'اما تو قانون رو می‌دونی. بریم سراغشون.'
-      ],
-      outro: 'همه‌ی دروغ‌ها رو برملا کردی. حالا می‌فهمم که پشت این پرونده یه ذهن مرموز هست...',
-      questionCount: 4,
-      maxSides: 4,
-      bossSides: 5
-    },
-    {
-      id: 3,
-      title: 'پنج‌ضلعی‌های پنهان',
-      intro: [
-        'ردپایی از یه گروه مخفی پیدا کردی: «فرقه‌ی زوایا».',
-        'ایشون معتقدن بعضی زاویه‌ها هرگز نباید دیده بشن.',
-        'ولی تو باید ببینیشون. حتی اگه پنهان باشن.'
-      ],
-      outro: 'پنج‌ضلعی‌های پنهان دیگه پنهان نیستن. راز بزرگ‌تری در انتظارته...',
-      questionCount: 5,
-      maxSides: 5,
-      bossSides: 6
-    },
-    {
-      id: 4,
-      title: 'شش‌ضلعی‌های سایه',
-      intro: [
-        'وارد یه کتابخانه‌ی تاریک می‌شی. یه کتاب قدیمی که با شش‌ضلعی‌ها نوشته شده.',
-        'هر صفحه یه سؤال، هر سؤال یه کلید.',
-        'فقط کسی می‌تونه این کتاب رو بخونه که با سایه‌ها دوست باشه.'
-      ],
-      outro: 'کتاب رو خوندی. حالا می‌دونی که راز اصلی چیه. ولی هنوز مدرک نداری...',
-      questionCount: 6,
-      maxSides: 6,
-      bossSides: 7
-    },
-    {
-      id: 5,
-      title: 'چندضلعی نهایی',
-      intro: [
-        'به قله‌ی هندسه رسیدی. اینجا هیچ قانونی نیست، فقط حقیقت.',
-        'یه چندضلعی بزرگ که هیچ‌کس نتونسته زاویه‌هاش رو کامل کنه.',
-        'تو آخرین کارآگاهی. آخرین فرصت برای کشف راز.'
-      ],
-      outro: 'پیروز شدی، کارآگاه. اما یه سؤال هنوز بی‌جواب مونده: پرونده‌ی ۰۷-۱۳ چیه؟',
-      questionCount: 7,
-      maxSides: 8,
-      bossSides: 8
-    }
+  // 4 regions × 5 levels = 20 levels
+  var REGIONS = [
+    { name: 'روستای مثلث‌ها', icon: '🏘️', color: '#cf9f42', minSides: 3, maxSides: 3, levels: 5 },
+    { name: 'جنگل چهارضلعی', icon: '🌲', color: '#4f9c7c', minSides: 4, maxSides: 4, levels: 5 },
+    { name: 'کوه پنج‌ضلعی', icon: '⛰️', color: '#b878ff', minSides: 5, maxSides: 6, levels: 5 },
+    { name: 'قصر نهایی', icon: '🏰', color: '#ff78c8', minSides: 7, maxSides: 8, levels: 5 }
   ];
 
   var st = {
-    chapterIndex: 0,
-    sceneIndex: 0,
+    levelIndex: 0,
     questionIndex: 0,
     correctCount: 0,
     wrongCount: 0,
+    levelScore: 0,
     active: false,
     locked: false,
-    mode: 'intro',
-    angles: [],
-    missingIndex: -1,
-    nSides: 3,
-    isBoss: false
+    startTime: 0,
+    answers: []
+  };
+
+  function getLevelInfo(levelIdx) {
+    var region = Math.floor(levelIdx / 5);
+    var inRegion = levelIdx % 5;
+    var r = REGIONS[region];
+    var nSides = r.minSides + Math.floor(Math.random() * (r.maxSides - r.minSides + 1));
+    var isBoss = inRegion === 4;
+    return {
+      index: levelIdx,
+      region: region,
+      inRegion: inRegion,
+      regionName: r.name,
+      regionIcon: r.icon,
+      regionColor: r.color,
+      nSides: nSides,
+      isBoss: isBoss,
+      name: isBoss ? 'باس منطقه‌ی ' + toFa(region + 1) : 'مرحله‌ی ' + toFa(levelIdx + 1),
+      questionCount: isBoss ? 5 : 3
+    };
+  }
+
+  function renderAdventureMap() {
+    var progress = C.getAdventureProgress();
+    var html = '';
+    for (var r = 0; r < REGIONS.length; r++) {
+      var region = REGIONS[r];
+      html += '<div class="adv-region" style="--region-color:' + region.color + '">';
+      html += '<div class="adv-region__header"><span class="adv-region__icon">' + region.icon + '</span><span class="adv-region__name">' + region.name + '</span></div>';
+      html += '<div class="adv-region__levels">';
+      for (var i = 0; i < region.levels; i++) {
+        var levelIdx = r * 5 + i;
+        var unlocked = (levelIdx + 1) <= progress.unlocked;
+        var completed = progress.completed[levelIdx];
+        var stars = completed ? completed.stars : 0;
+        var isBoss = i === 4;
+        html += '<button class="adv-level' +
+          (unlocked ? '' : ' is-locked') +
+          (completed ? ' is-completed' : '') +
+          (isBoss ? ' adv-level--boss' : '') +
+          '" data-idx="' + levelIdx + '"' +
+          (unlocked ? '' : ' disabled') + '>' +
+          '<span class="adv-level__num">' + (isBoss ? '👹' : toFa(levelIdx + 1)) + '</span>' +
+          '<span class="adv-level__stars">' + (unlocked ? starsToStars(stars) : '🔒') + '</span>' +
+          '</button>';
+      }
+      html += '</div></div>';
+    }
+    $('adventureMap').innerHTML = html;
+    $('adventureMap').querySelectorAll('.adv-level:not(.is-locked)').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        startLevel(parseInt(btn.dataset.idx, 10));
+      });
+    });
+
+    var completedCount = Object.keys(progress.completed).length;
+    $('advBadge').textContent = toFa(completedCount) + '/۲۰';
+    if (completedCount === 20) {
+      $('advBadge').textContent = 'کامل ✅';
+      $('advDesc').textContent = 'همه‌ی ۲۰ مرحله رو فتح کردی! تو یه افسانه‌ای، کارآگاه.';
+    } else {
+      $('advDesc').textContent = toFa(completedCount) + ' از ۲۰ مرحله فتح شده. ادامه بده!';
+    }
+  }
+
+  function starsToStars(n) {
+    var s = '';
+    for (var i = 0; i < 3; i++) s += i < n ? '★' : '☆';
+    return s;
+  }
+
+  function startLevel(idx) {
+    st.levelIndex = idx;
+    st.questionIndex = 0;
+    st.correctCount = 0;
+    st.wrongCount = 0;
+    st.levelScore = 0;
+    st.active = true;
+    st.locked = false;
+    st.startTime = Date.now();
+    st.answers = [];
+
+    var info = getLevelInfo(idx);
+    $('advLevelLabel').textContent = info.regionIcon + ' ' + info.regionName;
+    $('advLevelTitle').textContent = info.name;
+    $('advLevelDesc').textContent = info.isBoss
+      ? 'باس منطقه! ' + toFa(info.questionCount) + ' سؤال سخت'
+      : toFa(info.questionCount) + ' سؤال — هرچی سریع‌تر، ستاره‌ی بیشتر';
+    C.showScreen('adventureLevelScreen');
+    A.ensureAudio();
+    renderAdventureQuestion();
+  }
+
+  function renderAdventureQuestion() {
+    var info = getLevelInfo(st.levelIndex);
+    if (st.questionIndex >= info.questionCount) {
+      finishLevel();
+      return;
+    }
+    var nSides = info.isBoss ? Math.min(8, info.nSides + 1) : info.nSides;
+    var total = (nSides - 2) * 180;
+    var angles = P.generateAngles(nSides, total);
+    var mi = Math.floor(Math.random() * nSides);
+    st.currentQuestion = { nSides: nSides, angles: angles, missingIndex: mi, answer: angles[mi] };
+    st.questionStart = Date.now();
+    st.locked = false;
+
+    var html = P.buildPolygonSVG(nSides, angles, mi, { w: 320, h: 320, half: 88 });
+    if (E && E.drawPolygonAnimated) E.drawPolygonAnimated($('advPolygonWrap'), html);
+    else $('advPolygonWrap').innerHTML = html;
+
+    $('advQuestionNum').textContent = toFa(st.questionIndex + 1) + ' / ' + toFa(info.questionCount);
+    $('advStars').textContent = starsToStars(st.correctCount >= info.questionCount ? 3 : st.correctCount);
+    $('advScoreVal').textContent = toFa(st.levelScore);
+    $('advAnswerInput').value = '';
+    $('advAnswerInput').disabled = false;
+    $('advSubmitBtn').disabled = false;
+    $('advFeedback').textContent = '';
+    $('advFeedback').className = 'feedback';
+    setTimeout(function () { $('advAnswerInput').focus(); }, 80);
+  }
+
+  function submitAdventure() {
+    if (!st.active || st.locked) return;
+    var raw = $('advAnswerInput').value.trim();
+    if (raw === '') return;
+    var g = Math.round(parseFloat(raw));
+    var q = st.currentQuestion;
+    st.locked = true;
+    $('advAnswerInput').disabled = true;
+    $('advSubmitBtn').disabled = true;
+    var timeMs = Date.now() - st.questionStart;
+    st.answers.push(timeMs);
+
+    if (g === q.answer) {
+      st.correctCount++;
+      var basePoints = 30 + (q.nSides - 2) * 15;
+      var speedBonus = timeMs < 3000 ? 20 : timeMs < 6000 ? 10 : 0;
+      st.levelScore += basePoints + speedBonus;
+      A.playCorrectSound();
+      if (E) E.goldParticles(window.innerWidth / 2, window.innerHeight / 2);
+      $('advFeedback').textContent = '✅ +' + toFa(basePoints + speedBonus) + (speedBonus ? ' (سرعت +' + toFa(speedBonus) + ')' : '');
+      $('advFeedback').className = 'feedback is-correct';
+      C.recordAnswer(true, timeMs, st.correctCount);
+      $('advScoreVal').textContent = toFa(st.levelScore);
+      $('advStars').textContent = starsToStars(Math.min(3, st.correctCount));
+    } else {
+      st.wrongCount++;
+      A.playWrongSound();
+      if (E) E.shakeScreen();
+      $('advFeedback').textContent = '❌ جواب درست: ' + q.answer + '°';
+      $('advFeedback').className = 'feedback is-wrong';
+      C.recordAnswer(false, timeMs, 0);
+    }
+
+    setTimeout(function () {
+      st.questionIndex++;
+      renderAdventureQuestion();
+    }, 900);
+  }
+
+  function finishLevel() {
+    st.active = false;
+    var info = getLevelInfo(st.levelIndex);
+    var stars = 0;
+    var totalQ = info.questionCount;
+    if (st.correctCount >= totalQ) stars = 3;
+    else if (st.correctCount >= totalQ - 1) stars = 2;
+    else if (st.correctCount >= 1) stars = 1;
+
+    var progress = C.getAdventureProgress();
+    var prevStars = progress.completed[st.levelIndex] ? progress.completed[st.levelIndex].stars : 0;
+    if (stars > prevStars) {
+      progress.completed[st.levelIndex] = { stars: stars, score: st.levelScore };
+    }
+    if (progress.unlocked < st.levelIndex + 2 && st.levelIndex + 2 <= 20) {
+      progress.unlocked = st.levelIndex + 2;
+    }
+    C.saveAdventureProgress(progress);
+
+    var reward = 50 + stars * 30 + (info.isBoss ? 50 : 0);
+    C.addTotalScore(reward);
+    C.checkMilestoneAchievements();
+    C.recordGame();
+
+    if (Object.keys(progress.completed).length === 20) C.unlockAchievement('adventure_full');
+
+    A.playFanfare();
+    if (E && E.confetti) E.confetti(30);
+
+    $('advResultTitle').textContent = info.name + ' فتح شد!';
+    $('advResultRank').textContent = stars === 3 ? '🌟 عالی! همه رو درست زدی!' : stars === 2 ? '✨ خوب بود!' : '👍 تلاش خوب!';
+    $('advResultStars').textContent = starsToStars(stars);
+    $('advResultScore').textContent = toFa(reward) + ' امتیاز';
+    $('advResultNextBtn').hidden = !(st.levelIndex + 1 < 20);
+    $('adventureResultModal').hidden = false;
+  }
+
+  function exitAdventureLevel() {
+    st.active = false;
+    C.showScreen('adventureScreen');
+    renderAdventureMap();
+    C.refreshTotalScoreUI();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    renderAdventureMap();
+    $('btnAdventure').addEventListener('click', function () {
+      C.showScreen('adventureScreen');
+      renderAdventureMap();
+    });
+    $('adventureBackBtn').addEventListener('click', function () {
+      C.showScreen('startScreen');
+      C.refreshTotalScoreUI();
+    });
+    $('advSubmitBtn').addEventListener('click', submitAdventure);
+    $('advAnswerInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') submitAdventure(); });
+    $('advExitBtn').addEventListener('click', exitAdventureLevel);
+    $('advResultNextBtn').addEventListener('click', function () {
+      $('adventureResultModal').hidden = true;
+      startLevel(st.levelIndex + 1);
+    });
+    $('advResultMenuBtn').addEventListener('click', function () {
+      $('adventureResultModal').hidden = true;
+      exitAdventureLevel();
+    });
+  });
+})();
+</script>
+
+<!-- =========================================================
+     7. STORY MODE (با باگ fix شده)
+     ========================================================= -->
+<script>
+(function () {
+  "use strict";
+  var C = window.GeoCore, A = window.GeoAudio, P = window.GeoPolygon, E = window.GeoEffects;
+  if (!C || !A || !P) return;
+  var toFa = C.toFa;
+  var $ = function (id) { return document.getElementById(id); };
+
+  var CHAPTERS = [
+    { id: 1, title: 'مثلث گمشده',
+      intro: ['کارآگاه، به اداره‌ی هندسه خوش اومدی.', 'یه پرونده‌ی عجیب روی میزته: یه مثلث که یکی از زاویه‌هاش ناپدید شده.', 'هیچ‌کس نمی‌دونه چرا. ولی تو باید کشفش کنی.', 'قبل از هرچیز، باید تواناییت رو ثابت کنی. سه تا سؤال ساده.'],
+      outro: 'آفرین کارآگاه! اولین قدم رو محکم برداشتی. ولی این تازه شروع ماجراست...',
+      questionCount: 3, maxSides: 3, bossSides: 4 },
+    { id: 2, title: 'چهارضلعی‌های دروغگو',
+      intro: ['یه نامه‌ی ناشناس رسیده: «چهارضلعی‌ها دروغ می‌گن.»', 'باید بررسی کنی. بعضی از این شکل‌ها ادعا می‌کنن مجموع زوایاشون ۳۶۰ نیست.', 'اما تو قانون رو می‌دونی. بریم سراغشون.'],
+      outro: 'همه‌ی دروغ‌ها رو برملا کردی. حالا می‌فهمم که پشت این پرونده یه ذهن مرموز هست...',
+      questionCount: 4, maxSides: 4, bossSides: 5 },
+    { id: 3, title: 'پنج‌ضلعی‌های پنهان',
+      intro: ['ردپایی از یه گروه مخفی پیدا کردی: «فرقه‌ی زوایا».', 'ایشون معتقدن بعضی زاویه‌ها هرگز نباید دیده بشن.', 'ولی تو باید ببینیشون. حتی اگه پنهان باشن.'],
+      outro: 'پنج‌ضلعی‌های پنهان دیگه پنهان نیستن. راز بزرگ‌تری در انتظارته...',
+      questionCount: 5, maxSides: 5, bossSides: 6 },
+    { id: 4, title: 'شش‌ضلعی‌های سایه',
+      intro: ['وارد یه کتابخانه‌ی تاریک می‌شی. یه کتاب قدیمی که با شش‌ضلعی‌ها نوشته شده.', 'هر صفحه یه سؤال، هر سؤال یه کلید.', 'فقط کسی می‌تونه این کتاب رو بخونه که با سایه‌ها دوست باشه.'],
+      outro: 'کتاب رو خوندی. حالا می‌دونی که راز اصلی چیه. ولی هنوز مدرک نداری...',
+      questionCount: 6, maxSides: 6, bossSides: 7 },
+    { id: 5, title: 'چندضلعی نهایی',
+      intro: ['به قله‌ی هندسه رسیدی. اینجا هیچ قانونی نیست، فقط حقیقت.', 'یه چندضلعی بزرگ که هیچ‌کس نتونسته زاویه‌هاش رو کامل کنه.', 'تو آخرین کارآگاهی. آخرین فرصت برای کشف راز.'],
+      outro: 'پیروز شدی، کارآگاه. اما یه سؤال هنوز بی‌جواب مونده: پرونده‌ی ۰۷-۱۳ چیه؟',
+      questionCount: 7, maxSides: 8, bossSides: 8 }
+  ];
+
+  var st = {
+    chapterIndex: 0, sceneIndex: 0, questionIndex: 0,
+    correctCount: 0, wrongCount: 0,
+    active: false, locked: false, mode: 'intro',
+    angles: [], missingIndex: -1, nSides: 3, isBoss: false
   };
 
   function renderChapters() {
@@ -1931,24 +2574,18 @@
       html += '<button class="story-chapter' +
         (locked ? ' is-locked' : '') +
         (completed ? ' is-completed' : '') +
-        '" data-idx="' + i + '"' +
-        (locked ? ' disabled' : '') + '>' +
+        '" data-idx="' + i + '"' + (locked ? ' disabled' : '') + '>' +
         '<div class="story-chapter__num">فصل ' + toFa(i + 1) + '</div>' +
         '<div class="story-chapter__title">' + ch.title + '</div>' +
-        '<div class="story-chapter__status">' +
-          (locked ? '🔒 قفل' : completed ? '✅ تموم شده' : '▶ شروع') +
-        '</div>' +
+        '<div class="story-chapter__status">' + (locked ? '🔒 قفل' : completed ? '✅ تموم شده' : '▶ شروع') + '</div>' +
         '</button>';
     });
     $('storyChapters').innerHTML = html;
     $('storyChapters').querySelectorAll('.story-chapter').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var idx = parseInt(btn.dataset.idx, 10);
-        startChapter(idx);
+        startChapter(parseInt(btn.dataset.idx, 10));
       });
     });
-
-    // Badge
     var nextChapter = Math.min(progress.unlocked, CHAPTERS.length);
     $('storyBadge').textContent = 'فصل ' + toFa(nextChapter);
     if (progress.completed.length === CHAPTERS.length) {
@@ -1966,46 +2603,43 @@
     st.active = true;
     st.mode = 'intro';
     st.isBoss = false;
-    showStoryPlay();
-    renderScene();
-  }
-
-  function showStoryPlay() {
     $('storyHub').hidden = true;
     $('storyPlay').hidden = false;
     $('storyQuestion').hidden = true;
     $('storyScene').hidden = false;
+    // باگ fix: دکمه ادامه از اول نمایش داده بشه
+    $('storyNextBtn').hidden = false;
+    $('storyNextBtn').textContent = 'ادامه ▸';
+    renderScene();
   }
 
   function renderScene() {
     var ch = CHAPTERS[st.chapterIndex];
     $('storyChapterLabel').textContent = 'فصل ' + toFa(st.chapterIndex + 1);
     $('storyChapterTitle').textContent = ch.title;
+    // باگ fix: دکمه ادامه نمایش داده بشه در حالت متن
+    $('storyNextBtn').hidden = false;
+    $('storyNextBtn').textContent = 'ادامه ▸';
 
     var text = '';
-    if (st.mode === 'intro') {
-      text = ch.intro[st.sceneIndex] || '';
-    } else if (st.mode === 'outro') {
-      text = ch.outro;
-    }
+    if (st.mode === 'intro') text = ch.intro[st.sceneIndex] || '';
+    else if (st.mode === 'outro') text = ch.outro;
 
     var el = $('storySceneText');
     el.innerHTML = '';
-    typeWriter(el, text, 25, function () {
-      // بعد از تایپ، دکمه‌ی ادامه فعاله
-    });
+    typeWriter(el, text, 25);
   }
 
-  function typeWriter(el, text, speed, cb) {
+  function typeWriter(el, text, speed) {
     var i = 0;
     el.textContent = '';
     function step() {
       if (i < text.length) {
         el.textContent += text.charAt(i);
         i++;
-        if (i % 3 === 0) A.playTypeSound && A.playTypeSound();
+        if (i % 3 === 0 && A.playTypeSound) A.playTypeSound();
         setTimeout(step, speed);
-      } else if (cb) cb();
+      }
     }
     step();
   }
@@ -2015,7 +2649,6 @@
     if (st.mode === 'intro') {
       st.sceneIndex++;
       if (st.sceneIndex >= ch.intro.length) {
-        // شروع سؤال‌ها
         st.mode = 'question';
         st.questionIndex = 0;
         st.isBoss = false;
@@ -2024,11 +2657,9 @@
         renderScene();
       }
     } else if (st.mode === 'outro') {
-      // پایان فصل
       finishChapter();
     } else if (st.mode === 'question') {
-      // بعد از پاسخ، سؤال بعد یا باس
-      nextStoryQuestion();
+      // در حالت سؤال، دکمه ادامه مخفی است
     }
   }
 
@@ -2039,6 +2670,9 @@
     $('storyScene').hidden = true;
     $('storyQuestion').hidden = false;
 
+    // باگ fix: دکمه ادامه مخفی بشه وقتی سؤال نمایش داده میشه
+    $('storyNextBtn').hidden = true;
+
     var nSides = isBossNow ? ch.bossSides : (3 + Math.floor(Math.random() * (ch.maxSides - 2)));
     var total = (nSides - 2) * 180;
     st.nSides = nSides;
@@ -2046,7 +2680,10 @@
     st.missingIndex = Math.floor(Math.random() * nSides);
     st.locked = false;
 
-    $('storyPolygonWrap').innerHTML = P.buildPolygonSVG(nSides, st.angles, st.missingIndex, { w: 320, h: 320, half: 88 });
+    var html = P.buildPolygonSVG(nSides, st.angles, st.missingIndex, { w: 320, h: 320, half: 88 });
+    if (E && E.drawPolygonAnimated) E.drawPolygonAnimated($('storyPolygonWrap'), html);
+    else $('storyPolygonWrap').innerHTML = html;
+
     $('storyAnswerInput').value = '';
     $('storyAnswerInput').disabled = false;
     $('storySubmitBtn').disabled = false;
@@ -2071,12 +2708,14 @@
     if (g === actual) {
       st.correctCount++;
       A.playCorrectSound();
+      if (E) E.goldParticles(window.innerWidth / 2, window.innerHeight / 2);
       $('storyFeedback').textContent = '✅ درسته!';
       $('storyFeedback').className = 'feedback is-correct';
       setTimeout(function () { nextStoryQuestion(); }, 800);
     } else {
       st.wrongCount++;
       A.playWrongSound();
+      if (E) E.shakeScreen();
       $('storyFeedback').textContent = '❌ جواب درست: ' + actual + '°';
       $('storyFeedback').className = 'feedback is-wrong';
       setTimeout(function () { nextStoryQuestion(); }, 1200);
@@ -2088,7 +2727,6 @@
     st.locked = false;
 
     if (st.isBoss) {
-      // باس تموم شد
       st.mode = 'outro';
       $('storyQuestion').hidden = true;
       $('storyScene').hidden = false;
@@ -2098,7 +2736,6 @@
 
     st.questionIndex++;
     if (st.questionIndex >= ch.questionCount) {
-      // وقت باس
       st.isBoss = true;
       showQuestion();
       return;
@@ -2109,15 +2746,12 @@
   function finishChapter() {
     var ch = CHAPTERS[st.chapterIndex];
     var progress = C.getStoryProgress();
-    if (progress.completed.indexOf(ch.id) === -1) {
-      progress.completed.push(ch.id);
-    }
+    if (progress.completed.indexOf(ch.id) === -1) progress.completed.push(ch.id);
     if (progress.unlocked < st.chapterIndex + 2 && st.chapterIndex + 2 <= CHAPTERS.length) {
       progress.unlocked = st.chapterIndex + 2;
     }
     C.saveStoryProgress(progress);
 
-    // امتیاز
     var reward = 100 + st.chapterIndex * 50;
     var bonus = st.wrongCount === 0 ? 50 : 0;
     var totalReward = reward + bonus;
@@ -2125,7 +2759,6 @@
     if (st.chapterIndex === 0) C.unlockAchievement('story1');
     C.checkMilestoneAchievements();
 
-    // مودال پایان
     $('storyFinalTitle').textContent = 'فصل ' + toFa(st.chapterIndex + 1) + ' تموم شد! 🎉';
     $('storyFinalText').textContent = 'درست: ' + toFa(st.correctCount) + ' — غلط: ' + toFa(st.wrongCount) + ' — پاداش: ' + toFa(totalReward) + ' امتیاز' + (bonus ? ' (بدون خطا! +۵۰)' : '');
     if (st.chapterIndex + 1 < CHAPTERS.length) {
@@ -2139,6 +2772,7 @@
     }
     $('storyFinalModal').hidden = false;
     A.playFanfare();
+    if (E && E.confetti) E.confetti(50);
   }
 
   function exitStory() {
@@ -2159,7 +2793,6 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     renderChapters();
-
     $('btnStory').addEventListener('click', function () {
       C.showScreen('storyScreen');
       renderChapters();
@@ -2171,15 +2804,11 @@
     $('storyAbortBtn').addEventListener('click', backToStoryHub);
     $('storyNextBtn').addEventListener('click', advanceScene);
     $('storySubmitBtn').addEventListener('click', submitStory);
-    $('storyAnswerInput').addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') submitStory();
-    });
+    $('storyAnswerInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') submitStory(); });
 
     $('storyFinalNextBtn').addEventListener('click', function () {
       $('storyFinalModal').hidden = true;
-      if (st.chapterIndex + 1 < CHAPTERS.length) {
-        startChapter(st.chapterIndex + 1);
-      }
+      if (st.chapterIndex + 1 < CHAPTERS.length) startChapter(st.chapterIndex + 1);
     });
     $('storyFinalMenuBtn').addEventListener('click', function () {
       $('storyFinalModal').hidden = true;
@@ -2191,12 +2820,388 @@
 </script>
 
 <!-- =========================================================
-     6. DAILY CHALLENGE
+     8. LOOT BOX
      ========================================================= -->
 <script>
 (function () {
   "use strict";
-  var C = window.GeoCore, A = window.GeoAudio, P = window.GeoPolygon;
+  var C = window.GeoCore, A = window.GeoAudio, E = window.GeoEffects;
+  if (!C || !A) return;
+  var toFa = C.toFa;
+  var $ = function (id) { return document.getElementById(id); };
+
+  // Rarity types
+  var RARITIES = {
+    common: { name: 'معمولی', color: '#9fb2c9', icon: '🥉' },
+    rare: { name: 'نادر', color: '#4fc3f7', icon: '🥈' },
+    epic: { name: 'حماسی', color: '#b878ff', icon: '🥇' },
+    legendary: { name: 'افسانه‌ای', color: '#e8bc63', icon: '💎' }
+  };
+
+  // Reward pool
+  function pickReward() {
+    var r = Math.random();
+    if (r < 0.55) { // common
+      return { type: 'points', rarity: 'common', points: 50, title: 'امتیاز معمولی', desc: '+۵۰ امتیاز' };
+    } else if (r < 0.82) { // rare
+      var rareRewards = [
+        { type: 'points', rarity: 'rare', points: 150, title: 'امتیاز نادر', desc: '+۱۵۰ امتیاز' },
+        { type: 'avatar', rarity: 'rare', avatarId: 'master', title: 'کارآگاه طلایی', desc: 'آواتار نادر جدید!' },
+        { type: 'avatar', rarity: 'rare', avatarId: 'ninja', title: 'نینجای هندسه', desc: 'آواتار نادر جدید!' },
+        { type: 'avatar', rarity: 'rare', avatarId: 'robot', title: 'ربات پیشرفته', desc: 'آواتار نادر جدید!' }
+      ];
+      return rareRewards[Math.floor(Math.random() * rareRewards.length)];
+    } else if (r < 0.96) { // epic
+      var epicRewards = [
+        { type: 'points', rarity: 'epic', points: 400, title: 'امتیاز حماسی', desc: '+۴۰۰ امتیاز' },
+        { type: 'avatar', rarity: 'epic', avatarId: 'wizard', title: 'جادوگر زوایا', desc: 'آواتار حماسی جدید!' },
+        { type: 'avatar', rarity: 'epic', avatarId: 'ghost', title: 'روح گمشده', desc: 'آواتار حماسی جدید!' },
+        { type: 'avatar', rarity: 'epic', avatarId: 'alien', title: 'فضایی مرموز', desc: 'آواتار حماسی جدید!' }
+      ];
+      return epicRewards[Math.floor(Math.random() * epicRewards.length)];
+    } else { // legendary
+      var legRewards = [
+        { type: 'points', rarity: 'legendary', points: 1000, title: 'امتیاز افسانه‌ای', desc: '+۱۰۰۰ امتیاز' },
+        { type: 'avatar', rarity: 'legendary', avatarId: 'dragon', title: 'اژدهای مدرک', desc: 'آواتار افسانه‌ای!' },
+        { type: 'avatar', rarity: 'legendary', avatarId: 'king', title: 'شاه زاویه‌ها', desc: 'آواتار افسانه‌ای!' }
+      ];
+      return legRewards[Math.floor(Math.random() * legRewards.length)];
+    }
+  }
+
+  function renderLoot() {
+    var st = C.getLootState();
+    $('lootCountVal').textContent = toFa(st.unopened);
+    $('lootOpenedVal').textContent = toFa(st.opened);
+
+    var box = $('lootBox');
+    if (st.unopened > 0) {
+      box.classList.remove('is-disabled');
+      $('lootHint').textContent = 'برای باز کردن، روی جعبه کلیک کن';
+    } else {
+      box.classList.add('is-disabled');
+      var rem = 10 - st.correctCount;
+      $('lootHint').textContent = 'هنوز جعبه‌ای نداری. ' + toFa(rem) + ' جواب درست دیگه مونده.';
+    }
+
+    // Rewards history
+    var rewards = C.getJSON(C.KEYS.LOOT_REWARDS, []);
+    var list = $('lootRewards');
+    if (!rewards.length) {
+      list.innerHTML = '<p class="evidence-clues__empty">هنوز جایزه‌ای نگرفتی.</p>';
+      return;
+    }
+    var html = '';
+    rewards.slice(-8).reverse().forEach(function (r) {
+      var rar = RARITIES[r.rarity] || RARITIES.common;
+      html += '<div class="loot-reward-item" style="--rarity-color:' + rar.color + '">' +
+        '<span class="loot-reward-item__icon">' + rar.icon + '</span>' +
+        '<span class="loot-reward-item__title">' + r.title + '</span>' +
+        '<span class="loot-reward-item__desc">' + r.desc + '</span>' +
+        '</div>';
+    });
+    list.innerHTML = html;
+  }
+
+  function openLootBox() {
+    var st = C.getLootState();
+    if (st.unopened <= 0) return;
+
+    st.unopened--;
+    st.opened++;
+    C.saveLootState(st);
+
+    var box = $('lootBox');
+    box.classList.add('is-opening');
+    A.ensureAudio();
+    A.playLootOpen();
+
+    var reward = pickReward();
+
+    setTimeout(function () {
+      // Apply reward
+      if (reward.type === 'points') {
+        C.addTotalScore(reward.points);
+        C.checkMilestoneAchievements();
+      } else if (reward.type === 'avatar') {
+        var wasNew = C.unlockAvatar(reward.avatarId);
+        if (!wasNew) {
+          // already had it, give points instead
+          reward.type = 'points';
+          reward.points = 100;
+          reward.title = 'امتیاز جایگزین';
+          reward.desc = '+۱۰۰ امتیاز (آواتار تکراری)';
+          C.addTotalScore(100);
+        }
+      }
+
+      // Save reward history
+      var rewards = C.getJSON(C.KEYS.LOOT_REWARDS, []);
+      rewards.push(reward);
+      if (rewards.length > 50) rewards = rewards.slice(-50);
+      C.setJSON(C.KEYS.LOOT_REWARDS, rewards);
+
+      showLootResult(reward);
+      C.unlockAchievement('loot1');
+      if (reward.rarity === 'legendary') C.unlockAchievement('loot_legendary');
+
+      box.classList.remove('is-opening');
+      C.refreshTotalScoreUI();
+      C.refreshLootBadge();
+      renderLoot();
+
+      // Effects
+      if (reward.rarity === 'legendary') {
+        A.playLootRare();
+        if (E) E.confetti(80);
+      } else if (reward.rarity === 'epic') {
+        A.playLootRare();
+        if (E) E.confetti(40);
+      } else if (reward.rarity === 'rare') {
+        A.playFanfare();
+      }
+    }, 900);
+  }
+
+  function showLootResult(reward) {
+    var rar = RARITIES[reward.rarity] || RARITIES.common;
+    $('lootResultIcon').textContent = rar.icon;
+    $('lootResultIcon').style.filter = 'drop-shadow(0 0 20px ' + rar.color + ')';
+    $('lootResultTitle').textContent = reward.title;
+    $('lootResultTitle').style.color = rar.color;
+    $('lootResultDesc').textContent = rar.name + ' — ' + reward.desc;
+    $('lootResultReward').style.borderColor = rar.color;
+    $('lootResultReward').style.color = rar.color;
+    if (reward.type === 'points') {
+      $('lootResultReward').textContent = '+' + toFa(reward.points) + ' امتیاز';
+    } else {
+      $('lootResultReward').textContent = '🎭 آواتار جدید باز شد!';
+    }
+    $('lootResultModal').hidden = false;
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    renderLoot();
+    $('btnLoot').addEventListener('click', function () {
+      C.showScreen('lootScreen');
+      renderLoot();
+    });
+    $('lootBox').addEventListener('click', openLootBox);
+    $('lootResultCloseBtn').addEventListener('click', function () {
+      $('lootResultModal').hidden = true;
+    });
+    $('lootBackBtn').addEventListener('click', function () {
+      C.showScreen('startScreen');
+      C.refreshTotalScoreUI();
+    });
+  });
+})();
+</script>
+
+<!-- =========================================================
+     9. SPECIAL DAILY
+     ========================================================= -->
+<script>
+(function () {
+  "use strict";
+  var C = window.GeoCore, A = window.GeoAudio, P = window.GeoPolygon, E = window.GeoEffects;
+  if (!C || !A || !P) return;
+  var toFa = C.toFa;
+  var $ = function (id) { return document.getElementById(id); };
+
+  var st = { round: 0, score: 0, active: false, locked: false, timeLeft: 0, timerId: null, question: null, startTime: 0 };
+
+  function refreshSpecialBadge() {
+    var special = C.getTodaySpecial();
+    var state = C.getSpecialDailyState();
+    $('specialDailyBadge').textContent = special.icon + ' ' + special.name.split('‌')[1] || special.name;
+    $('specialDailyBadge').className = 'mode-card__badge mode-card__badge--special';
+    $('specialDailyDesc').textContent = special.desc;
+    if (state.completed) {
+      $('specialDailyBadge').textContent = 'انجام شد ✅';
+      $('specialDailyBadge').className = 'mode-card__badge mode-card__badge--done';
+      $('specialDailyDesc').textContent = 'چالش امروز رو انجام دادی! فردا چالش جدید.';
+    }
+  }
+
+  function start() {
+    var state = C.getSpecialDailyState();
+    if (state.completed) {
+      alert('چالش ویژه‌ی امروز رو انجام دادی! فردا چالش جدید میاد. 😉');
+      return;
+    }
+    A.ensureAudio();
+    st.round = 0;
+    st.score = 0;
+    st.active = true;
+    st.locked = false;
+    var special = C.getTodaySpecial();
+    var d = new Date();
+    $('specialDateLabel').textContent = toFa(d.getFullYear()) + '/' + toFa(d.getMonth() + 1) + '/' + toFa(d.getDate());
+    $('specialTitle').innerHTML = special.icon + ' <span class="title__accent">' + special.name + '</span>';
+    $('specialDesc').textContent = special.desc;
+    $('specialScoreVal').textContent = '۰';
+    C.showScreen('specialDailyScreen');
+    nextQuestion();
+  }
+
+  function nextQuestion() {
+    var special = C.getTodaySpecial();
+    if (st.round >= special.count) {
+      finish();
+      return;
+    }
+    var nSides = special.shapeMin + Math.floor(Math.random() * (special.shapeMax - special.shapeMin + 1));
+    var angles = P.generateAngles(nSides, (nSides - 2) * 180);
+    var mi = Math.floor(Math.random() * nSides);
+    st.question = { nSides: nSides, angles: angles, missingIndex: mi, answer: angles[mi] };
+    st.startTime = Date.now();
+    st.locked = false;
+
+    var html = P.buildPolygonSVG(nSides, angles, mi, { w: 320, h: 320, half: 88 });
+    if (E && E.drawPolygonAnimated) E.drawPolygonAnimated($('specialPolygonWrap'), html);
+    else $('specialPolygonWrap').innerHTML = html;
+
+    $('specialProgressVal').textContent = toFa(st.round) + ' / ' + toFa(special.count);
+    $('specialAnswerInput').value = '';
+    $('specialAnswerInput').disabled = false;
+    $('specialSubmitBtn').disabled = false;
+    $('specialFeedback').textContent = '';
+    $('specialFeedback').className = 'feedback';
+    setTimeout(function () { $('specialAnswerInput').focus(); }, 80);
+    startTimer(special.time);
+  }
+
+  function startTimer(secs) {
+    if (st.timerId) clearInterval(st.timerId);
+    st.timeLeft = secs;
+    updateTimerBar(secs);
+    var last = Date.now();
+    st.timerId = setInterval(function () {
+      var now = Date.now();
+      st.timeLeft -= (now - last) / 1000;
+      last = now;
+      if (st.timeLeft <= 0) {
+        st.timeLeft = 0;
+        updateTimerBar(secs);
+        clearInterval(st.timerId); st.timerId = null;
+        timeoutAnswer();
+      } else updateTimerBar(secs);
+    }, 100);
+  }
+
+  function updateTimerBar(maxSecs) {
+    var pct = Math.max(0, (st.timeLeft / maxSecs) * 100);
+    $('specialTimerFill').style.width = pct + '%';
+    $('specialTimerFill').classList.toggle('is-low', pct < 30);
+  }
+
+  function timeoutAnswer() {
+    if (st.locked) return;
+    st.locked = true;
+    $('specialAnswerInput').disabled = true;
+    $('specialSubmitBtn').disabled = true;
+    A.playWrongSound();
+    if (E) E.shakeScreen();
+    var special = C.getTodaySpecial();
+    if (special.rule === 'suddenDeath') {
+      $('specialFeedback').textContent = '💀 وقت تموم شد!';
+      $('specialFeedback').className = 'feedback is-wrong';
+      setTimeout(finish, 900);
+    } else {
+      $('specialFeedback').textContent = '⏱ وقت تموم شد! جواب: ' + st.question.answer + '°';
+      $('specialFeedback').className = 'feedback is-wrong';
+      setTimeout(function () { st.round++; nextQuestion(); }, 900);
+    }
+  }
+
+  function submit() {
+    if (!st.active || st.locked) return;
+    var raw = $('specialAnswerInput').value.trim();
+    if (raw === '') return;
+    var g = Math.round(parseFloat(raw));
+    var q = st.question;
+    var special = C.getTodaySpecial();
+    st.locked = true;
+    $('specialAnswerInput').disabled = true;
+    $('specialSubmitBtn').disabled = true;
+    if (st.timerId) { clearInterval(st.timerId); st.timerId = null; }
+    var timeMs = Date.now() - st.startTime;
+
+    if (g === q.answer) {
+      var base = 30 + (q.nSides - 2) * 15;
+      var pts = base * special.multiplier;
+      st.score += pts;
+      A.playCorrectSound();
+      if (E) E.goldParticles(window.innerWidth / 2, window.innerHeight / 2);
+      $('specialFeedback').textContent = '✅ +' + toFa(pts) + ' (×' + toFa(special.multiplier) + ')';
+      $('specialFeedback').className = 'feedback is-correct';
+      $('specialScoreVal').textContent = toFa(st.score);
+      C.recordAnswer(true, timeMs, 0);
+      C.refreshLootBadge();
+    } else {
+      A.playWrongSound();
+      if (E) E.shakeScreen();
+      $('specialFeedback').textContent = '❌ جواب درست: ' + q.answer + '°';
+      $('specialFeedback').className = 'feedback is-wrong';
+      C.recordAnswer(false, timeMs, 0);
+    }
+
+    if (special.rule === 'suddenDeath' && g !== q.answer) {
+      setTimeout(finish, 900);
+      return;
+    }
+    setTimeout(function () { st.round++; nextQuestion(); }, 900);
+  }
+
+  function finish() {
+    st.active = false;
+    if (st.timerId) { clearInterval(st.timerId); st.timerId = null; }
+    var state = C.getSpecialDailyState();
+    state.completed = true;
+    state.score = st.score;
+    C.saveSpecialDailyState(state);
+    var newTotal = C.addTotalScore(st.score);
+    C.checkMilestoneAchievements();
+    C.recordGame();
+    A.playFanfare();
+    if (E) E.confetti(40);
+    var special = C.getTodaySpecial();
+    $('specialResultTitle').textContent = special.icon + ' ' + special.name + ' تموم شد!';
+    $('specialResultRank').textContent = st.score >= 300 ? 'درخشیدی! ⭐' : 'تلاش خوبی بود!';
+    $('specialFinalScore').textContent = toFa(st.score);
+    $('specialTotalScore').textContent = toFa(newTotal);
+    $('specialResultModal').hidden = false;
+    refreshSpecialBadge();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    refreshSpecialBadge();
+    $('btnSpecialDaily').addEventListener('click', start);
+    $('specialSubmitBtn').addEventListener('click', submit);
+    $('specialAnswerInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') submit(); });
+    $('specialBackBtn').addEventListener('click', function () {
+      st.active = false;
+      if (st.timerId) { clearInterval(st.timerId); st.timerId = null; }
+      C.showScreen('startScreen');
+      C.refreshTotalScoreUI();
+    });
+    $('specialResultMenuBtn').addEventListener('click', function () {
+      $('specialResultModal').hidden = true;
+      C.showScreen('startScreen');
+      C.refreshTotalScoreUI();
+    });
+  });
+})();
+</script>
+
+<!-- =========================================================
+     10. DAILY CHALLENGE
+     ========================================================= -->
+<script>
+(function () {
+  "use strict";
+  var C = window.GeoCore, A = window.GeoAudio, P = window.GeoPolygon, E = window.GeoEffects;
   if (!C || !A || !P) return;
   var toFa = C.toFa;
   var TOTAL = 10;
@@ -2233,7 +3238,9 @@
   }
   function render() {
     var q = questions[st.round];
-    $('dailyPolygonWrap').innerHTML = P.buildPolygonSVG(q.nSides, q.angles, q.missingIndex, { w: 320, h: 320, half: 88 });
+    var html = P.buildPolygonSVG(q.nSides, q.angles, q.missingIndex, { w: 320, h: 320, half: 88 });
+    if (E && E.drawPolygonAnimated) E.drawPolygonAnimated($('dailyPolygonWrap'), html);
+    else $('dailyPolygonWrap').innerHTML = html;
     $('dailyAnswerInput').value = '';
     $('dailyAnswerInput').disabled = false;
     $('dailySubmitBtn').disabled = false;
@@ -2255,17 +3262,20 @@
     var timeMs = Date.now() - st.roundStart;
     var ok = (g === q.answer);
     C.recordAnswer(ok, timeMs, 0);
+    C.refreshLootBadge();
     if (timeMs < 3000) C.unlockAchievement('fast');
 
     if (ok) {
       var pts = (30 + (q.nSides - 2) * 15) * 3;
       st.score += pts;
       A.playCorrectSound();
+      if (E) E.goldParticles(window.innerWidth / 2, window.innerHeight / 2);
       $('dailyFeedback').textContent = '✅ +' + toFa(pts) + ' (×۳)';
       $('dailyFeedback').className = 'feedback is-correct';
       $('dailyScoreVal').textContent = toFa(st.score);
     } else {
       A.playWrongSound();
+      if (E) E.shakeScreen();
       $('dailyFeedback').textContent = '❌ جواب: ' + q.answer + '°';
       $('dailyFeedback').className = 'feedback is-wrong';
     }
@@ -2292,6 +3302,7 @@
     var newTotal = C.addTotalScore(st.score);
     C.checkMilestoneAchievements();
     A.playFanfare();
+    if (E) E.confetti(30);
     $('dailyResultTitle').textContent = 'چالش تموم شد 🎉';
     $('dailyResultRank').textContent = st.score >= 400 ? 'درخشیدی! ⭐' : 'تلاش خوبی بود!';
     $('dailyFinalScore').textContent = toFa(st.score);
@@ -2337,7 +3348,7 @@
 </script>
 
 <!-- =========================================================
-     7. EVIDENCE DISCOVERY
+     11. EVIDENCE DISCOVERY
      ========================================================= -->
 <script>
 (function () {
@@ -2348,27 +3359,13 @@
   var $ = function (id) { return document.getElementById(id); };
 
   var EVIDENCE = [
-    { id:'E1', label:'مدرک ۰۱ — یادداشت', title:'یادداشت مرموز',
-      text:'«تاریخ ثبت‌شده: ۱۳ آبان — ساعت ۲۳:۴۷. اما کسی آن شب آن‌جا نبود...»',
-      x:18, y:26, minAngle:-60, maxAngle:-20, minZoom:100, nSides:3 },
-    { id:'E2', label:'مدرک ۰۲ — عکس', title:'عکس قدیمی',
-      text:'«پشت عکس با خودکار آبی: همان تاریخ، ۱۳ آبان، دفتر شماره ۷.»',
-      x:76, y:34, minAngle:25, maxAngle:60, minZoom:100, nSides:3 },
-    { id:'E3', label:'مدرک ۰۳ — فایل', title:'فایل نیمه‌سوخته',
-      text:'«بخشی از گزارش: "...طبق روایت رسمی، حادثه در ۱۳ آبان رخ نداده است."»',
-      x:42, y:64, minAngle:-12, maxAngle:12, minZoom:135, nSides:4 },
-    { id:'E4', label:'مدرک ۰۴ — نماد', title:'نماد زاویه‌ها',
-      text:'«علامت حکاکی‌شده: مثلثی با یک ضلع ناقص. زیرش: زاویه‌ی سوم همیشه پنهان است.»',
-      x:62, y:22, minAngle:40, maxAngle:60, minZoom:145, nSides:3 },
-    { id:'E5', label:'مدرک ۰۵ — شماره', title:'شماره‌ی مشکوک',
-      text:'«شماره روی لبه‌ی میز: ۰۷-۱۳. اشاره به یک پرونده‌ی بسته‌شده دارد.»',
-      x:30, y:78, minAngle:-55, maxAngle:-30, minZoom:160, nSides:4 },
-    { id:'E6', label:'مدرک ۰۶ — کاغذ', title:'تکه‌کاغذ پاره',
-      text:'«تکه‌ای از نقشه‌ی هندسی. یک زاویه با رنگ قرمز و کنارش: از زاویه‌ی درست ببین.»',
-      x:82, y:70, minAngle:15, maxAngle:35, minZoom:120, nSides:5 },
-    { id:'E7', label:'مدرک ۰۷ — صدا', title:'پیام صوتی ناتمام',
-      text:'«صدای ضعیف: "...اگه اینو می‌شنوی، یعنی مدارک رو پیدا کردی. ولی یه چیز هنوز جور درنمیاد..."»',
-      x:52, y:46, minAngle:-6, maxAngle:6, minZoom:190, nSides:5 }
+    { id:'E1', label:'مدرک ۰۱ — یادداشت', title:'یادداشت مرموز', text:'«تاریخ ثبت‌شده: ۱۳ آبان — ساعت ۲۳:۴۷. اما کسی آن شب آن‌جا نبود...»', x:18, y:26, minAngle:-60, maxAngle:-20, minZoom:100, nSides:3 },
+    { id:'E2', label:'مدرک ۰۲ — عکس', title:'عکس قدیمی', text:'«پشت عکس با خودکار آبی: همان تاریخ، ۱۳ آبان، دفتر شماره ۷.»', x:76, y:34, minAngle:25, maxAngle:60, minZoom:100, nSides:3 },
+    { id:'E3', label:'مدرک ۰۳ — فایل', title:'فایل نیمه‌سوخته', text:'«بخشی از گزارش: "...طبق روایت رسمی، حادثه در ۱۳ آبان رخ نداده است."»', x:42, y:64, minAngle:-12, maxAngle:12, minZoom:135, nSides:4 },
+    { id:'E4', label:'مدرک ۰۴ — نماد', title:'نماد زاویه‌ها', text:'«علامت حکاکی‌شده: مثلثی با یک ضلع ناقص. زیرش: زاویه‌ی سوم همیشه پنهان است.»', x:62, y:22, minAngle:40, maxAngle:60, minZoom:145, nSides:3 },
+    { id:'E5', label:'مدرک ۰۵ — شماره', title:'شماره‌ی مشکوک', text:'«شماره روی لبه‌ی میز: ۰۷-۱۳. اشاره به یک پرونده‌ی بسته‌شده دارد.»', x:30, y:78, minAngle:-55, maxAngle:-30, minZoom:160, nSides:4 },
+    { id:'E6', label:'مدرک ۰۶ — کاغذ', title:'تکه‌کاغذ پاره', text:'«تکه‌ای از نقشه‌ی هندسی. یک زاویه با رنگ قرمز و کنارش: از زاویه‌ی درست ببین.»', x:82, y:70, minAngle:15, maxAngle:35, minZoom:120, nSides:5 },
+    { id:'E7', label:'مدرک ۰۷ — صدا', title:'پیام صوتی ناتمام', text:'«صدای ضعیف: "...اگه اینو می‌شنوی، یعنی مدارک رو پیدا کردی. ولی یه چیز هنوز جور درنمیاد..."»', x:52, y:46, minAngle:-6, maxAngle:6, minZoom:190, nSides:5 }
   ];
 
   var viewAngle = 0, viewZoom = 100, isInScene = false;
@@ -2386,10 +3383,7 @@
     inner.innerHTML = '';
     var decor = document.createElement('div');
     decor.className = 'scene-decor';
-    decor.innerHTML =
-      '<div class="decor-shelf"></div><div class="decor-lamp"></div>' +
-      '<div class="decor-window"></div><div class="decor-desk"></div>' +
-      '<div class="decor-board"></div>';
+    decor.innerHTML = '<div class="decor-shelf"></div><div class="decor-lamp"></div><div class="decor-window"></div><div class="decor-desk"></div><div class="decor-board"></div>';
     inner.appendChild(decor);
 
     EVIDENCE.forEach(function (ev) {
@@ -2417,9 +3411,7 @@
       if (solved && solved.puzzleSolved) { el.classList.add('is-found'); return; }
       var ok = viewAngle >= ev.minAngle && viewAngle <= ev.maxAngle && viewZoom >= ev.minZoom;
       el.classList.toggle('is-visible', ok);
-      el.classList.toggle('is-near', !ok && (
-        Math.abs(viewAngle - (ev.minAngle + ev.maxAngle) / 2) < 12 && viewZoom >= ev.minZoom - 15
-      ));
+      el.classList.toggle('is-near', !ok && (Math.abs(viewAngle - (ev.minAngle + ev.maxAngle) / 2) < 12 && viewZoom >= ev.minZoom - 15));
     });
     var anyV = EVIDENCE.some(function (ev) {
       var s = dailyState.solved[ev.id];
@@ -2434,7 +3426,6 @@
     if (anyV) $('sceneHint').textContent = '✅ یه چیز این‌جاست... روش کلیک کن.';
     else if (anyN) $('sceneHint').textContent = '👀 یه چیز تقریباً این‌جاست...';
     else $('sceneHint').textContent = 'زاویه یا زوم رو تغییر بده...';
-
     var lc = $('sceneLightcone');
     if (lc) lc.style.left = (50 - viewAngle * 0.35) + '%';
   }
@@ -2509,9 +3500,8 @@
     foundCount = found.length;
     var list = $('cluesList');
     list.innerHTML = '';
-    if (!found.length) {
-      list.appendChild($('cluesEmpty'));
-    } else {
+    if (!found.length) list.appendChild($('cluesEmpty'));
+    else {
       found.forEach(function (ev, i) {
         var c = document.createElement('button');
         c.type = 'button';
@@ -2548,9 +3538,7 @@
       C.checkMilestoneAchievements();
       $('finalBonus').textContent = '+۳۰۰ امتیاز (کل: ' + toFa(nt) + ')';
       $('finalBonus').hidden = false;
-    } else {
-      $('finalBonus').hidden = true;
-    }
+    } else $('finalBonus').hidden = true;
     $('evidenceFinalModal').hidden = false;
   }
   function refreshUI() {
@@ -2573,9 +3561,7 @@
     if (!el) return;
     function tick() {
       var now = new Date();
-      var t = new Date(now);
-      t.setDate(t.getDate() + 1);
-      t.setHours(0, 0, 0, 0);
+      var t = new Date(now); t.setDate(t.getDate() + 1); t.setHours(0, 0, 0, 0);
       var diff = t - now;
       if (diff <= 0) { el.textContent = 'ریست شد! 🔄'; return; }
       var h = Math.floor(diff / 3600000);
@@ -2657,38 +3643,26 @@
 </script>
 
 <!-- =========================================================
-     8. DUEL v3 (2-player)
+     12. DUEL (2-player)
      ========================================================= -->
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 (function () {
   "use strict";
-
   if (typeof Peer === 'undefined') {
     var bd0 = document.getElementById('btnDuel');
-    if (bd0) bd0.addEventListener('click', function () {
-      alert('سرویس مسابقه در دسترس نیست. اینترنت رو چک کن و صفحه رو دوباره بارگذاری کن.');
-    });
+    if (bd0) bd0.addEventListener('click', function () { alert('سرویس مسابقه در دسترس نیست.'); });
     return;
   }
-
   var C = window.GeoCore, A = window.GeoAudio, P = window.GeoPolygon;
   if (!C || !A || !P) return;
   var toFa = C.toFa;
   var $ = function (id) { return document.getElementById(id); };
 
   var CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  function genCode() {
-    var s = '';
-    for (var i = 0; i < 5; i++) s += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)];
-    return s;
-  }
+  function genCode() { var s = ''; for (var i = 0; i < 5; i++) s += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]; return s; }
   function peerId(code) { return 'gdzv3-' + code.toUpperCase(); }
-  function esc(s) {
-    return String(s || '').replace(/[&<>"']/g, function (c) {
-      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
-    });
-  }
+  function esc(s) { return String(s || '').replace(/[&<>"']/g, function (c) { return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
 
   var peer = null, conn = null;
   var isHost = false;
@@ -2701,35 +3675,15 @@
     var mn = $('duelMinSelect'), mx = $('duelMaxSelect');
     if (!mn || !mx) return;
     for (var n = 3; n <= 8; n++) {
-      var o1 = document.createElement('option');
-      o1.value = n; o1.textContent = toFa(n) + ' ضلعی';
-      mn.appendChild(o1);
-      var o2 = document.createElement('option');
-      o2.value = n; o2.textContent = toFa(n) + ' ضلعی';
-      mx.appendChild(o2);
+      var o1 = document.createElement('option'); o1.value = n; o1.textContent = toFa(n) + ' ضلعی'; mn.appendChild(o1);
+      var o2 = document.createElement('option'); o2.value = n; o2.textContent = toFa(n) + ' ضلعی'; mx.appendChild(o2);
     }
-    mn.value = 3;
-    mx.value = 8;
+    mn.value = 3; mx.value = 8;
   })();
 
-  function setSetupMsg(t, err) {
-    var el = $('duelSetupMsg');
-    if (!el) return;
-    el.textContent = t || '';
-    el.className = 'feedback' + (err ? ' is-wrong' : '');
-  }
-  function setLobbyMsg(t, err) {
-    var el = $('duelLobbyMsg');
-    if (!el) return;
-    el.textContent = t || '';
-    el.className = 'feedback' + (err ? ' is-wrong' : '');
-  }
-  function info(t) {
-    var el = $('duelInfoText');
-    if (el) el.textContent = t;
-    var m = $('duelInfoModal');
-    if (m) m.hidden = false;
-  }
+  function setSetupMsg(t, err) { var el = $('duelSetupMsg'); if (el) { el.textContent = t || ''; el.className = 'feedback' + (err ? ' is-wrong' : ''); } }
+  function setLobbyMsg(t, err) { var el = $('duelLobbyMsg'); if (el) { el.textContent = t || ''; el.className = 'feedback' + (err ? ' is-wrong' : ''); } }
+  function info(t) { var el = $('duelInfoText'); if (el) el.textContent = t; var m = $('duelInfoModal'); if (m) m.hidden = false; }
   function cleanup() {
     if (conn) { try { conn.close(); } catch (e) {} conn = null; }
     if (peer) { try { peer.destroy(); } catch (e) {} peer = null; }
@@ -2740,22 +3694,16 @@
   }
   function backToMenu() {
     cleanup();
-    var m = $('duelResultModal');
-    if (m) m.hidden = true;
+    var m = $('duelResultModal'); if (m) m.hidden = true;
     C.showScreen('startScreen');
     C.refreshTotalScoreUI();
   }
-
   function tryCreateRoom(attempt) {
     if (attempt > 4) { setSetupMsg('ساخت روم ناموفق بود.', true); connecting = false; return; }
     var code = genCode();
     var p;
-    try {
-      p = new Peer(peerId(code), { debug: 0, config: { iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:global.stun.twilio.com:3478' }
-      ]}});
-    } catch (e) { setSetupMsg('مرورگر پشتیبانی نمی‌کنه.', true); connecting = false; return; }
+    try { p = new Peer(peerId(code), { debug: 0, config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478' }] } }); }
+    catch (e) { setSetupMsg('مرورگر پشتیبانی نمی‌کنه.', true); connecting = false; return; }
     peer = p;
     var settled = false;
     p.on('open', function () {
@@ -2766,28 +3714,14 @@
       settings = { time: 60, minSides: 3, maxSides: 8 };
       enterLobbyAsHost();
       p.on('connection', function (c) {
-        if (conn && conn.open) {
-          c.on('open', function () {
-            try { c.send({ type: 'full' }); } catch (e) {}
-            setTimeout(function () { try { c.close(); } catch (e) {} }, 300);
-          });
-          return;
-        }
-        conn = c;
-        setupHostConn(c);
+        if (conn && conn.open) { c.on('open', function () { try { c.send({ type: 'full' }); } catch (e) {} setTimeout(function () { try { c.close(); } catch (e) {} }, 300); }); return; }
+        conn = c; setupHostConn(c);
       });
     });
     p.on('error', function (err) {
       if (settled) return;
-      if (err && err.type === 'unavailable-id') {
-        settled = true;
-        try { p.destroy(); } catch (e) {}
-        tryCreateRoom(attempt + 1);
-      } else {
-        settled = true;
-        setSetupMsg('خطا در ساخت روم.', true);
-        cleanup(); connecting = false;
-      }
+      if (err && err.type === 'unavailable-id') { settled = true; try { p.destroy(); } catch (e) {} tryCreateRoom(attempt + 1); }
+      else { settled = true; setSetupMsg('خطا در ساخت روم.', true); cleanup(); connecting = false; }
     });
   }
   function setupHostConn(c) {
@@ -2814,24 +3748,17 @@
     if (msg.type === 'join') {
       peerName = (msg.name || 'مهمان').slice(0, 14);
       guestReady = false;
-      if (conn && conn.open) {
-        try { conn.send({ type: 'lobby', hostName: myName, guestReady: guestReady, settings: settings }); } catch (e) {}
-      }
+      if (conn && conn.open) { try { conn.send({ type: 'lobby', hostName: myName, guestReady: guestReady, settings: settings }); } catch (e) {} }
       renderLobby();
     } else if (msg.type === 'ready') { guestReady = !!msg.ready; renderLobby(); }
     else if (msg.type === 'answer') { if (ds.active) evalAnswer('opp', msg.guess); }
     else if (msg.type === 'leave') { onGuestLeft(); }
   }
-
   function joinRoom(code) {
     code = code.toUpperCase();
     var p;
-    try {
-      p = new Peer(undefined, { debug: 0, config: { iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:global.stun.twilio.com:3478' }
-      ]}});
-    } catch (e) { setSetupMsg('مرورگر پشتیبانی نمی‌کنه.', true); connecting = false; return; }
+    try { p = new Peer(undefined, { debug: 0, config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478' }] } }); }
+    catch (e) { setSetupMsg('مرورگر پشتیبانی نمی‌کنه.', true); connecting = false; return; }
     peer = p;
     var settled = false;
     connecting = true;
@@ -2839,11 +3766,7 @@
       var c = p.connect(peerId(code), { reliable: true });
       conn = c; isHost = false; roomCode = code;
       var connTimeout = setTimeout(function () {
-        if (!settled) {
-          settled = true; connecting = false;
-          setSetupMsg('اتصال برقرار نشد.', true);
-          cleanup();
-        }
+        if (!settled) { settled = true; connecting = false; setSetupMsg('اتصال برقرار نشد.', true); cleanup(); }
       }, 15000);
       c.on('open', function () {
         clearTimeout(connTimeout);
@@ -2855,11 +3778,8 @@
       c.on('data', function (msg) { try { onGuestMsg(msg); } catch (e) { console.warn(e); } });
       c.on('close', function () { if (settled) onHostLeft(); });
       c.on('error', function (err) {
-        if (!settled) {
-          settled = true; clearTimeout(connTimeout); connecting = false;
-          setSetupMsg('اتصال ممکن نشد.', true);
-          cleanup();
-        } else onHostLeft();
+        if (!settled) { settled = true; clearTimeout(connTimeout); connecting = false; setSetupMsg('اتصال ممکن نشد.', true); cleanup(); }
+        else onHostLeft();
       });
     });
     p.on('error', function (err) {
@@ -2879,60 +3799,28 @@
   function onGuestMsg(msg) {
     if (!msg || !msg.type) return;
     if (msg.type === 'full') { setSetupMsg('این روم پره.', true); cleanup(); }
-    else if (msg.type === 'lobby') {
-      hostName = msg.hostName; peerName = msg.hostName;
-      guestReady = msg.guestReady; settings = msg.settings;
-      renderLobby();
-    } else if (msg.type === 'kicked') {
-      cleanup();
-      C.showScreen('duelSetupScreen');
-      info('میزبان تو رو اخراج کرد.');
-    } else if (msg.type === 'round') {
-      ds.round = msg.round; ds.nSides = msg.nSides;
-      ds.angles = msg.angles; ds.missingIndex = msg.missingIndex;
-      ds.locked = false;
-      renderDuelRound();
-    } else if (msg.type === 'result') {
-      var won = msg.winner === 'guest';
-      ds.scoreMe = msg.scoreGuest; ds.scoreOpp = msg.scoreHost; ds.locked = true;
-      A.playCorrectSound();
-      renderDuelResult(won, msg.actual, ds.scoreMe, ds.scoreOpp);
-    } else if (msg.type === 'tick') { ds.timeLeft = msg.timeLeft; updateDuelTimer(); }
+    else if (msg.type === 'lobby') { hostName = msg.hostName; peerName = msg.hostName; guestReady = msg.guestReady; settings = msg.settings; renderLobby(); }
+    else if (msg.type === 'kicked') { cleanup(); C.showScreen('duelSetupScreen'); info('میزبان تو رو اخراج کرد.'); }
+    else if (msg.type === 'round') { ds.round = msg.round; ds.nSides = msg.nSides; ds.angles = msg.angles; ds.missingIndex = msg.missingIndex; ds.locked = false; renderDuelRound(); }
+    else if (msg.type === 'result') { var won = msg.winner === 'guest'; ds.scoreMe = msg.scoreGuest; ds.scoreOpp = msg.scoreHost; ds.locked = true; A.playCorrectSound(); renderDuelResult(won, msg.actual, ds.scoreMe, ds.scoreOpp); }
+    else if (msg.type === 'tick') { ds.timeLeft = msg.timeLeft; updateDuelTimer(); }
     else if (msg.type === 'gameover') { duelOver(msg.scoreHost, msg.scoreGuest); }
-    else if (msg.type === 'gamestart') {
-      settings = msg.settings;
-      ds.scoreMe = 0; ds.scoreOpp = 0; ds.round = 0; ds.active = true;
-      enterDuelGame();
-    } else if (msg.type === 'backtolobby') {
-      C.showScreen('duelLobbyScreen');
-      var m = $('duelResultModal'); if (m) m.hidden = true;
-      enterLobbyAsGuest();
-    }
+    else if (msg.type === 'gamestart') { settings = msg.settings; ds.scoreMe = 0; ds.scoreOpp = 0; ds.round = 0; ds.active = true; enterDuelGame(); }
+    else if (msg.type === 'backtolobby') { C.showScreen('duelLobbyScreen'); var m = $('duelResultModal'); if (m) m.hidden = true; enterLobbyAsGuest(); }
   }
   function enterLobbyAsHost() {
     C.showScreen('duelLobbyScreen');
-    $('duelCodePanel').hidden = false;
-    $('duelCodeBox').textContent = roomCode;
-    $('duelSettingsCard').hidden = false;
-    $('duelSettingsReadonly').hidden = true;
-    $('duelReadyBtn').hidden = true;
-    $('duelStartBtn').hidden = false;
-    $('duelStartBtn').disabled = true;
-    setLobbyMsg('منتظر پیوستن حریف...');
-    renderLobby();
+    $('duelCodePanel').hidden = false; $('duelCodeBox').textContent = roomCode;
+    $('duelSettingsCard').hidden = false; $('duelSettingsReadonly').hidden = true;
+    $('duelReadyBtn').hidden = true; $('duelStartBtn').hidden = false; $('duelStartBtn').disabled = true;
+    setLobbyMsg('منتظر پیوستن حریف...'); renderLobby();
   }
   function enterLobbyAsGuest() {
     C.showScreen('duelLobbyScreen');
-    $('duelCodePanel').hidden = true;
-    $('duelSettingsCard').hidden = true;
-    $('duelSettingsReadonly').hidden = false;
-    $('duelReadyBtn').hidden = false;
-    $('duelStartBtn').hidden = true;
-    guestReady = false;
-    $('duelReadyBtn').textContent = 'آماده‌ام ✅';
-    $('duelReadyBtn').classList.remove('is-ready');
-    setLobbyMsg('منتظر شروع از طرف میزبان...');
-    renderLobby();
+    $('duelCodePanel').hidden = true; $('duelSettingsCard').hidden = true; $('duelSettingsReadonly').hidden = false;
+    $('duelReadyBtn').hidden = false; $('duelStartBtn').hidden = true;
+    guestReady = false; $('duelReadyBtn').textContent = 'آماده‌ام ✅'; $('duelReadyBtn').classList.remove('is-ready');
+    setLobbyMsg('منتظر شروع از طرف میزبان...'); renderLobby();
   }
   function renderLobby() {
     var rows = '';
@@ -2943,45 +3831,32 @@
         rows += '<div class="player-row"><span class="player-row__name">🙋 ' + esc(peerName) + '</span>' +
           '<span class="player-row__badge' + (guestReady ? ' is-ready' : '') + '">' + (guestReady ? 'آماده ✅' : 'در انتظار ⏳') + '</span>' +
           '<button class="player-row__kick" id="kickBtn" type="button">✕</button></div>';
-      } else {
-        rows += '<div class="player-row player-row--empty">⏳ منتظر حریف...</div>';
-      }
+      } else rows += '<div class="player-row player-row--empty">⏳ منتظر حریف...</div>';
     } else {
       rows += '<div class="player-row"><span class="player-row__name">🙋 ' + esc(myName) + '</span>' +
         '<span class="player-row__badge' + (guestReady ? ' is-ready' : '') + '">' + (guestReady ? 'آماده ✅' : 'در انتظار ⏳') + '</span></div>';
     }
     $('playerList').innerHTML = rows;
     if (isHost) {
-      var kb = $('kickBtn');
-      if (kb) kb.addEventListener('click', kick);
+      var kb = $('kickBtn'); if (kb) kb.addEventListener('click', kick);
       $('duelStartBtn').disabled = !(connected && guestReady);
-      var sub = $('duelLobbySubtitle');
-      if (sub) sub.textContent = connected ? 'حریف وصل شد.' : 'کد یا لینک رو بفرست.';
+      var sub = $('duelLobbySubtitle'); if (sub) sub.textContent = connected ? 'حریف وصل شد.' : 'کد یا لینک رو بفرست.';
     } else {
-      $('duelSettingsReadonlyText').innerHTML =
-        '<p>⏱ ' + toFa(settings.time) + ' ثانیه</p><p>🔺 ' + toFa(settings.minSides) + ' تا ' + toFa(settings.maxSides) + ' ضلعی</p>';
-      var sub2 = $('duelLobbySubtitle');
-      if (sub2) sub2.textContent = 'منتظر شروع از طرف میزبان...';
+      $('duelSettingsReadonlyText').innerHTML = '<p>⏱ ' + toFa(settings.time) + ' ثانیه</p><p>🔺 ' + toFa(settings.minSides) + ' تا ' + toFa(settings.maxSides) + ' ضلعی</p>';
+      var sub2 = $('duelLobbySubtitle'); if (sub2) sub2.textContent = 'منتظر شروع از طرف میزبان...';
     }
   }
   function kick() {
     if (!isHost || !conn) return;
     try { conn.send({ type: 'kicked' }); } catch (e) {}
-    setTimeout(function () {
-      try { conn.close(); } catch (e) {}
-      conn = null; connected = false; guestReady = false; peerName = '';
-      renderLobby();
-      setLobbyMsg('حریف اخراج شد.');
-    }, 200);
+    setTimeout(function () { try { conn.close(); } catch (e) {} conn = null; connected = false; guestReady = false; peerName = ''; renderLobby(); setLobbyMsg('حریف اخراج شد.'); }, 200);
   }
   function enterDuelGame() {
     C.showScreen('duelGameScreen');
     $('duelMeLabel').textContent = 'شما (' + myName + ')';
     $('duelOppLabel').textContent = 'حریف (' + (peerName || '---') + ')';
-    $('duelMeScore').textContent = '۰';
-    $('duelOppScore').textContent = '۰';
-    ds.timeLeft = settings.time;
-    updateDuelTimer();
+    $('duelMeScore').textContent = '۰'; $('duelOppScore').textContent = '۰';
+    ds.timeLeft = settings.time; updateDuelTimer();
   }
   function startRound() {
     if (!isHost) return;
@@ -2991,19 +3866,14 @@
     ds.angles = P.generateAngles(ds.nSides, (ds.nSides - 2) * 180);
     ds.missingIndex = Math.floor(Math.random() * ds.nSides);
     ds.locked = false;
-    if (conn && connected) {
-      try { conn.send({ type: 'round', round: ds.round, nSides: ds.nSides, angles: ds.angles, missingIndex: ds.missingIndex }); } catch (e) {}
-    }
+    if (conn && connected) { try { conn.send({ type: 'round', round: ds.round, nSides: ds.nSides, angles: ds.angles, missingIndex: ds.missingIndex }); } catch (e) {} }
     renderDuelRound();
   }
   function renderDuelRound() {
     $('duelRoundNum').textContent = toFa(ds.round);
     $('duelPolygonWrap').innerHTML = P.buildPolygonSVG(ds.nSides, ds.angles, ds.missingIndex, { w: 320, h: 320, half: 88 });
-    $('duelAnswerInput').value = '';
-    $('duelAnswerInput').disabled = false;
-    $('duelSubmitBtn').disabled = false;
-    $('duelFeedback').textContent = '';
-    $('duelFeedback').className = 'feedback';
+    $('duelAnswerInput').value = ''; $('duelAnswerInput').disabled = false; $('duelSubmitBtn').disabled = false;
+    $('duelFeedback').textContent = ''; $('duelFeedback').className = 'feedback';
     setTimeout(function () { $('duelAnswerInput').focus(); }, 80);
   }
   function submitDuel() {
@@ -3017,16 +3887,12 @@
     } else {
       var actual = ds.angles[ds.missingIndex];
       if (g === actual) {
-        $('duelAnswerInput').disabled = true;
-        $('duelSubmitBtn').disabled = true;
-        $('duelFeedback').textContent = '✅ درسته! منتظر تایید...';
-        $('duelFeedback').className = 'feedback is-correct';
+        $('duelAnswerInput').disabled = true; $('duelSubmitBtn').disabled = true;
+        $('duelFeedback').textContent = '✅ درسته! منتظر تایید...'; $('duelFeedback').className = 'feedback is-correct';
         if (conn && connected) { try { conn.send({ type: 'answer', guess: g }); } catch (e) {} }
       } else {
-        $('duelFeedback').textContent = '❌ اشتباه!';
-        $('duelFeedback').className = 'feedback is-wrong';
-        $('duelAnswerInput').value = '';
-        $('duelAnswerInput').focus();
+        $('duelFeedback').textContent = '❌ اشتباه!'; $('duelFeedback').className = 'feedback is-wrong';
+        $('duelAnswerInput').value = ''; $('duelAnswerInput').focus();
       }
     }
   }
@@ -3034,36 +3900,23 @@
     if (!isHost || !ds.active || ds.locked) return;
     var actual = ds.angles[ds.missingIndex];
     if (guess !== actual) {
-      if (role === 'me') {
-        $('duelFeedback').textContent = '❌ اشتباه!';
-        $('duelFeedback').className = 'feedback is-wrong';
-      }
+      if (role === 'me') { $('duelFeedback').textContent = '❌ اشتباه!'; $('duelFeedback').className = 'feedback is-wrong'; }
       return;
     }
     ds.locked = true;
     var pts = 30 + (ds.nSides - 2) * 15;
     if (role === 'me') ds.scoreMe += pts; else ds.scoreOpp += pts;
-    $('duelAnswerInput').disabled = true;
-    $('duelSubmitBtn').disabled = true;
+    $('duelAnswerInput').disabled = true; $('duelSubmitBtn').disabled = true;
     A.playCorrectSound();
     renderDuelResult(role === 'me', actual, ds.scoreMe, ds.scoreOpp);
-    if (conn && connected) {
-      try { conn.send({ type: 'result', winner: role === 'me' ? 'host' : 'guest', actual: actual, scoreHost: ds.scoreMe, scoreGuest: ds.scoreOpp }); } catch (e) {}
-    }
+    if (conn && connected) { try { conn.send({ type: 'result', winner: role === 'me' ? 'host' : 'guest', actual: actual, scoreHost: ds.scoreMe, scoreGuest: ds.scoreOpp }); } catch (e) {} }
     if (ds.active) setTimeout(function () { if (ds.active) startRound(); }, 900);
   }
   function renderDuelResult(won, actual, me, opp) {
-    $('duelMeScore').textContent = toFa(me);
-    $('duelOppScore').textContent = toFa(opp);
-    $('duelAnswerInput').disabled = true;
-    $('duelSubmitBtn').disabled = true;
-    if (won) {
-      $('duelFeedback').textContent = '✅ تو سریع‌تر بودی! ' + actual + '°';
-      $('duelFeedback').className = 'feedback is-correct';
-    } else {
-      $('duelFeedback').textContent = '⏱ حریف زودتر گفت. جواب: ' + actual + '°';
-      $('duelFeedback').className = 'feedback is-wrong';
-    }
+    $('duelMeScore').textContent = toFa(me); $('duelOppScore').textContent = toFa(opp);
+    $('duelAnswerInput').disabled = true; $('duelSubmitBtn').disabled = true;
+    if (won) { $('duelFeedback').textContent = '✅ تو سریع‌تر بودی! ' + actual + '°'; $('duelFeedback').className = 'feedback is-correct'; }
+    else { $('duelFeedback').textContent = '⏱ حریف زودتر گفت. جواب: ' + actual + '°'; $('duelFeedback').className = 'feedback is-wrong'; }
   }
   function startDuelTimer() {
     if (ds.timerId) clearInterval(ds.timerId);
@@ -3073,18 +3926,8 @@
       var now = Date.now();
       ds.timeLeft -= (now - last) / 1000;
       last = now;
-      if (ds.timeLeft <= 0) {
-        ds.timeLeft = 0;
-        updateDuelTimer();
-        clearInterval(ds.timerId); ds.timerId = null;
-        finishMatch();
-      } else {
-        updateDuelTimer();
-        if (now - lastBC > 800) {
-          lastBC = now;
-          if (conn && connected) { try { conn.send({ type: 'tick', timeLeft: ds.timeLeft }); } catch (e) {} }
-        }
-      }
+      if (ds.timeLeft <= 0) { ds.timeLeft = 0; updateDuelTimer(); clearInterval(ds.timerId); ds.timerId = null; finishMatch(); }
+      else { updateDuelTimer(); if (now - lastBC > 800) { lastBC = now; if (conn && connected) { try { conn.send({ type: 'tick', timeLeft: ds.timeLeft }); } catch (e) {} } } }
     }, 100);
   }
   function updateDuelTimer() {
@@ -3094,9 +3937,7 @@
   }
   function finishMatch() {
     ds.active = false;
-    if (conn && connected) {
-      try { conn.send({ type: 'gameover', scoreHost: ds.scoreMe, scoreGuest: ds.scoreOpp }); } catch (e) {}
-    }
+    if (conn && connected) { try { conn.send({ type: 'gameover', scoreHost: ds.scoreMe, scoreGuest: ds.scoreOpp }); } catch (e) {} }
     duelOver(ds.scoreMe, ds.scoreOpp);
   }
   function duelOver(hostScore, guestScore) {
@@ -3106,19 +3947,10 @@
     var opp = isHost ? guestScore : hostScore;
     ds.scoreMe = me; ds.scoreOpp = opp;
     A.playFanfare();
-    $('duelResultMe').textContent = toFa(me);
-    $('duelResultOpp').textContent = toFa(opp);
-    if (me > opp) {
-      $('duelResultTitle').textContent = 'بردی! 🏆';
-      $('duelResultRank').textContent = 'آفرین کارآگاه!';
-      C.unlockAchievement('duel');
-    } else if (me < opp) {
-      $('duelResultTitle').textContent = 'باختی 😅';
-      $('duelResultRank').textContent = 'دفعه‌ی بعد بهتر!';
-    } else {
-      $('duelResultTitle').textContent = 'مساوی! 🤝';
-      $('duelResultRank').textContent = 'امتیازها برابر.';
-    }
+    $('duelResultMe').textContent = toFa(me); $('duelResultOpp').textContent = toFa(opp);
+    if (me > opp) { $('duelResultTitle').textContent = 'بردی! 🏆'; $('duelResultRank').textContent = 'آفرین کارآگاه!'; C.unlockAchievement('duel'); }
+    else if (me < opp) { $('duelResultTitle').textContent = 'باختی 😅'; $('duelResultRank').textContent = 'دفعه‌ی بعد بهتر!'; }
+    else { $('duelResultTitle').textContent = 'مساوی! 🤝'; $('duelResultRank').textContent = 'امتیازها برابر.'; }
     $('duelPlayAgainBtn').hidden = !isHost;
     $('duelResultModal').hidden = false;
   }
@@ -3126,27 +3958,18 @@
     var bd = $('btnDuel');
     if (bd) bd.addEventListener('click', function () {
       setSetupMsg('');
-      try {
-        var url = new URL(window.location.href);
-        var q = url.searchParams.get('room');
-        if (q) $('duelCodeInput').value = q.toUpperCase();
-      } catch (e) {}
-      var saved = localStorage.getItem('geoDetectiveDuelName');
-      if (saved) $('duelNameInput').value = saved;
+      try { var url = new URL(window.location.href); var q = url.searchParams.get('room'); if (q) $('duelCodeInput').value = q.toUpperCase(); } catch (e) {}
+      var saved = localStorage.getItem('geoDetectiveDuelName'); if (saved) $('duelNameInput').value = saved;
       C.showScreen('duelSetupScreen');
     });
-    var sb = $('duelSetupBackBtn');
-    if (sb) sb.addEventListener('click', function () { C.showScreen('startScreen'); });
-    var iok = $('duelInfoOkBtn');
-    if (iok) iok.addEventListener('click', function () { $('duelInfoModal').hidden = true; });
+    var sb = $('duelSetupBackBtn'); if (sb) sb.addEventListener('click', function () { C.showScreen('startScreen'); });
+    var iok = $('duelInfoOkBtn'); if (iok) iok.addEventListener('click', function () { $('duelInfoModal').hidden = true; });
     $('btnCreateRoom').addEventListener('click', function () {
       var name = $('duelNameInput').value.trim().slice(0, 14);
       if (!name) { setSetupMsg('اول یه اسم بنویس.', true); return; }
       if (connecting) return;
-      localStorage.setItem('geoDetectiveDuelName', name);
-      myName = name;
-      setSetupMsg('در حال ساخت روم...');
-      tryCreateRoom(0);
+      localStorage.setItem('geoDetectiveDuelName', name); myName = name;
+      setSetupMsg('در حال ساخت روم...'); tryCreateRoom(0);
     });
     $('btnJoinRoom').addEventListener('click', function () {
       var name = $('duelNameInput').value.trim().slice(0, 14);
@@ -3154,10 +3977,8 @@
       if (!name) { setSetupMsg('اول یه اسم بنویس.', true); return; }
       if (!code || code.length !== 5) { setSetupMsg('کد ۵ کاراکتری معتبر وارد کن.', true); return; }
       if (connecting) return;
-      localStorage.setItem('geoDetectiveDuelName', name);
-      myName = name;
-      setSetupMsg('در حال اتصال...');
-      joinRoom(code);
+      localStorage.setItem('geoDetectiveDuelName', name); myName = name;
+      setSetupMsg('در حال اتصال...'); joinRoom(code);
     });
     var leave = function () {
       if (isHost && conn) { try { conn.send({ type: 'kicked' }); } catch (e) {} }
@@ -3180,24 +4001,18 @@
       readSettings();
       ds.scoreMe = 0; ds.scoreOpp = 0; ds.round = 0; ds.active = true;
       if (conn) { try { conn.send({ type: 'gamestart', settings: settings }); } catch (e) {} }
-      enterDuelGame();
-      A.ensureAudio();
-      startRound();
-      startDuelTimer();
+      enterDuelGame(); A.ensureAudio(); startRound(); startDuelTimer();
     });
     $('duelSubmitBtn').addEventListener('click', submitDuel);
     $('duelAnswerInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') submitDuel(); });
     $('copyCodeBtn').addEventListener('click', function () { copyText(roomCode, this, 'کپی کد'); });
     $('copyLinkBtn').addEventListener('click', function () {
-      var url = new URL(window.location.href);
-      url.search = '';
-      url.searchParams.set('room', roomCode);
+      var url = new URL(window.location.href); url.search = ''; url.searchParams.set('room', roomCode);
       copyText(url.toString(), this, 'کپی لینک');
     });
     $('duelPlayAgainBtn').addEventListener('click', function () {
       if (!isHost) return;
-      $('duelResultModal').hidden = true;
-      guestReady = false;
+      $('duelResultModal').hidden = true; guestReady = false;
       if (conn && connected) { try { conn.send({ type: 'backtolobby' }); } catch (e) {} }
       enterLobbyAsHost();
     });
@@ -3218,15 +4033,10 @@
   function broadcastSettings() {
     if (!isHost) return;
     readSettings();
-    if (conn && connected) {
-      try { conn.send({ type: 'lobby', hostName: myName, guestReady: guestReady, settings: settings }); } catch (e) {}
-    }
+    if (conn && connected) { try { conn.send({ type: 'lobby', hostName: myName, guestReady: guestReady, settings: settings }); } catch (e) {} }
   }
   function copyText(text, btn, reset) {
-    var done = function () {
-      btn.textContent = 'کپی شد ✅';
-      setTimeout(function () { btn.textContent = reset; }, 1500);
-    };
+    var done = function () { btn.textContent = 'کپی شد ✅'; setTimeout(function () { btn.textContent = reset; }, 1500); };
     if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () { fallback(text); done(); });
     else { fallback(text); done(); }
   }
@@ -3245,52 +4055,33 @@
 </script>
 
 <!-- =========================================================
-     9. PARTY MODE (multi-player, up to 8)
+     13. PARTY (multi-player)
      ========================================================= -->
 <script>
 (function () {
   "use strict";
-
   if (typeof Peer === 'undefined') return;
-
   var C = window.GeoCore, A = window.GeoAudio, P = window.GeoPolygon;
   if (!C || !A || !P) return;
   var toFa = C.toFa;
   var $ = function (id) { return document.getElementById(id); };
 
   var CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  function genCode() {
-    var s = '';
-    for (var i = 0; i < 5; i++) s += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)];
-    return s;
-  }
+  function genCode() { var s = ''; for (var i = 0; i < 5; i++) s += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]; return s; }
   function peerId(code) { return 'gdzv-party-' + code.toUpperCase(); }
-  function esc(s) {
-    return String(s || '').replace(/[&<>"']/g, function (c) {
-      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
-    });
-  }
+  function esc(s) { return String(s || '').replace(/[&<>"']/g, function (c) { return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
 
   var MAX_PLAYERS = 8;
   var peer = null, conns = [], hostConn = null;
   var isHost = false;
   var myName = '', roomCode = '';
   var connecting = false;
-  var players = []; // { id, name, score, peerId, conn }
+  var players = [];
   var ps = { round: 0, nSides: 3, angles: [], missingIndex: -1, locked: false, timeLeft: 0, timerId: null, active: false, answered: {} };
+  var myId = 'host';
 
-  function setPartyMsg(t, err) {
-    var el = $('partySetupMsg');
-    if (!el) return;
-    el.textContent = t || '';
-    el.className = 'feedback' + (err ? ' is-wrong' : '');
-  }
-  function setPartyLobbyMsg(t, err) {
-    var el = $('partyLobbyMsg');
-    if (!el) return;
-    el.textContent = t || '';
-    el.className = 'feedback' + (err ? ' is-wrong' : '');
-  }
+  function setPartyMsg(t, err) { var el = $('partySetupMsg'); if (el) { el.textContent = t || ''; el.className = 'feedback' + (err ? ' is-wrong' : ''); } }
+  function setPartyLobbyMsg(t, err) { var el = $('partyLobbyMsg'); if (el) { el.textContent = t || ''; el.className = 'feedback' + (err ? ' is-wrong' : ''); } }
 
   function cleanupParty() {
     conns.forEach(function (c) { try { c.close(); } catch (e) {} });
@@ -3300,10 +4091,7 @@
     if (ps.timerId) { clearInterval(ps.timerId); ps.timerId = null; }
     ps.active = false;
     ps.answered = {};
-    isHost = false;
-    connecting = false;
-    roomCode = '';
-    players = [];
+    isHost = false; connecting = false; roomCode = ''; players = [];
     var m = $('partyResultModal'); if (m) m.hidden = true;
   }
 
@@ -3313,79 +4101,45 @@
     C.refreshTotalScoreUI();
   }
 
-  // ========== HOST ==========
   function tryCreateParty(attempt) {
     if (attempt > 4) { setPartyMsg('ساخت اتاق ناموفق.', true); connecting = false; return; }
     var code = genCode();
     var p;
-    try {
-      p = new Peer(peerId(code), { debug: 0, config: { iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:global.stun.twilio.com:3478' }
-      ]}});
-    } catch (e) { setPartyMsg('مرورگر پشتیبانی نمی‌کنه.', true); connecting = false; return; }
+    try { p = new Peer(peerId(code), { debug: 0, config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478' }] } }); }
+    catch (e) { setPartyMsg('مرورگر پشتیبانی نمی‌کنه.', true); connecting = false; return; }
     peer = p;
     var settled = false;
     p.on('open', function () {
       if (settled) return;
       settled = true;
-      isHost = true;
-      roomCode = code;
-      connecting = false;
+      isHost = true; roomCode = code; connecting = false;
       players = [{ id: 'host', name: myName, score: 0, peerId: peerId(code), conn: null }];
       enterPartyLobbyAsHost();
       p.on('connection', function (c) {
         if (conns.length >= MAX_PLAYERS - 1) {
-          c.on('open', function () {
-            try { c.send({ type: 'full' }); } catch (e) {}
-            setTimeout(function () { try { c.close(); } catch (e) {} }, 300);
-          });
+          c.on('open', function () { try { c.send({ type: 'full' }); } catch (e) {} setTimeout(function () { try { c.close(); } catch (e) {} }, 300); });
           return;
         }
-        conns.push(c);
-        setupHostPartyConn(c);
+        conns.push(c); setupHostPartyConn(c);
       });
     });
     p.on('error', function (err) {
       if (settled) return;
-      if (err && err.type === 'unavailable-id') {
-        settled = true;
-        try { p.destroy(); } catch (e) {}
-        tryCreateParty(attempt + 1);
-      } else {
-        settled = true;
-        setPartyMsg('خطا در ساخت اتاق.', true);
-        cleanupParty();
-      }
+      if (err && err.type === 'unavailable-id') { settled = true; try { p.destroy(); } catch (e) {} tryCreateParty(attempt + 1); }
+      else { settled = true; setPartyMsg('خطا در ساخت اتاق.', true); cleanupParty(); }
     });
   }
 
   function setupHostPartyConn(c) {
-    var pid = null;
-    c.on('open', function () {
-      // Wait for 'join' message to get player name
-    });
-    c.on('data', function (msg) {
-      try { onHostPartyMsg(c, msg, pid); } catch (e) { console.warn(e); }
-    });
+    c.on('data', function (msg) { try { onHostPartyMsg(c, msg); } catch (e) { console.warn(e); } });
     c.on('close', function () {
-      // remove player
       var idx = -1;
-      for (var i = 0; i < players.length; i++) {
-        if (players[i].conn === c) { idx = i; break; }
-      }
-      if (idx > 0) {
-        players.splice(idx, 1);
-        renderPartyLobby();
-        broadcastPartyLobby();
-        if (players.length < 2 && ps.active) {
-          // pause if too few
-        }
-      }
+      for (var i = 0; i < players.length; i++) if (players[i].conn === c) { idx = i; break; }
+      if (idx > 0) { players.splice(idx, 1); renderPartyLobby(); broadcastPartyLobby(); }
     });
   }
 
-  function onHostPartyMsg(c, msg, pid) {
+  function onHostPartyMsg(c, msg) {
     if (!msg || !msg.type) return;
     if (msg.type === 'join') {
       var name = (msg.name || 'مهمان').slice(0, 14);
@@ -3393,8 +4147,7 @@
       players.push({ id: newId, name: name, score: 0, peerId: null, conn: c });
       c._playerId = newId;
       try { c.send({ type: 'joined', id: newId, code: roomCode }); } catch (e) {}
-      renderPartyLobby();
-      broadcastPartyLobby();
+      renderPartyLobby(); broadcastPartyLobby();
     } else if (msg.type === 'answer') {
       if (!ps.active || ps.locked) return;
       var actual = ps.angles[ps.missingIndex];
@@ -3403,43 +4156,24 @@
       if (msg.guess === actual) {
         pl.answered = true;
         pl.score += 30 + (ps.nSides - 2) * 15;
-        broadcastPartyScores();
-        renderPartyScores();
-        // check if all answered
-        var allAnswered = players.every(function (x) { return x.answered || x.id === 'host' ? x.answered : true; });
-        if (allAnswered && ps.answeredHost) nextPartyRound();
+        broadcastPartyScores(); renderPartyScores();
       }
     }
   }
 
   function broadcastPartyLobby() {
-    var lobbyMsg = {
-      type: 'lobby',
-      players: players.map(function (p) { return { id: p.id, name: p.name }; }),
-      hostName: myName
-    };
-    players.forEach(function (p) {
-      if (p.conn) { try { p.conn.send(lobbyMsg); } catch (e) {} }
-    });
+    var lobbyMsg = { type: 'lobby', players: players.map(function (p) { return { id: p.id, name: p.name }; }), hostName: myName };
+    players.forEach(function (p) { if (p.conn) { try { p.conn.send(lobbyMsg); } catch (e) {} } });
   }
-
   function broadcastPartyScores() {
-    var scoreMsg = {
-      type: 'scores',
-      players: players.map(function (p) { return { id: p.id, name: p.name, score: p.score }; })
-    };
-    players.forEach(function (p) {
-      if (p.conn) { try { p.conn.send(scoreMsg); } catch (e) {} }
-    });
+    var scoreMsg = { type: 'scores', players: players.map(function (p) { return { id: p.id, name: p.name, score: p.score }; }) };
+    players.forEach(function (p) { if (p.conn) { try { p.conn.send(scoreMsg); } catch (e) {} } });
   }
-
   function renderPartyLobby() {
     var rows = '';
     players.forEach(function (p, i) {
       var isMe = (p.id === 'host' && isHost) || (p.id === myId);
-      rows += '<div class="player-row"><span class="player-row__name">' +
-        (i === 0 ? '👑 ' : '🙋 ') + esc(p.name) + (isMe ? ' (شما)' : '') +
-        '</span><span class="player-row__badge is-ready">' + (i === 0 ? 'میزبان' : 'آماده') + '</span></div>';
+      rows += '<div class="player-row"><span class="player-row__name">' + (i === 0 ? '👑 ' : '🙋 ') + esc(p.name) + (isMe ? ' (شما)' : '') + '</span><span class="player-row__badge is-ready">' + (i === 0 ? 'میزبان' : 'آماده') + '</span></div>';
     });
     $('partyPlayerList').innerHTML = rows;
     $('partyPlayerCount').textContent = toFa(players.length);
@@ -3451,13 +4185,8 @@
   function startPartyGame() {
     if (!isHost || players.length < 2) return;
     players.forEach(function (p) { p.score = 0; p.answered = false; });
-    ps.round = 0;
-    ps.active = true;
-    // tell everyone
-    var startMsg = { type: 'start' };
-    players.forEach(function (p) {
-      if (p.conn) { try { p.conn.send(startMsg); } catch (e) {} }
-    });
+    ps.round = 0; ps.active = true;
+    players.forEach(function (p) { if (p.conn) { try { p.conn.send({ type: 'start' }); } catch (e) {} } });
     C.showScreen('partyGameScreen');
     A.ensureAudio();
     nextPartyRound();
@@ -3466,89 +4195,54 @@
   function nextPartyRound() {
     if (!isHost) return;
     ps.round++;
-    if (ps.round > 10) {
-      finishPartyGame();
-      return;
-    }
+    if (ps.round > 10) { finishPartyGame(); return; }
     ps.nSides = 3 + Math.floor(Math.random() * 5);
     ps.angles = P.generateAngles(ps.nSides, (ps.nSides - 2) * 180);
     ps.missingIndex = Math.floor(Math.random() * ps.nSides);
-    ps.locked = false;
-    ps.answeredHost = false;
+    ps.locked = false; ps.answeredHost = false;
     players.forEach(function (p) { p.answered = false; });
     ps.timeLeft = 15;
-    var roundMsg = {
-      type: 'round',
-      round: ps.round,
-      nSides: ps.nSides,
-      angles: ps.angles,
-      missingIndex: ps.missingIndex
-    };
-    players.forEach(function (p) {
-      if (p.conn) { try { p.conn.send(roundMsg); } catch (e) {} }
-    });
-    renderPartyRound();
-    startPartyTimer();
+    var roundMsg = { type: 'round', round: ps.round, nSides: ps.nSides, angles: ps.angles, missingIndex: ps.missingIndex };
+    players.forEach(function (p) { if (p.conn) { try { p.conn.send(roundMsg); } catch (e) {} } });
+    renderPartyRound(); startPartyTimer();
   }
 
   function renderPartyRound() {
     $('partyRoundNum').textContent = toFa(ps.round);
     $('partyPolygonWrap').innerHTML = P.buildPolygonSVG(ps.nSides, ps.angles, ps.missingIndex, { w: 320, h: 320, half: 88 });
-    $('partyAnswerInput').value = '';
-    $('partyAnswerInput').disabled = false;
-    $('partySubmitBtn').disabled = false;
-    $('partyFeedback').textContent = '';
-    $('partyFeedback').className = 'feedback';
+    $('partyAnswerInput').value = ''; $('partyAnswerInput').disabled = false; $('partySubmitBtn').disabled = false;
+    $('partyFeedback').textContent = ''; $('partyFeedback').className = 'feedback';
     renderPartyScores();
     setTimeout(function () { $('partyAnswerInput').focus(); }, 80);
   }
-
   function renderPartyScores() {
     var html = '';
     players.slice().sort(function (a, b) { return b.score - a.score; }).forEach(function (p) {
-      html += '<div class="party-score-row' + (p.id === 'host' && isHost ? ' is-me' : p.id === myId ? ' is-me' : '') + '">' +
-        '<span class="party-score-row__name">' + esc(p.name) + '</span>' +
-        '<span class="party-score-row__score">' + toFa(p.score) + '</span></div>';
+      var isMe = (p.id === 'host' && isHost) || p.id === myId;
+      html += '<div class="party-score-row' + (isMe ? ' is-me' : '') + '"><span class="party-score-row__name">' + esc(p.name) + '</span><span class="party-score-row__score">' + toFa(p.score) + '</span></div>';
     });
     $('partyScores').innerHTML = html;
   }
-
   function startPartyTimer() {
     if (ps.timerId) clearInterval(ps.timerId);
-    ps.timeLeft = 15;
-    updatePartyTimerLabel();
+    ps.timeLeft = 15; updatePartyTimerLabel();
     var last = Date.now();
     ps.timerId = setInterval(function () {
       var now = Date.now();
-      ps.timeLeft -= (now - last) / 1000;
-      last = now;
-      if (ps.timeLeft <= 0) {
-        ps.timeLeft = 0;
-        updatePartyTimerLabel();
-        clearInterval(ps.timerId); ps.timerId = null;
-        // timeout -> next round
-        if (isHost) nextPartyRound();
-      } else updatePartyTimerLabel();
+      ps.timeLeft -= (now - last) / 1000; last = now;
+      if (ps.timeLeft <= 0) { ps.timeLeft = 0; updatePartyTimerLabel(); clearInterval(ps.timerId); ps.timerId = null; if (isHost) nextPartyRound(); }
+      else updatePartyTimerLabel();
     }, 100);
   }
-
-  function updatePartyTimerLabel() {
-    $('partyTimerLabel').textContent = toFa(Math.ceil(ps.timeLeft)) + ' ثانیه';
-  }
+  function updatePartyTimerLabel() { $('partyTimerLabel').textContent = toFa(Math.ceil(ps.timeLeft)) + ' ثانیه'; }
 
   function finishPartyGame() {
     ps.active = false;
     if (ps.timerId) { clearInterval(ps.timerId); ps.timerId = null; }
-    var endMsg = {
-      type: 'end',
-      players: players.map(function (p) { return { id: p.id, name: p.name, score: p.score }; })
-    };
-    players.forEach(function (p) {
-      if (p.conn) { try { p.conn.send(endMsg); } catch (e) {} }
-    });
+    var endMsg = { type: 'end', players: players.map(function (p) { return { id: p.id, name: p.name, score: p.score }; }) };
+    players.forEach(function (p) { if (p.conn) { try { p.conn.send(endMsg); } catch (e) {} } });
     showPartyFinal(players);
   }
-
   function showPartyFinal(list) {
     var sorted = list.slice().sort(function (a, b) { return b.score - a.score; });
     var html = '';
@@ -3559,36 +4253,22 @@
     $('partyFinalScores').innerHTML = html;
     $('partyResultModal').hidden = false;
     A.playFanfare();
-
-    // achievement for host winning
     if (isHost && sorted[0] && sorted[0].id === 'host') C.unlockAchievement('party');
   }
 
-  // ========== GUEST ==========
-  var myId = 'host';
   function joinParty(code) {
     code = code.toUpperCase();
     var p;
-    try {
-      p = new Peer(undefined, { debug: 0, config: { iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:global.stun.twilio.com:3478' }
-      ]}});
-    } catch (e) { setPartyMsg('مرورگر پشتیبانی نمی‌کنه.', true); connecting = false; return; }
+    try { p = new Peer(undefined, { debug: 0, config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478' }] } }); }
+    catch (e) { setPartyMsg('مرورگر پشتیبانی نمی‌کنه.', true); connecting = false; return; }
     peer = p;
     var settled = false;
     connecting = true;
     p.on('open', function () {
       var c = p.connect(peerId(code), { reliable: true });
-      hostConn = c;
-      isHost = false;
-      roomCode = code;
+      hostConn = c; isHost = false; roomCode = code;
       var connTimeout = setTimeout(function () {
-        if (!settled) {
-          settled = true; connecting = false;
-          setPartyMsg('اتصال برقرار نشد.', true);
-          cleanupParty();
-        }
+        if (!settled) { settled = true; connecting = false; setPartyMsg('اتصال برقرار نشد.', true); cleanupParty(); }
       }, 15000);
       c.on('open', function () {
         clearTimeout(connTimeout);
@@ -3596,18 +4276,9 @@
         try { c.send({ type: 'join', name: myName }); } catch (e) {}
       });
       c.on('data', function (msg) { try { onGuestPartyMsg(msg); } catch (e) { console.warn(e); } });
-      c.on('close', function () {
-        cleanupParty();
-        C.showScreen('partySetupScreen');
-        setPartyMsg('میزبان اتاق رو ترک کرد.', true);
-      });
+      c.on('close', function () { cleanupParty(); C.showScreen('partySetupScreen'); setPartyMsg('میزبان اتاق رو ترک کرد.', true); });
       c.on('error', function (err) {
-        console.warn(err);
-        if (!settled) {
-          settled = true; clearTimeout(connTimeout); connecting = false;
-          setPartyMsg('اتصال ممکن نشد.', true);
-          cleanupParty();
-        }
+        if (!settled) { settled = true; clearTimeout(connTimeout); connecting = false; setPartyMsg('اتصال ممکن نشد.', true); cleanupParty(); }
       });
     });
     p.on('error', function (err) {
@@ -3618,130 +4289,85 @@
       cleanupParty();
     });
   }
-
   function onGuestPartyMsg(msg) {
     if (!msg || !msg.type) return;
-    if (msg.type === 'full') {
-      setPartyMsg('این اتاق پره.', true);
-      cleanupParty();
-    } else if (msg.type === 'joined') {
+    if (msg.type === 'full') { setPartyMsg('این اتاق پره.', true); cleanupParty(); }
+    else if (msg.type === 'joined') {
       myId = msg.id;
       C.showScreen('partyLobbyScreen');
-      $('partyCodePanel').hidden = true;
-      $('partyStartBtn').hidden = true;
+      $('partyCodePanel').hidden = true; $('partyStartBtn').hidden = true;
       setPartyLobbyMsg('منتظر شروع از طرف میزبان...');
     } else if (msg.type === 'lobby') {
-      players = msg.players.map(function (p) {
-        return { id: p.id, name: p.name, score: 0 };
-      });
+      players = msg.players.map(function (p) { return { id: p.id, name: p.name, score: 0 }; });
       renderGuestLobby();
-    } else if (msg.type === 'start') {
-      C.showScreen('partyGameScreen');
-      A.ensureAudio();
-    } else if (msg.type === 'round') {
-      ps.round = msg.round;
-      ps.nSides = msg.nSides;
-      ps.angles = msg.angles;
-      ps.missingIndex = msg.missingIndex;
-      ps.locked = false;
-      renderPartyRound();
-      startPartyTimer();
+    } else if (msg.type === 'start') { C.showScreen('partyGameScreen'); A.ensureAudio(); }
+    else if (msg.type === 'round') {
+      ps.round = msg.round; ps.nSides = msg.nSides; ps.angles = msg.angles; ps.missingIndex = msg.missingIndex;
+      ps.locked = false; renderPartyRound(); startPartyTimer();
     } else if (msg.type === 'scores') {
-      // update scores from host
-      msg.players.forEach(function (p) {
-        var mine = players.find(function (x) { return x.id === p.id; });
-        if (mine) mine.score = p.score;
-      });
+      msg.players.forEach(function (p) { var mine = players.find(function (x) { return x.id === p.id; }); if (mine) mine.score = p.score; });
       renderPartyScores();
-    } else if (msg.type === 'end') {
-      showPartyFinal(msg.players);
-    }
+    } else if (msg.type === 'end') { showPartyFinal(msg.players); }
   }
-
   function renderGuestLobby() {
     var rows = '';
     players.forEach(function (p, i) {
       var isMe = p.id === myId;
-      rows += '<div class="player-row"><span class="player-row__name">' +
-        (i === 0 ? '👑 ' : '🙋 ') + esc(p.name) + (isMe ? ' (شما)' : '') +
-        '</span><span class="player-row__badge is-ready">' + (i === 0 ? 'میزبان' : 'آماده') + '</span></div>';
+      rows += '<div class="player-row"><span class="player-row__name">' + (i === 0 ? '👑 ' : '🙋 ') + esc(p.name) + (isMe ? ' (شما)' : '') + '</span><span class="player-row__badge is-ready">' + (i === 0 ? 'میزبان' : 'آماده') + '</span></div>';
     });
     $('partyPlayerList').innerHTML = rows;
     $('partyPlayerCount').textContent = toFa(players.length);
   }
-
   function submitParty() {
     if (!ps.active || ps.locked) return;
     var raw = $('partyAnswerInput').value.trim();
     if (raw === '') return;
     var g = Math.round(parseFloat(raw));
     var actual = ps.angles[ps.missingIndex];
-
     if (isHost) {
       if (g === actual) {
         ps.answeredHost = true;
         var host = players[0];
         host.answered = true;
         host.score += 30 + (ps.nSides - 2) * 15;
-        $('partyAnswerInput').disabled = true;
-        $('partySubmitBtn').disabled = true;
-        $('partyFeedback').textContent = '✅ درسته!';
-        $('partyFeedback').className = 'feedback is-correct';
+        $('partyAnswerInput').disabled = true; $('partySubmitBtn').disabled = true;
+        $('partyFeedback').textContent = '✅ درسته!'; $('partyFeedback').className = 'feedback is-correct';
         A.playCorrectSound();
-        renderPartyScores();
-        broadcastPartyScores();
+        renderPartyScores(); broadcastPartyScores();
         var all = players.every(function (x) { return x.answered; });
-        if (all) {
-          if (ps.timerId) { clearInterval(ps.timerId); ps.timerId = null; }
-          setTimeout(nextPartyRound, 900);
-        }
+        if (all) { if (ps.timerId) { clearInterval(ps.timerId); ps.timerId = null; } setTimeout(nextPartyRound, 900); }
       } else {
-        $('partyFeedback').textContent = '❌ اشتباه!';
-        $('partyFeedback').className = 'feedback is-wrong';
-        $('partyAnswerInput').value = '';
-        $('partyAnswerInput').focus();
+        $('partyFeedback').textContent = '❌ اشتباه!'; $('partyFeedback').className = 'feedback is-wrong';
+        $('partyAnswerInput').value = ''; $('partyAnswerInput').focus();
       }
     } else {
       if (g === actual) {
-        $('partyAnswerInput').disabled = true;
-        $('partySubmitBtn').disabled = true;
-        $('partyFeedback').textContent = '✅ درسته! منتظر بقیه...';
-        $('partyFeedback').className = 'feedback is-correct';
+        $('partyAnswerInput').disabled = true; $('partySubmitBtn').disabled = true;
+        $('partyFeedback').textContent = '✅ درسته! منتظر بقیه...'; $('partyFeedback').className = 'feedback is-correct';
         if (hostConn) { try { hostConn.send({ type: 'answer', guess: g }); } catch (e) {} }
       } else {
-        $('partyFeedback').textContent = '❌ اشتباه!';
-        $('partyFeedback').className = 'feedback is-wrong';
-        $('partyAnswerInput').value = '';
-        $('partyAnswerInput').focus();
+        $('partyFeedback').textContent = '❌ اشتباه!'; $('partyFeedback').className = 'feedback is-wrong';
+        $('partyAnswerInput').value = ''; $('partyAnswerInput').focus();
       }
     }
   }
 
-  // ========== EVENTS ==========
   document.addEventListener('DOMContentLoaded', function () {
     var bp = $('btnParty');
     if (bp) bp.addEventListener('click', function () {
       setPartyMsg('');
-      try {
-        var url = new URL(window.location.href);
-        var q = url.searchParams.get('party');
-        if (q) $('partyCodeInput').value = q.toUpperCase();
-      } catch (e) {}
-      var saved = localStorage.getItem('gdPartyName');
-      if (saved) $('partyNameInput').value = saved;
+      try { var url = new URL(window.location.href); var q = url.searchParams.get('party'); if (q) $('partyCodeInput').value = q.toUpperCase(); } catch (e) {}
+      var saved = localStorage.getItem('gdPartyName'); if (saved) $('partyNameInput').value = saved;
       C.showScreen('partySetupScreen');
     });
-    var psb = $('partySetupBackBtn');
-    if (psb) psb.addEventListener('click', function () { C.showScreen('startScreen'); });
+    var psb = $('partySetupBackBtn'); if (psb) psb.addEventListener('click', function () { C.showScreen('startScreen'); });
     var pc = $('btnCreateParty');
     if (pc) pc.addEventListener('click', function () {
       var name = $('partyNameInput').value.trim().slice(0, 14);
       if (!name) { setPartyMsg('اول یه اسم بنویس.', true); return; }
       if (connecting) return;
-      localStorage.setItem('gdPartyName', name);
-      myName = name;
-      setPartyMsg('در حال ساخت اتاق...');
-      tryCreateParty(0);
+      localStorage.setItem('gdPartyName', name); myName = name;
+      setPartyMsg('در حال ساخت اتاق...'); tryCreateParty(0);
     });
     var pj = $('btnJoinParty');
     if (pj) pj.addEventListener('click', function () {
@@ -3750,156 +4376,97 @@
       if (!name) { setPartyMsg('اول یه اسم بنویس.', true); return; }
       if (!code || code.length !== 5) { setPartyMsg('کد ۵ کاراکتری معتبر وارد کن.', true); return; }
       if (connecting) return;
-      localStorage.setItem('gdPartyName', name);
-      myName = name;
-      setPartyMsg('در حال اتصال...');
-      joinParty(code);
+      localStorage.setItem('gdPartyName', name); myName = name;
+      setPartyMsg('در حال اتصال...'); joinParty(code);
     });
-    var plb = $('partyLeaveBtn');
-    if (plb) plb.addEventListener('click', backToMenuParty);
-    var pqb = $('partyQuitBtn');
-    if (pqb) pqb.addEventListener('click', backToMenuParty);
-    var psb2 = $('partyStartBtn');
-    if (psb2) psb2.addEventListener('click', startPartyGame);
-    var psub = $('partySubmitBtn');
-    if (psub) psub.addEventListener('click', submitParty);
-    var pai = $('partyAnswerInput');
-    if (pai) pai.addEventListener('keydown', function (e) { if (e.key === 'Enter') submitParty(); });
+    var plb = $('partyLeaveBtn'); if (plb) plb.addEventListener('click', backToMenuParty);
+    var pqb = $('partyQuitBtn'); if (pqb) pqb.addEventListener('click', backToMenuParty);
+    var psb2 = $('partyStartBtn'); if (psb2) psb2.addEventListener('click', startPartyGame);
+    var psub = $('partySubmitBtn'); if (psub) psub.addEventListener('click', submitParty);
+    var pai = $('partyAnswerInput'); if (pai) pai.addEventListener('keydown', function (e) { if (e.key === 'Enter') submitParty(); });
     var pcc = $('copyPartyCodeBtn');
     if (pcc) pcc.addEventListener('click', function () {
       if (navigator.clipboard) navigator.clipboard.writeText(roomCode);
-      pcc.textContent = 'کپی شد ✅';
-      setTimeout(function () { pcc.textContent = 'کپی کد'; }, 1500);
+      pcc.textContent = 'کپی شد ✅'; setTimeout(function () { pcc.textContent = 'کپی کد'; }, 1500);
     });
     var pcl = $('copyPartyLinkBtn');
     if (pcl) pcl.addEventListener('click', function () {
-      var url = new URL(window.location.href);
-      url.search = '';
-      url.searchParams.set('party', roomCode);
+      var url = new URL(window.location.href); url.search = ''; url.searchParams.set('party', roomCode);
       if (navigator.clipboard) navigator.clipboard.writeText(url.toString());
-      pcl.textContent = 'کپی شد ✅';
-      setTimeout(function () { pcl.textContent = 'کپی لینک'; }, 1500);
+      pcl.textContent = 'کپی شد ✅'; setTimeout(function () { pcl.textContent = 'کپی لینک'; }, 1500);
     });
-    var prm = $('partyResultMenuBtn');
-    if (prm) prm.addEventListener('click', backToMenuParty);
+    var prm = $('partyResultMenuBtn'); if (prm) prm.addEventListener('click', backToMenuParty);
     window.addEventListener('beforeunload', cleanupParty);
   });
 })();
 </script>
 
 <!-- =========================================================
-     10. TEACHER MODE
+     14. TEACHER MODE
      ========================================================= -->
 <script>
 (function () {
   "use strict";
-
   if (typeof Peer === 'undefined') return;
-
   var C = window.GeoCore, A = window.GeoAudio, P = window.GeoPolygon;
   if (!C || !A || !P) return;
   var toFa = C.toFa;
   var $ = function (id) { return document.getElementById(id); };
 
   var CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  function genCode() {
-    var s = '';
-    for (var i = 0; i < 5; i++) s += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)];
-    return s;
-  }
+  function genCode() { var s = ''; for (var i = 0; i < 5; i++) s += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]; return s; }
   function peerId(code) { return 'gdzv-teach-' + code.toUpperCase(); }
 
   var peer = null, conns = [];
   var isHost = false, roomCode = '';
   var connecting = false;
   var myName = '';
-  var questions = []; // { nSides, angles, missingIndex, answer }
-  var students = []; // { conn, name, score, progress, done }
-  var currentQIndex = 0;
-  var teacherModeActive = false;
+  var questions = [];
+  var students = [];
 
-  function setTeacherMsg(t, err) {
-    var el = $('teacherSetupMsg');
-    if (!el) return;
-    el.textContent = t || '';
-    el.className = 'feedback' + (err ? ' is-wrong' : '');
-  }
-
+  function setTeacherMsg(t, err) { var el = $('teacherSetupMsg'); if (el) { el.textContent = t || ''; el.className = 'feedback' + (err ? ' is-wrong' : ''); } }
   function cleanupTeacher() {
     conns.forEach(function (c) { try { c.close(); } catch (e) {} });
     conns = [];
     if (peer) { try { peer.destroy(); } catch (e) {} peer = null; }
-    isHost = false;
-    connecting = false;
-    roomCode = '';
-    questions = [];
-    students = [];
-    teacherModeActive = false;
+    isHost = false; connecting = false; roomCode = '';
+    questions = []; students = [];
   }
-
   function exitTeacher() {
     cleanupTeacher();
-    $('teacherPanel').hidden = true;
-    $('teacherHub').hidden = false;
+    $('teacherPanel').hidden = true; $('teacherHub').hidden = false;
     C.showScreen('startScreen');
     C.refreshTotalScoreUI();
   }
-
-  // ========== TEACHER: CREATE CLASS ==========
   function tryCreateClass(attempt) {
     if (attempt > 4) { setTeacherMsg('ساخت کلاس ناموفق.', true); connecting = false; return; }
     var code = genCode();
     var p;
-    try {
-      p = new Peer(peerId(code), { debug: 0, config: { iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { url: 'stun:global.stun.twilio.com:3478' }
-      ]}});
-    } catch (e) { setTeacherMsg('مرورگر پشتیبانی نمی‌کنه.', true); connecting = false; return; }
+    try { p = new Peer(peerId(code), { debug: 0, config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478' }] } }); }
+    catch (e) { setTeacherMsg('مرورگر پشتیبانی نمی‌کنه.', true); connecting = false; return; }
     peer = p;
     var settled = false;
     p.on('open', function () {
       if (settled) return;
       settled = true;
-      isHost = true;
-      roomCode = code;
-      connecting = false;
-      teacherModeActive = true;
+      isHost = true; roomCode = code; connecting = false;
       enterTeacherPanel();
-      p.on('connection', function (c) {
-        conns.push(c);
-        setupTeacherConn(c);
-      });
+      p.on('connection', function (c) { conns.push(c); setupTeacherConn(c); });
     });
     p.on('error', function (err) {
       if (settled) return;
-      if (err && err.type === 'unavailable-id') {
-        settled = true;
-        try { p.destroy(); } catch (e) {}
-        tryCreateClass(attempt + 1);
-      } else {
-        settled = true;
-        setTeacherMsg('خطا در ساخت کلاس.', true);
-        cleanupTeacher();
-      }
+      if (err && err.type === 'unavailable-id') { settled = true; try { p.destroy(); } catch (e) {} tryCreateClass(attempt + 1); }
+      else { settled = true; setTeacherMsg('خطا در ساخت کلاس.', true); cleanupTeacher(); }
     });
   }
-
   function setupTeacherConn(c) {
-    c.on('data', function (msg) {
-      try { onTeacherMsg(c, msg); } catch (e) { console.warn(e); }
-    });
+    c.on('data', function (msg) { try { onTeacherMsg(c, msg); } catch (e) { console.warn(e); } });
     c.on('close', function () {
-      // remove student
       var idx = -1;
       for (var i = 0; i < students.length; i++) if (students[i].conn === c) { idx = i; break; }
-      if (idx >= 0) {
-        students.splice(idx, 1);
-        renderStudents();
-      }
+      if (idx >= 0) { students.splice(idx, 1); renderStudents(); }
     });
   }
-
   function onTeacherMsg(c, msg) {
     if (!msg || !msg.type) return;
     if (msg.type === 'join') {
@@ -3907,42 +4474,28 @@
       students.push({ conn: c, name: name, score: 0, progress: 0, done: false });
       try { c.send({ type: 'joined', code: roomCode }); } catch (e) {}
       renderStudents();
-      // send existing questions if any
-      if (questions.length) {
-        try { c.send({ type: 'questions', questions: questions }); } catch (e) {}
-      }
+      if (questions.length) { try { c.send({ type: 'questions', questions: questions }); } catch (e) {} }
     } else if (msg.type === 'answer') {
       var st = students.find(function (x) { return x.conn === c; });
       if (!st) return;
       var q = questions[msg.qIndex];
       if (!q) return;
-      var ok = (msg.guess === q.answer);
-      if (ok) {
-        st.score += 30 + (q.nSides - 2) * 15;
-      }
+      if (msg.guess === q.answer) st.score += 30 + (q.nSides - 2) * 15;
       st.progress++;
       if (st.progress >= questions.length) st.done = true;
       renderStudents();
-      try { c.send({ type: 'feedback', correct: ok, answer: q.answer }); } catch (e) {}
+      try { c.send({ type: 'feedback', correct: msg.guess === q.answer, answer: q.answer }); } catch (e) {}
     }
   }
-
   function enterTeacherPanel() {
-    $('teacherHub').hidden = true;
-    $('teacherPanel').hidden = false;
+    $('teacherHub').hidden = true; $('teacherPanel').hidden = false;
     $('teacherClassCode').textContent = roomCode;
-    questions = [];
-    students = [];
-    renderQuestions();
-    renderStudents();
+    questions = []; students = [];
+    renderQuestions(); renderStudents();
   }
-
   function renderQuestions() {
     var el = $('teacherQuestionsList');
-    if (!questions.length) {
-      el.innerHTML = '<p class="evidence-clues__empty">هنوز سؤالی اضافه نکردی.</p>';
-      return;
-    }
+    if (!questions.length) { el.innerHTML = '<p class="evidence-clues__empty">هنوز سؤالی اضافه نکردی.</p>'; return; }
     var html = '';
     questions.forEach(function (q, i) {
       html += '<div class="teacher-q-item"><span class="teacher-q-item__num">' + toFa(i+1) + '</span>' +
@@ -3952,116 +4505,60 @@
     el.innerHTML = html;
     el.querySelectorAll('.teacher-q-item__del').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var idx = parseInt(btn.dataset.idx, 10);
-        questions.splice(idx, 1);
-        renderQuestions();
-        broadcastQuestions();
+        questions.splice(parseInt(btn.dataset.idx, 10), 1);
+        renderQuestions(); broadcastQuestions();
       });
     });
   }
-
   function renderStudents() {
     $('teacherStudentCount').textContent = toFa(students.length);
     var el = $('teacherStudentsList');
-    if (!students.length) {
-      el.innerHTML = '<p class="evidence-clues__empty">هنوز دانش‌آموزی وارد نشده.</p>';
-      return;
-    }
+    if (!students.length) { el.innerHTML = '<p class="evidence-clues__empty">هنوز دانش‌آموزی وارد نشده.</p>'; return; }
     var html = '';
     students.forEach(function (s) {
-      html += '<div class="student-row">' +
-        '<span class="student-row__name">' + s.name + '</span>' +
+      html += '<div class="student-row"><span class="student-row__name">' + s.name + '</span>' +
         '<span class="student-row__score">' + toFa(s.score) + '</span>' +
-        '<span class="student-row__progress">' + toFa(s.progress) + '/' + toFa(questions.length) + (s.done ? ' ✅' : '') + '</span>' +
-        '</div>';
+        '<span class="student-row__progress">' + toFa(s.progress) + '/' + toFa(questions.length) + (s.done ? ' ✅' : '') + '</span></div>';
     });
     el.innerHTML = html;
   }
-
   function broadcastQuestions() {
     var msg = { type: 'questions', questions: questions };
-    students.forEach(function (s) {
-      if (s.conn && s.conn.open) { try { s.conn.send(msg); } catch (e) {} }
-    });
+    students.forEach(function (s) { if (s.conn && s.conn.open) { try { s.conn.send(msg); } catch (e) {} } });
   }
-
   function addTeacherQuestion() {
     var nSides = parseInt($('teacherNSides').value, 10) || 3;
     var raw = $('teacherAnglesInput').value.trim();
     var parts = raw.split(',').map(function (x) { return parseInt(x.trim(), 10); }).filter(function (x) { return !isNaN(x); });
     var msg = $('teacherAddQMsg');
-
-    if (parts.length !== nSides - 1) {
-      msg.textContent = 'برای ' + toFa(nSides) + ' ضلعی باید ' + toFa(nSides - 1) + ' زاویه بدی.';
-      msg.className = 'feedback is-wrong';
-      return;
-    }
+    if (parts.length !== nSides - 1) { msg.textContent = 'برای ' + toFa(nSides) + ' ضلعی باید ' + toFa(nSides - 1) + ' زاویه بدی.'; msg.className = 'feedback is-wrong'; return; }
     var total = (nSides - 2) * 180;
     var sum = parts.reduce(function (a, b) { return a + b; }, 0);
     var missing = total - sum;
-    if (missing < 20 || missing > 170) {
-      msg.textContent = 'زاویه‌ی گمشده (' + toFa(missing) + '°) غیرمنطقیه. زاویه‌های معلوم رو تغییر بده.';
-      msg.className = 'feedback is-wrong';
-      return;
-    }
-
-    // randomize missing position
+    if (missing < 20 || missing > 170) { msg.textContent = 'زاویه‌ی گمشده (' + toFa(missing) + '°) غیرمنطقیه.'; msg.className = 'feedback is-wrong'; return; }
     var angles = parts.slice();
     var missingIndex = Math.floor(Math.random() * nSides);
     angles.splice(missingIndex, 0, missing);
-
-    // validate total
-    var checkTotal = angles.reduce(function (a, b) { return a + b; }, 0);
-    if (checkTotal !== total) {
-      msg.textContent = 'خطا در محاسبه.';
-      msg.className = 'feedback is-wrong';
-      return;
-    }
-
-    questions.push({
-      nSides: nSides,
-      angles: angles,
-      missingIndex: missingIndex,
-      answer: missing
-    });
+    questions.push({ nSides: nSides, angles: angles, missingIndex: missingIndex, answer: missing });
     $('teacherAnglesInput').value = '';
-    msg.textContent = '✅ سؤال اضافه شد.';
-    msg.className = 'feedback is-correct';
-    renderQuestions();
-    broadcastQuestions();
+    msg.textContent = '✅ سؤال اضافه شد.'; msg.className = 'feedback is-correct';
+    renderQuestions(); broadcastQuestions();
   }
 
-  // ========== STUDENT ==========
-  var studentState = {
-    questions: [],
-    qIndex: 0,
-    score: 0,
-    active: false,
-    locked: false
-  };
+  var studentState = { questions: [], qIndex: 0, score: 0, active: false, locked: false };
 
   function joinClass(code) {
     code = code.toUpperCase();
     var p;
-    try {
-      p = new Peer(undefined, { debug: 0, config: { iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { url: 'stun:global.stun.twilio.com:3478' }
-      ]}});
-    } catch (e) { setTeacherMsg('مرورگر پشتیبانی نمی‌کنه.', true); connecting = false; return; }
+    try { p = new Peer(undefined, { debug: 0, config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478' }] } }); }
+    catch (e) { setTeacherMsg('مرورگر پشتیبانی نمی‌کنه.', true); connecting = false; return; }
     peer = p;
-    var settled = false;
-    connecting = true;
+    var settled = false; connecting = true;
     p.on('open', function () {
       var c = p.connect(peerId(code), { reliable: true });
-      conns.push(c);
-      roomCode = code;
+      conns.push(c); roomCode = code;
       var connTimeout = setTimeout(function () {
-        if (!settled) {
-          settled = true; connecting = false;
-          setTeacherMsg('اتصال برقرار نشد.', true);
-          cleanupTeacher();
-        }
+        if (!settled) { settled = true; connecting = false; setTeacherMsg('اتصال برقرار نشد.', true); cleanupTeacher(); }
       }, 15000);
       c.on('open', function () {
         clearTimeout(connTimeout);
@@ -4069,20 +4566,8 @@
         try { c.send({ type: 'join', name: myName }); } catch (e) {}
       });
       c.on('data', function (msg) { try { onStudentMsg(msg); } catch (e) { console.warn(e); } });
-      c.on('close', function () {
-        cleanupTeacher();
-        C.showScreen('teacherScreen');
-        $('teacherHub').hidden = false;
-        $('teacherPanel').hidden = true;
-        $('teacherStudentScreen').hidden = true;
-      });
-      c.on('error', function (err) {
-        if (!settled) {
-          settled = true; clearTimeout(connTimeout); connecting = false;
-          setTeacherMsg('اتصال ممکن نشد.', true);
-          cleanupTeacher();
-        }
-      });
+      c.on('close', function () { cleanupTeacher(); C.showScreen('teacherScreen'); $('teacherHub').hidden = false; $('teacherPanel').hidden = true; $('teacherStudentScreen').hidden = true; });
+      c.on('error', function (err) { if (!settled) { settled = true; clearTimeout(connTimeout); connecting = false; setTeacherMsg('اتصال ممکن نشد.', true); cleanupTeacher(); } });
     });
     p.on('error', function (err) {
       if (settled) return;
@@ -4092,54 +4577,38 @@
       cleanupTeacher();
     });
   }
-
   function onStudentMsg(msg) {
     if (!msg || !msg.type) return;
     if (msg.type === 'joined') {
       C.showScreen('teacherStudentScreen');
       $('studentClassCode').textContent = roomCode;
       $('studentNameVal').textContent = myName;
-      studentState.questions = [];
-      studentState.qIndex = 0;
-      studentState.score = 0;
-      studentState.active = false;
+      studentState.questions = []; studentState.qIndex = 0; studentState.score = 0; studentState.active = false;
       $('studentStatus').textContent = 'در انتظار سؤال‌های معلم...';
     } else if (msg.type === 'questions') {
       studentState.questions = msg.questions || [];
-      if (studentState.questions.length === 0) {
-        $('studentStatus').textContent = 'معلم هنوز سؤالی اضافه نکرده.';
-        return;
-      }
+      if (studentState.questions.length === 0) { $('studentStatus').textContent = 'معلم هنوز سؤالی اضافه نکرده.'; return; }
       if (!studentState.active) {
-        studentState.active = true;
-        studentState.qIndex = 0;
+        studentState.active = true; studentState.qIndex = 0;
         $('studentStatus').textContent = 'شروع! ' + toFa(studentState.questions.length) + ' سؤال.';
         renderStudentQuestion();
       }
-    } else if (msg.type === 'feedback') {
-      // handled inline in submit
     }
   }
-
   function renderStudentQuestion() {
     var q = studentState.questions[studentState.qIndex];
     if (!q) {
       $('studentPolygonWrap').innerHTML = '';
       $('studentFeedback').textContent = '🎉 همه‌ی سؤال‌ها رو جواب دادی!';
       $('studentFeedback').className = 'feedback is-correct';
-      studentState.active = false;
-      return;
+      studentState.active = false; return;
     }
     $('studentPolygonWrap').innerHTML = P.buildPolygonSVG(q.nSides, q.angles, q.missingIndex, { w: 320, h: 320, half: 88 });
-    $('studentAnswerInput').value = '';
-    $('studentAnswerInput').disabled = false;
-    $('studentSubmitBtn').disabled = false;
-    $('studentFeedback').textContent = '';
-    $('studentFeedback').className = 'feedback';
+    $('studentAnswerInput').value = ''; $('studentAnswerInput').disabled = false; $('studentSubmitBtn').disabled = false;
+    $('studentFeedback').textContent = ''; $('studentFeedback').className = 'feedback';
     $('studentProgressVal').textContent = toFa(studentState.qIndex) + ' / ' + toFa(studentState.questions.length);
     studentState.locked = false;
   }
-
   function submitStudent() {
     if (!studentState.active || studentState.locked) return;
     var q = studentState.questions[studentState.qIndex];
@@ -4148,47 +4617,30 @@
     if (raw === '') return;
     var g = Math.round(parseFloat(raw));
     studentState.locked = true;
-    $('studentAnswerInput').disabled = true;
-    $('studentSubmitBtn').disabled = true;
-
+    $('studentAnswerInput').disabled = true; $('studentSubmitBtn').disabled = true;
     var ok = (g === q.answer);
     if (ok) {
       studentState.score += 30 + (q.nSides - 2) * 15;
       $('studentScoreVal').textContent = toFa(studentState.score);
       A.playCorrectSound();
-      $('studentFeedback').textContent = '✅ درسته!';
-      $('studentFeedback').className = 'feedback is-correct';
+      $('studentFeedback').textContent = '✅ درسته!'; $('studentFeedback').className = 'feedback is-correct';
     } else {
       A.playWrongSound();
-      $('studentFeedback').textContent = '❌ جواب درست: ' + q.answer + '°';
-      $('studentFeedback').className = 'feedback is-wrong';
+      $('studentFeedback').textContent = '❌ جواب درست: ' + q.answer + '°'; $('studentFeedback').className = 'feedback is-wrong';
     }
-
-    // send to teacher
-    if (conns[0] && conns[0].open) {
-      try { conns[0].send({ type: 'answer', qIndex: studentState.qIndex, guess: g }); } catch (e) {}
-    }
-
-    setTimeout(function () {
-      studentState.qIndex++;
-      renderStudentQuestion();
-    }, 900);
+    if (conns[0] && conns[0].open) { try { conns[0].send({ type: 'answer', qIndex: studentState.qIndex, guess: g }); } catch (e) {} }
+    setTimeout(function () { studentState.qIndex++; renderStudentQuestion(); }, 900);
   }
 
-  // ========== EVENTS ==========
   document.addEventListener('DOMContentLoaded', function () {
     var bt = $('btnTeacher');
     if (bt) bt.addEventListener('click', function () {
       setTeacherMsg('');
       C.showScreen('teacherScreen');
-      $('teacherHub').hidden = false;
-      $('teacherPanel').hidden = true;
-      $('teacherStudentScreen').hidden = true;
+      $('teacherHub').hidden = false; $('teacherPanel').hidden = true; $('teacherStudentScreen').hidden = true;
     });
-    var tbb = $('teacherBackBtn');
-    if (tbb) tbb.addEventListener('click', function () { C.showScreen('startScreen'); });
-    var tpb = $('teacherPanelBackBtn');
-    if (tpb) tpb.addEventListener('click', function () { exitTeacher(); });
+    var tbb = $('teacherBackBtn'); if (tbb) tbb.addEventListener('click', function () { C.showScreen('startScreen'); });
+    var tpb = $('teacherPanelBackBtn'); if (tpb) tpb.addEventListener('click', exitTeacher);
     var tcc = $('btnTeacherCreate');
     if (tcc) tcc.addEventListener('click', function () {
       var name = prompt('اسم معلم؟', 'معلم');
@@ -4207,26 +4659,20 @@
       connecting = true;
       joinClass(code);
     });
-    var tac = $('teacherAddQBtn');
-    if (tac) tac.addEventListener('click', addTeacherQuestion);
-    var tex = $('teacherExitBtn');
-    if (tex) tex.addEventListener('click', function () { exitTeacher(); });
+    var tac = $('teacherAddQBtn'); if (tac) tac.addEventListener('click', addTeacherQuestion);
+    var tex = $('teacherExitBtn'); if (tex) tex.addEventListener('click', exitTeacher);
     var tccb = $('teacherCopyCodeBtn');
     if (tccb) tccb.addEventListener('click', function () {
       if (navigator.clipboard) navigator.clipboard.writeText(roomCode);
-      tccb.textContent = 'کپی شد ✅';
-      setTimeout(function () { tccb.textContent = 'کپی'; }, 1500);
+      tccb.textContent = 'کپی شد ✅'; setTimeout(function () { tccb.textContent = 'کپی'; }, 1500);
     });
-    var ssb = $('studentSubmitBtn');
-    if (ssb) ssb.addEventListener('click', submitStudent);
-    var sai = $('studentAnswerInput');
-    if (sai) sai.addEventListener('keydown', function (e) { if (e.key === 'Enter') submitStudent(); });
+    var ssb = $('studentSubmitBtn'); if (ssb) ssb.addEventListener('click', submitStudent);
+    var sai = $('studentAnswerInput'); if (sai) sai.addEventListener('keydown', function (e) { if (e.key === 'Enter') submitStudent(); });
     var slb = $('studentLeaveBtn');
     if (slb) slb.addEventListener('click', function () {
       cleanupTeacher();
       C.showScreen('startScreen');
-      $('teacherStudentScreen').hidden = true;
-      $('teacherHub').hidden = false;
+      $('teacherStudentScreen').hidden = true; $('teacherHub').hidden = false;
     });
     window.addEventListener('beforeunload', cleanupTeacher);
   });
